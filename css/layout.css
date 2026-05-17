@@ -150,3 +150,16 @@ body[data-lang="th"] {
   .drawer,
   .drawer-scrim { display: none !important; }
 }
+
+/* ── DRE-8: viewport safety + typography scale ───────────────── */
+html, body { overflow-x: hidden; max-width: 100%; }
+
+h1 { font-size: 1.75rem; line-height: 1.25; margin-block: 0.5em 0.4em; font-weight: 700; }
+h2 { font-size: 1.4rem;  line-height: 1.3;  margin-block: 1em 0.4em; font-weight: 700; }
+h3 { font-size: 1.15rem; line-height: 1.35; margin-block: 0.8em 0.3em; font-weight: 600; }
+p  { margin-block: 0.6em; }
+body[data-lang="th"] { font-size: calc(16px * 1.05); }
+
+@media (min-width: 640px)  { .section { padding: 24px; max-width: 720px; } }
+@media (min-width: 1024px) { .section { max-width: 840px; } }
+@media (min-width: 1280px) { .section { max-width: 900px; } }

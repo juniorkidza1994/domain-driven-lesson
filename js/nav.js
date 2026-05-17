@@ -32,6 +32,7 @@ document.addEventListener('alpine:init', function () {
     setLang: function (next) {
       this.lang = next;
       localStorage.setItem('lang', next);
+      document.body.setAttribute('data-lang', next);
     },
     toggleLang: function () {
       this.setLang(this.lang === 'en' ? 'th' : 'en');
@@ -40,6 +41,9 @@ document.addEventListener('alpine:init', function () {
       return !!(this.progress[id] && this.progress[id].quizCompleted === true);
     },
   });
+
+  // Sync body[data-lang] on init so Sarabun CSS rule fires immediately on reload
+  document.body.setAttribute('data-lang', Alpine.store('app').lang);
 
   Alpine.store('modules', {
     list: MODULE_LIST,
