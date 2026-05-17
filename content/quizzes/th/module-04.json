@@ -1,0 +1,16 @@
+{
+  "moduleId": "module-04",
+  "questions": [
+    {
+      "id": "q1",
+      "type": "mcq",
+      "question": { "en": "In Event Storming, what colour sticky note represents a Domain Event?", "th": "ใน Event Storming สีใดของ sticky note แทน Domain Event?" },
+      "options": [
+        { "id": "a", "text": { "en": "Orange", "th": "ส้ม" } },
+        { "id": "b", "text": { "en": "Blue", "th": "น้ำเงิน" } }
+      ],
+      "correctOption": "a",
+      "explanation": { "en": "Domain Events are represented by orange sticky notes in Event Storming sessions.", "th": "" }
+    }
+  ]
+}

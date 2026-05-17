@@ -1,0 +1,16 @@
+{
+  "moduleId": "module-07",
+  "questions": [
+    {
+      "id": "q1",
+      "type": "mcq",
+      "question": { "en": "Which of the following best describes the relationship between Event Storming and DDD?", "th": "ข้อใดอธิบายความสัมพันธ์ระหว่าง Event Storming กับ DDD ได้ดีที่สุด?" },
+      "options": [
+        { "id": "a", "text": { "en": "Event Storming is a collaborative technique for discovering the domain model used in DDD", "th": "Event Storming เป็นเทคนิคร่วมมือเพื่อค้นพบ domain model ที่ใช้ใน DDD" } },
+        { "id": "b", "text": { "en": "They are unrelated practices", "th": "เป็นแนวทางปฏิบัติที่ไม่เกี่ยวข้องกัน" } }
+      ],
+      "correctOption": "a",
+      "explanation": { "en": "Event Storming is a workshop technique that helps teams discover and model their domain, feeding directly into DDD implementation.", "th": "" }
+    }
+  ]
+}

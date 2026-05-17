@@ -1,0 +1,16 @@
+{
+  "module": {
+    "id": "module-06",
+    "number": 6,
+    "title": { "en": "DDD in Practice: E-Commerce Case Study", "th": "DDD ในทางปฏิบัติ: กรณีศึกษา E-Commerce" },
+    "estimatedMinutes": 40,
+    "sections": [
+      {
+        "id": "intro",
+        "type": "text",
+        "title": { "en": "Introduction", "th": "บทนำ" },
+        "content": { "en": "TBD — populated in DRE-18..24", "th": "" }
+      }
+    ]
+  }
+}

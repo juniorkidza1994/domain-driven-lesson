@@ -1,1 +1,25 @@
-{}
+{
+  "tooltips": [
+    {
+      "id": "bounded-context",
+      "term": { "en": "Bounded Context", "th": "ขอบเขตที่มีบริบท" },
+      "short": { "en": "A boundary within which a domain model is defined and internally consistent.", "th": "" },
+      "full": { "en": "A Bounded Context is a central pattern in Domain-Driven Design. It defines an explicit boundary within which a particular domain model is defined and applicable.", "th": "" },
+      "sourceRef": "Eric Evans, Domain-Driven Design (2003)"
+    },
+    {
+      "id": "aggregate",
+      "term": { "en": "Aggregate", "th": "กลุ่มวัตถุโดเมน" },
+      "short": { "en": "A cluster of domain objects treated as a single unit, with an Aggregate Root controlling access.", "th": "" },
+      "full": { "en": "An Aggregate is a cluster of associated domain objects treated as a single unit for data changes.", "th": "" },
+      "sourceRef": "Eric Evans, Domain-Driven Design (2003)"
+    },
+    {
+      "id": "ubiquitous-language",
+      "term": { "en": "Ubiquitous Language", "th": "ภาษากลางที่ใช้ร่วมกัน" },
+      "short": { "en": "A shared language used by developers and domain experts within a Bounded Context.", "th": "" },
+      "full": { "en": "Ubiquitous Language is the practice of building a common, rigorous language between developers and domain experts within a Bounded Context.", "th": "" },
+      "sourceRef": "Eric Evans, Domain-Driven Design (2003)"
+    }
+  ]
+}
