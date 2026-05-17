@@ -1,0 +1,16 @@
+{
+  "module": {
+    "id": "module-02",
+    "number": 2,
+    "title": { "en": "Strategic Design: Bounded Contexts", "th": "" },
+    "estimatedMinutes": 25,
+    "sections": [
+      {
+        "id": "intro",
+        "type": "text",
+        "title": { "en": "Introduction", "th": "" },
+        "content": { "en": "TBD — populated in DRE-18..24", "th": "" }
+      }
+    ]
+  }
+}

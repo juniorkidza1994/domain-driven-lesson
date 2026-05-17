@@ -1,1 +1,80 @@
-{}
+{
+  "categories": [
+    {
+      "id": "ddd-strategic",
+      "name": { "en": "DDD Strategic Patterns", "th": "" },
+      "terms": [
+        {
+          "id": "bounded-context",
+          "term": { "en": "Bounded Context", "th": "" },
+          "definition": { "en": "An explicit boundary within which a particular domain model is defined and applicable. All terms of the Ubiquitous Language have a specific meaning within this boundary.", "th": "" },
+          "relatedTerms": ["ubiquitous-language", "context-map"],
+          "sourceRef": "Evans 2003"
+        },
+        {
+          "id": "ubiquitous-language",
+          "term": { "en": "Ubiquitous Language", "th": "" },
+          "definition": { "en": "A common, rigorous language built between developers and domain experts within a Bounded Context, used in all conversations, code, tests, and documentation.", "th": "" },
+          "relatedTerms": ["bounded-context"],
+          "sourceRef": "Evans 2003"
+        },
+        {
+          "id": "context-map",
+          "term": { "en": "Context Map", "th": "" },
+          "definition": { "en": "A visual representation of the relationships and integration patterns between different Bounded Contexts in a system.", "th": "" },
+          "relatedTerms": ["bounded-context"],
+          "sourceRef": "Evans 2003"
+        }
+      ]
+    },
+    {
+      "id": "ddd-tactical",
+      "name": { "en": "DDD Tactical Patterns", "th": "" },
+      "terms": [
+        {
+          "id": "aggregate",
+          "term": { "en": "Aggregate", "th": "" },
+          "definition": { "en": "A cluster of associated domain objects treated as a single unit for data changes, with an Aggregate Root controlling all access and enforcing business invariants.", "th": "" },
+          "relatedTerms": ["entity", "value-object"],
+          "sourceRef": "Evans 2003"
+        },
+        {
+          "id": "entity",
+          "term": { "en": "Entity", "th": "" },
+          "definition": { "en": "A domain object defined by a thread of continuity and identity, rather than by its attributes. Two entities with the same attributes are still distinct if they have different identities.", "th": "" },
+          "sourceRef": "Evans 2003"
+        },
+        {
+          "id": "value-object",
+          "term": { "en": "Value Object", "th": "" },
+          "definition": { "en": "A domain object that describes some characteristic or attribute but carries no concept of identity. Value Objects are immutable and are equal when all their attributes are equal.", "th": "" },
+          "relatedTerms": ["entity"],
+          "sourceRef": "Evans 2003"
+        }
+      ]
+    },
+    {
+      "id": "event-storming",
+      "name": { "en": "Event Storming", "th": "" },
+      "terms": [
+        {
+          "id": "domain-event",
+          "term": { "en": "Domain Event", "th": "" },
+          "definition": { "en": "Something that happened in the domain that domain experts care about. Domain Events are the core artefact of Event Storming, represented by orange sticky notes.", "th": "" },
+          "sourceRef": "Brandolini 2013"
+        }
+      ]
+    },
+    {
+      "id": "eda",
+      "name": { "en": "Event-Driven Architecture", "th": "" },
+      "terms": [
+        {
+          "id": "event-broker",
+          "term": { "en": "Event Broker", "th": "" },
+          "definition": { "en": "A middleware component that receives events from producers and routes them to interested consumers. Examples include Apache Kafka, RabbitMQ, and AWS EventBridge.", "th": "" }
+        }
+      ]
+    }
+  ]
+}
