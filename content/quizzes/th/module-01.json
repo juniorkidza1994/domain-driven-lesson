@@ -1,0 +1,16 @@
+{
+  "moduleId": "module-01",
+  "questions": [
+    {
+      "id": "q1",
+      "type": "mcq",
+      "question": { "en": "What does DDD stand for?", "th": "DDD ย่อมาจากอะไร?" },
+      "options": [
+        { "id": "a", "text": { "en": "Domain-Driven Design", "th": "Domain-Driven Design" } },
+        { "id": "b", "text": { "en": "Data-Driven Development", "th": "Data-Driven Development" } }
+      ],
+      "correctOption": "a",
+      "explanation": { "en": "DDD stands for Domain-Driven Design, a software development approach focused on the core domain.", "th": "" }
+    }
+  ]
+}

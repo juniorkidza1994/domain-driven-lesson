@@ -1,0 +1,16 @@
+{
+  "module": {
+    "id": "module-05",
+    "number": 5,
+    "title": { "en": "Event-Driven Architecture", "th": "" },
+    "estimatedMinutes": 30,
+    "sections": [
+      {
+        "id": "intro",
+        "type": "text",
+        "title": { "en": "Introduction", "th": "" },
+        "content": { "en": "TBD — populated in DRE-18..24", "th": "" }
+      }
+    ]
+  }
+}
