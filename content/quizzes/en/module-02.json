@@ -1,0 +1,16 @@
+{
+  "moduleId": "module-02",
+  "questions": [
+    {
+      "id": "q1",
+      "type": "mcq",
+      "question": { "en": "What is a Bounded Context?", "th": "" },
+      "options": [
+        { "id": "a", "text": { "en": "A boundary within which a domain model is defined and applicable", "th": "" } },
+        { "id": "b", "text": { "en": "A database schema", "th": "" } }
+      ],
+      "correctOption": "a",
+      "explanation": { "en": "A Bounded Context defines the boundary within which a specific domain model applies and is internally consistent.", "th": "" }
+    }
+  ]
+}

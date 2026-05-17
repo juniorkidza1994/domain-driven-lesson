@@ -1,0 +1,16 @@
+{
+  "module": {
+    "id": "module-03",
+    "number": 3,
+    "title": { "en": "Tactical Design: Building Blocks", "th": "การออกแบบเชิงยุทธวิธี: Building Blocks" },
+    "estimatedMinutes": 30,
+    "sections": [
+      {
+        "id": "intro",
+        "type": "text",
+        "title": { "en": "Introduction", "th": "บทนำ" },
+        "content": { "en": "TBD — populated in DRE-18..24", "th": "" }
+      }
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "moduleId": "module-03",
+  "questions": [
+    {
+      "id": "q1",
+      "type": "mcq",
+      "question": { "en": "Which pattern enforces business rules and maintains consistency?", "th": "Pattern ใดบังคับใช้กฎทางธุรกิจและรักษาความสอดคล้อง?" },
+      "options": [
+        { "id": "a", "text": { "en": "Aggregate", "th": "Aggregate" } },
+        { "id": "b", "text": { "en": "Repository", "th": "Repository" } }
+      ],
+      "correctOption": "a",
+      "explanation": { "en": "An Aggregate is a cluster of domain objects treated as a single unit with an Aggregate Root that enforces invariants.", "th": "" }
+    }
+  ]
+}

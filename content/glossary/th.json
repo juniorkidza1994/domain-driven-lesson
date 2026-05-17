@@ -1,1 +1,80 @@
-{}
+{
+  "categories": [
+    {
+      "id": "ddd-strategic",
+      "name": { "en": "DDD Strategic Patterns", "th": "รูปแบบเชิงกลยุทธ์ของ DDD" },
+      "terms": [
+        {
+          "id": "bounded-context",
+          "term": { "en": "Bounded Context", "th": "ขอบเขตที่มีบริบท" },
+          "definition": { "en": "An explicit boundary within which a particular domain model is defined and applicable.", "th": "" },
+          "relatedTerms": ["ubiquitous-language", "context-map"],
+          "sourceRef": "Evans 2003"
+        },
+        {
+          "id": "ubiquitous-language",
+          "term": { "en": "Ubiquitous Language", "th": "ภาษากลางที่ใช้ร่วมกัน" },
+          "definition": { "en": "A common, rigorous language built between developers and domain experts within a Bounded Context.", "th": "" },
+          "relatedTerms": ["bounded-context"],
+          "sourceRef": "Evans 2003"
+        },
+        {
+          "id": "context-map",
+          "term": { "en": "Context Map", "th": "แผนที่บริบท" },
+          "definition": { "en": "A visual representation of the relationships and integration patterns between different Bounded Contexts in a system.", "th": "" },
+          "relatedTerms": ["bounded-context"],
+          "sourceRef": "Evans 2003"
+        }
+      ]
+    },
+    {
+      "id": "ddd-tactical",
+      "name": { "en": "DDD Tactical Patterns", "th": "รูปแบบเชิงยุทธวิธีของ DDD" },
+      "terms": [
+        {
+          "id": "aggregate",
+          "term": { "en": "Aggregate", "th": "กลุ่มวัตถุโดเมน" },
+          "definition": { "en": "A cluster of associated domain objects treated as a single unit for data changes.", "th": "" },
+          "relatedTerms": ["entity", "value-object"],
+          "sourceRef": "Evans 2003"
+        },
+        {
+          "id": "entity",
+          "term": { "en": "Entity", "th": "เอนทิตี" },
+          "definition": { "en": "A domain object defined by a thread of continuity and identity, rather than by its attributes.", "th": "" },
+          "sourceRef": "Evans 2003"
+        },
+        {
+          "id": "value-object",
+          "term": { "en": "Value Object", "th": "วัตถุค่า" },
+          "definition": { "en": "A domain object that describes some characteristic or attribute but carries no concept of identity.", "th": "" },
+          "relatedTerms": ["entity"],
+          "sourceRef": "Evans 2003"
+        }
+      ]
+    },
+    {
+      "id": "event-storming",
+      "name": { "en": "Event Storming", "th": "Event Storming" },
+      "terms": [
+        {
+          "id": "domain-event",
+          "term": { "en": "Domain Event", "th": "เหตุการณ์โดเมน" },
+          "definition": { "en": "Something that happened in the domain that domain experts care about.", "th": "" },
+          "sourceRef": "Brandolini 2013"
+        }
+      ]
+    },
+    {
+      "id": "eda",
+      "name": { "en": "Event-Driven Architecture", "th": "สถาปัตยกรรมที่ขับเคลื่อนด้วยเหตุการณ์" },
+      "terms": [
+        {
+          "id": "event-broker",
+          "term": { "en": "Event Broker", "th": "ตัวกลางรับส่งเหตุการณ์" },
+          "definition": { "en": "A middleware component that receives events from producers and routes them to interested consumers.", "th": "" }
+        }
+      ]
+    }
+  ]
+}

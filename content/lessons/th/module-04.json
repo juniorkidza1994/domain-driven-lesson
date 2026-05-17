@@ -1,0 +1,16 @@
+{
+  "module": {
+    "id": "module-04",
+    "number": 4,
+    "title": { "en": "Event Storming", "th": "Event Storming" },
+    "estimatedMinutes": 35,
+    "sections": [
+      {
+        "id": "intro",
+        "type": "text",
+        "title": { "en": "Introduction", "th": "บทนำ" },
+        "content": { "en": "TBD — populated in DRE-18..24", "th": "" }
+      }
+    ]
+  }
+}
