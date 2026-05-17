@@ -40,6 +40,13 @@ document.addEventListener('alpine:init', function () {
     isModuleComplete: function (id) {
       return !!(this.progress[id] && this.progress[id].quizCompleted === true);
     },
+    tooltipOpen: null,
+    openTooltip: function (id) { this.tooltipOpen = id; },
+    closeTooltip: function () { this.tooltipOpen = null; },
+    saveProgress: function (moduleId, score) {
+      this.progress[moduleId] = { quizCompleted: true, score: score };
+      localStorage.setItem('ddd-progress', JSON.stringify(this.progress));
+    },
   });
 
   // Sync body[data-lang] on init so Sarabun CSS rule fires immediately on reload

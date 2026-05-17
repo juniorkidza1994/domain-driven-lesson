@@ -12,8 +12,8 @@
   <link rel="stylesheet" href="css/layout.css"/>
   <link rel="stylesheet" href="css/components.css"/>
   <link rel="stylesheet" href="css/diagrams.css"/>
-  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
-  <script>mermaid.initialize({ startOnLoad: true });</script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+  <script defer src="js/diagrams.js"></script>
   <script defer src="js/nav.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -26,13 +26,20 @@
     <p>Welcome to the DDD Learning website.</p>
 
     <!-- Alpine smoke test element (AC3) -->
-    <div x-data="{ ok: true }" x-text="ok ? 'alpine-ok' : 'fail'"></div>
+    <div x-cloak x-data="{ ok: true }" x-text="ok ? 'alpine-ok' : 'fail'"></div>
 
     <!-- Mermaid smoke test block (AC4) -->
-    <pre class="mermaid">
-flowchart LR
-  A[Event] --> B[Storming]
-    </pre>
+    <div
+      class="mermaid-block"
+      x-ignore
+      data-source="flowchart LR&#10;  A[Event] --> B[Storming]">
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        if (window.renderDiagrams) window.renderDiagrams();
+      });
+    </script>
 
     <div class="card card-primary">
       <h2>Get started</h2>
