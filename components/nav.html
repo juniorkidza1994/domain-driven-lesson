@@ -1,1 +1,62 @@
-<!-- nav markup injected by js/nav.js (DRE-7) -->
+<div x-data="{ open: false }">
+  <header class="topnav">
+    <a class="logo" :href="$store.app.pathPrefix + 'index.html'">
+      <span class="mark">A</span>
+      <span>ArchPath</span>
+    </a>
+
+    <!-- desktop inline nav, hidden <768px -->
+    <nav class="nav-desktop" aria-label="Modules">
+      <template x-for="m in $store.modules.list" :key="m.id">
+        <a class="nav-item"
+           :class="{ active: $store.app.currentModuleId === m.id }"
+           :aria-current="$store.app.currentModuleId === m.id ? 'page' : undefined"
+           :href="$store.app.pathPrefix + 'modules/' + m.href">
+          <span class="num" x-text="m.num"></span>
+          <span class="label" x-text="$store.app.lang === 'en' ? m.en : m.th"></span>
+          <span class="check" x-show="$store.app.isModuleComplete(m.id)">&#x2713;</span>
+        </a>
+      </template>
+    </nav>
+
+    <div class="topnav-right">
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button :class="{ active: $store.app.lang === 'en' }" @click="$store.app.setLang('en')">EN</button>
+        <button :class="{ active: $store.app.lang === 'th' }" @click="$store.app.setLang('th')">TH</button>
+      </div>
+      <button class="icon-btn nav-hamburger" @click="open = true" aria-label="Open menu">&#9776;</button>
+    </div>
+  </header>
+
+  <!-- mobile drawer -->
+  <div class="drawer-scrim" :class="{ open }" @click="open = false"></div>
+  <aside class="drawer" :class="{ open }" aria-label="Modules">
+    <header>
+      <span class="logo"><span class="mark">A</span>ArchPath</span>
+      <button class="icon-btn" @click="open = false" aria-label="Close menu">&#x2715;</button>
+    </header>
+    <div class="nav-list">
+      <template x-for="m in $store.modules.list" :key="m.id">
+        <a class="nav-item"
+           :class="{ active: $store.app.currentModuleId === m.id }"
+           :aria-current="$store.app.currentModuleId === m.id ? 'page' : undefined"
+           :href="$store.app.pathPrefix + 'modules/' + m.href"
+           @click="open = false">
+          <span class="num" x-text="m.num"></span>
+          <span class="label" x-text="$store.app.lang === 'en' ? m.en : m.th"></span>
+          <span class="check" x-show="$store.app.isModuleComplete(m.id)">&#x2713;</span>
+        </a>
+      </template>
+      <a class="nav-item" :href="$store.app.pathPrefix + 'glossary.html'" @click="open = false">
+        <span class="num">&#x1F4D6;</span>
+        <span class="label" x-text="$store.app.lang === 'en' ? 'Glossary' : 'คำศัพท์'"></span>
+      </a>
+    </div>
+    <footer>
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button :class="{ active: $store.app.lang === 'en' }" @click="$store.app.setLang('en')">EN</button>
+        <button :class="{ active: $store.app.lang === 'th' }" @click="$store.app.setLang('th')">TH</button>
+      </div>
+    </footer>
+  </aside>
+</div>

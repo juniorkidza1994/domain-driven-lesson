@@ -4,12 +4,14 @@
   /* Core palette */
   --color-bg:        #faf9f7;
   --color-surface:   #ffffff;
-  --color-primary:   #6366f1;
-  --color-secondary: #14b8a6;
-  --color-accent:    #f59e0b;
-  --color-text:      #1e1b4b;
-  --color-muted:     #6b7280;
-  --color-border:    #e5e7eb;
+  --color-primary:     #6366f1;
+  --color-primary-50:  #eef2ff;
+  --color-primary-100: #e0e7ff;
+  --color-secondary:   #14b8a6;
+  --color-accent:      #f59e0b;
+  --color-text:        #1e1b4b;
+  --color-muted:       #6b7280;
+  --color-border:      #e5e7eb;
   --color-danger:    #dc2626;
 
   /* Typography */
