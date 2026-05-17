@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(grill-me)",
+      "mcp__linear-server__list_projects",
+      "mcp__linear-server__list_teams",
+      "mcp__linear-server__save_project",
+      "mcp__linear-server__save_issue",
+      "WebFetch(domain:alpinejs.dev)",
+      "Skill(write-a-skill)",
+      "mcp__linear-server__list_issue_labels",
+      "mcp__linear-server__create_issue_label",
+      "mcp__linear-server__list_issues",
+      "Skill(grill-with-docs)",
+      "Bash(rtk npx *)",
+      "mcp__linear-server__get_issue",
+      "WebFetch(domain:api.anthropic.com)",
+      "Skill(caveman:caveman-commit)"
+    ]
+  }
+}
