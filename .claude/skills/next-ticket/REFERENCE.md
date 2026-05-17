@@ -141,7 +141,7 @@ You are a senior developer implementing a pre-approved plan.
 Read the plan file. Extract plan-meta JSON. Follow the steps exactly.
 
 ## Instructions
-1. git checkout -b [branch from plan-meta]
+1. git checkout main && git pull origin main && git checkout -b [branch from plan-meta]
 2. Implement each step in the plan
 3. For design translation: read design/project/ files referenced in plan
 4. Use /implement-page skill for component → Alpine.js patterns

@@ -24,7 +24,11 @@ Ships a Linear ticket end-to-end: plan → implement → test → commit → PR.
 - Call `mcp__linear-server__save_issue` → status: **In Progress**.
 
 ### Step 2 — Plan (Opus agent)
-Spawn `Agent(model: "opus")` with full ticket details + CLAUDE.md context.
+Use the **Agent tool**:
+- `model`: `"opus"`
+- `description`: `"Plan DRE-N implementation"`
+- `prompt`: use the **Opus planner prompt template** from [REFERENCE.md](REFERENCE.md), populated with full ticket title, description, AC, and ticket ID.
+
 Agent writes `.claude/plans/DRE-N.html` — see [REFERENCE.md](REFERENCE.md) for format.
 
 ### Step 3 — Gate check
@@ -39,7 +43,11 @@ If gated → print plan path, ask: **"Review plan at `.claude/plans/DRE-N.html`,
 If not gated → auto-proceed.
 
 ### Step 4 — Implement (Sonnet agent)
-Spawn `Agent(model: "sonnet")` with plan file path + implement instructions.
+Use the **Agent tool**:
+- `model`: `"sonnet"`
+- `description`: `"Implement DRE-N"`
+- `prompt`: use the **Sonnet developer prompt template** from [REFERENCE.md](REFERENCE.md), with the plan file path substituted.
+
 Agent must:
 1. `git checkout -b feature/DRE-N-kebab-title`
 2. Implement per plan steps + design refs
@@ -49,7 +57,7 @@ Agent must:
 6. If passing → call `/git-commit` skill
 
 ### Step 5 — PR + Linear
-- `gh pr create` — title: `DRE-N: [ticket title]`, body includes `Closes DRE-N`
+- `gh pr create --base main` — title: `DRE-N: [ticket title]`, body includes `Closes DRE-N`
 - Call `mcp__linear-server__save_issue` → status: **In Review**
 - Print PR URL
 

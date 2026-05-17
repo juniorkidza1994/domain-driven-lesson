@@ -15,7 +15,42 @@
       "Bash(rtk npx *)",
       "mcp__linear-server__get_issue",
       "WebFetch(domain:api.anthropic.com)",
-      "Skill(caveman:caveman-commit)"
+      "Skill(caveman:caveman-commit)",
+      "Bash(npm init *)",
+      "Bash(rtk playwright *)",
+      "Bash(python3 -m http.server 8080)",
+      "Bash(echo \"Server PID: $!\")",
+      "Bash(gh auth *)",
+      "Bash(rtk gh *)",
+      "Skill(next-ticket)",
+      "Bash(python3 *)",
+      "Bash(lsof -i :8080 -sTCP:LISTEN)",
+      "Bash(kill %1)",
+      "Bash(gh api *)"
     ]
+  },
+  "skillOverrides": {
+    "alpine": "name-only",
+    "doc-writing-standard": "name-only",
+    "git-commit": "name-only",
+    "grill-me": "name-only",
+    "grill-with-docs": "name-only",
+    "implement-page": "name-only",
+    "javascript-pro": "name-only",
+    "next-ticket": "name-only",
+    "research": "name-only",
+    "research-add-fields": "name-only",
+    "research-add-items": "name-only",
+    "research-deep": "name-only",
+    "research-report": "name-only",
+    "tdd": "name-only",
+    "typescript-pro": "name-only",
+    "write-a-skill": "name-only",
+    "code-review": "name-only",
+    "doc-coauthoring": "name-only",
+    "playwright-skill": "name-only",
+    "senior-frontend": "name-only",
+    "senior-qa": "name-only",
+    "software-architecture": "name-only"
   }
 }
