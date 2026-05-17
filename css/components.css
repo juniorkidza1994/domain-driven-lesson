@@ -1,2 +1,102 @@
-/* css/components.css — cards, buttons, sticky notes, nav components */
-/* Populated in DRE-7 and DRE-8 */
+/* css/components.css — DRE-8: cards, buttons, callouts, badges, chips */
+
+/* ── Cards ─────────────────────────────────────────────────────── */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+  margin-block: 12px;
+}
+.card-primary   { border-left: 4px solid var(--color-primary); }
+.card-secondary { border-left: 4px solid var(--color-secondary); }
+
+/* ── Buttons (44×44px touch target minimum) ─────────────────── */
+.btn-primary,
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 10px 18px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+  text-decoration: none;
+  transition: transform .08s ease, background .15s ease;
+}
+.btn-primary   { background: var(--color-primary);   color: #fff; }
+.btn-secondary { background: var(--color-secondary); color: #fff; }
+.btn-primary:active,
+.btn-secondary:active { transform: scale(.97); }
+
+/* ── Callouts ───────────────────────────────────────────────── */
+.callout {
+  background: var(--color-primary-light);
+  border-left: 4px solid var(--color-primary);
+  padding: 12px 16px;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  margin-block: 12px;
+}
+.callout-warning {
+  background: #fef3c7;
+  border-left-color: var(--color-accent);
+}
+
+/* ── Badge ──────────────────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* ── Tag chip ───────────────────────────────────────────────── */
+.tag-chip {
+  display: inline-block;
+  padding: 4px 10px;
+  background: var(--color-surface-2);
+  color: var(--color-text-muted);
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  margin: 2px;
+}
+
+/* ── Expand card ────────────────────────────────────────────── */
+.expand-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  margin-block: 8px;
+}
+.expand-card > summary {
+  cursor: pointer;
+  font-weight: 600;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+/* ── Step flow ──────────────────────────────────────────────── */
+.step-flow { display: flex; flex-direction: column; gap: 12px; }
+.step-flow > .step {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+@media (min-width: 640px) {
+  .step-flow { flex-direction: row; flex-wrap: wrap; }
+  .step-flow > .step { flex: 1 1 220px; }
+}
