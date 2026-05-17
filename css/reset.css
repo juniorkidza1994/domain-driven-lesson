@@ -29,3 +29,5 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+[x-cloak] { display: none !important; }
