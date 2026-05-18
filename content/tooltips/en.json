@@ -1,28 +1,268 @@
 {
   "tooltips": [
     {
-      "id": "bounded-context",
-      "term": { "en": "Bounded Context", "th": "ขอบเขตที่มีบริบท" },
-      "short": { "en": "A boundary within which a domain model is defined and internally consistent.", "th": "" },
-      "full": { "en": "A Bounded Context is a central pattern in Domain-Driven Design. It defines an explicit boundary within which a particular domain model is defined and applicable. Inside a Bounded Context, all terms of the Ubiquitous Language have a specific meaning, and the model is internally consistent. Different Bounded Contexts may have different meanings for the same term.", "th": "" },
-      "example": { "en": "In an e-commerce system, 'Product' in the Catalog context (with description, images) differs from 'Product' in the Inventory context (with stock levels, warehouse location).", "th": "" },
+      "id": "ddd",
+      "term": { "en": "Domain-Driven Design", "th": "การออกแบบที่ขับเคลื่อนด้วยโดเมน" },
+      "short": { "en": "A software design approach that models software to match a complex business domain.", "th": "แนวทางออกแบบซอฟต์แวร์ที่สร้างโมเดลตามโดเมนธุรกิจที่ซับซ้อน" },
+      "full": { "en": "Domain-Driven Design (DDD) is a software development approach introduced by Eric Evans that focuses on building a shared model of the business domain between developers and domain experts. It emphasises placing the project's primary focus on the core domain and domain logic, basing complex designs on a model of the domain, and initiating a creative collaboration between technical and domain experts to iteratively cut to the conceptual heart of problems.", "th": "Domain-Driven Design (DDD) คือแนวทางพัฒนาซอฟต์แวร์ที่เสนอโดย Eric Evans มุ่งเน้นการสร้างโมเดลร่วมของโดเมนธุรกิจระหว่างนักพัฒนาและผู้เชี่ยวชาญโดเมน" },
+      "example": { "en": "A team building an e-commerce platform uses DDD to model the Ordering, Catalog, and Shipping subdomains separately, each with its own language and rules.", "th": "ทีมพัฒนาแพลตฟอร์มอีคอมเมิร์ซใช้ DDD เพื่อสร้างโมเดล subdomain การสั่งซื้อ แคตตาล็อก และจัดส่งแยกจากกัน" },
       "sourceRef": "Eric Evans, Domain-Driven Design (2003)"
     },
     {
-      "id": "aggregate",
-      "term": { "en": "Aggregate", "th": "กลุ่มวัตถุโดเมน" },
-      "short": { "en": "A cluster of domain objects treated as a single unit, with an Aggregate Root controlling access.", "th": "" },
-      "full": { "en": "An Aggregate is a cluster of associated domain objects (Entities and Value Objects) that are treated as a single unit for data changes. Each Aggregate has an Aggregate Root — an Entity that is the entry point for all external access. The Aggregate Root ensures consistency by controlling all modifications to the objects within its boundary.", "th": "" },
-      "example": { "en": "An Order Aggregate contains the Order (root), OrderItems, and ShippingAddress. External code can only access OrderItems through the Order root, never directly.", "th": "" },
+      "id": "domain",
+      "term": { "en": "Domain", "th": "โดเมน" },
+      "short": { "en": "The subject area to which a software application is applied — the business problem space.", "th": "พื้นที่หัวข้อที่ซอฟต์แวร์นำไปใช้งาน — พื้นที่ปัญหาทางธุรกิจ" },
+      "full": { "en": "The domain is the subject area to which the user applies the program. Every software system solves problems in some domain. In DDD, understanding the domain deeply — its rules, processes, and terminology — is the starting point for good design. The domain is shaped by conversations with domain experts and captured in the Ubiquitous Language.", "th": "โดเมนคือพื้นที่หัวข้อที่ผู้ใช้นำโปรแกรมไปใช้งาน ระบบซอฟต์แวร์ทุกระบบแก้ปัญหาในโดเมนใดโดเมนหนึ่ง" },
+      "example": { "en": "For a hospital management system, the domain includes concepts like Patient, Appointment, Treatment, and Billing — all reflecting the healthcare business.", "th": "สำหรับระบบจัดการโรงพยาบาล โดเมนประกอบด้วยแนวคิดเช่น ผู้ป่วย การนัดหมาย การรักษา และการเรียกเก็บเงิน" },
+      "sourceRef": "Eric Evans, Domain-Driven Design (2003)"
+    },
+    {
+      "id": "subdomain",
+      "term": { "en": "Subdomain", "th": "โดเมนย่อย" },
+      "short": { "en": "A smaller, coherent part of the overall domain that can be tackled independently.", "th": "ส่วนย่อยที่สอดคล้องกันของโดเมนรวมที่สามารถจัดการได้อย่างอิสระ" },
+      "full": { "en": "A subdomain is a part of the overall problem domain. Large business domains are usually divided into subdomains to manage complexity. There are three types: Core (competitive advantage, invest heavily), Supporting (necessary but not differentiating), and Generic (commodity functions, buy or use open source). Bounded Contexts often map one-to-one with subdomains, though not always.", "th": "Subdomain คือส่วนหนึ่งของโดเมนปัญหาโดยรวม โดเมนธุรกิจขนาดใหญ่มักแบ่งเป็น subdomain เพื่อจัดการความซับซ้อน" },
+      "example": { "en": "An e-commerce company has subdomains like Catalog (core), Order Management (core), Payments (generic — use Stripe), and Notifications (supporting).", "th": "บริษัทอีคอมเมิร์ซมี subdomain เช่น แคตตาล็อก (core) จัดการคำสั่งซื้อ (core) การชำระเงิน (generic) และการแจ้งเตือน (supporting)" },
+      "sourceRef": "Vaughn Vernon, Implementing Domain-Driven Design (2013)"
+    },
+    {
+      "id": "core-domain",
+      "term": { "en": "Core Domain", "th": "โดเมนหลัก" },
+      "short": { "en": "The subdomain that provides the business's competitive advantage — deserves the most investment.", "th": "Subdomain ที่ให้ข้อได้เปรียบทางการแข่งขันของธุรกิจ — ควรลงทุนมากที่สุด" },
+      "full": { "en": "The Core Domain is the part of the system that delivers the most business value and competitive differentiation. It is the reason the system exists and where the organisation's most talented developers should be focused. The Core Domain should be built in-house with the best engineering practices, including DDD tactical patterns. It should never be outsourced or replaced with off-the-shelf software.", "th": "Core Domain คือส่วนของระบบที่สร้างคุณค่าทางธุรกิจและความแตกต่างเชิงแข่งขันมากที่สุด" },
+      "example": { "en": "For Amazon, the recommendation engine and logistics optimisation are core domains. Payment processing (generic) and email notifications (supporting) are not.", "th": "สำหรับ Amazon เครื่องมือแนะนำและการเพิ่มประสิทธิภาพโลจิสติกส์คือ core domain" },
+      "sourceRef": "Eric Evans, Domain-Driven Design (2003)"
+    },
+    {
+      "id": "bounded-context",
+      "term": { "en": "Bounded Context", "th": "ขอบเขตที่มีบริบท" },
+      "short": { "en": "A boundary within which a domain model is defined and internally consistent.", "th": "ขอบเขตที่โมเดลโดเมนถูกกำหนดและสอดคล้องกันภายใน" },
+      "full": { "en": "A Bounded Context is a central pattern in Domain-Driven Design. It defines an explicit boundary within which a particular domain model is defined and applicable. Inside a Bounded Context, all terms of the Ubiquitous Language have a specific meaning, and the model is internally consistent. Different Bounded Contexts may have different meanings for the same term.", "th": "Bounded Context คือรูปแบบหลักใน Domain-Driven Design กำหนดขอบเขตที่ชัดเจนซึ่งโมเดลโดเมนเฉพาะถูกกำหนดและนำไปใช้" },
+      "example": { "en": "In an e-commerce system, 'Product' in the Catalog context (with description, images) differs from 'Product' in the Inventory context (with stock levels, warehouse location).", "th": "ในระบบอีคอมเมิร์ซ 'สินค้า' ใน context แคตตาล็อก (มีคำอธิบาย รูปภาพ) แตกต่างจาก 'สินค้า' ใน context คลังสินค้า (มีระดับสต็อก ตำแหน่งคลัง)" },
       "sourceRef": "Eric Evans, Domain-Driven Design (2003)"
     },
     {
       "id": "ubiquitous-language",
       "term": { "en": "Ubiquitous Language", "th": "ภาษากลางที่ใช้ร่วมกัน" },
-      "short": { "en": "A shared language used by developers and domain experts within a Bounded Context.", "th": "" },
-      "full": { "en": "Ubiquitous Language is the practice of building a common, rigorous language between developers and domain experts within a Bounded Context. This language is used in conversations, code, tests, and documentation. It evolves over time as the team's understanding of the domain deepens. Using the same terms everywhere reduces translation errors and makes the code express the domain model directly.", "th": "" },
-      "example": { "en": "Instead of 'user record' (database thinking), the team agrees to say 'Customer' (domain thinking). This word appears in class names, method names, and conversations.", "th": "" },
+      "short": { "en": "A shared language used by developers and domain experts within a Bounded Context.", "th": "ภาษาร่วมที่ใช้โดยนักพัฒนาและผู้เชี่ยวชาญโดเมนภายใน Bounded Context" },
+      "full": { "en": "Ubiquitous Language is the practice of building a common, rigorous language between developers and domain experts within a Bounded Context. This language is used in conversations, code, tests, and documentation. It evolves over time as the team's understanding of the domain deepens. Using the same terms everywhere reduces translation errors and makes the code express the domain model directly.", "th": "Ubiquitous Language คือการสร้างภาษาร่วมที่เข้มงวดระหว่างนักพัฒนาและผู้เชี่ยวชาญโดเมนภายใน Bounded Context" },
+      "example": { "en": "Instead of 'user record' (database thinking), the team agrees to say 'Customer' (domain thinking). This word appears in class names, method names, and conversations.", "th": "แทนที่จะใช้ 'user record' (คิดแบบฐานข้อมูล) ทีมตกลงใช้ 'ลูกค้า' (คิดแบบโดเมน) คำนี้ปรากฏในชื่อคลาส เมธอด และการสนทนา" },
       "sourceRef": "Eric Evans, Domain-Driven Design (2003)"
+    },
+    {
+      "id": "context-map",
+      "term": { "en": "Context Map", "th": "แผนที่บริบท" },
+      "short": { "en": "A visual representation of relationships between Bounded Contexts in a system.", "th": "การแสดงภาพความสัมพันธ์ระหว่าง Bounded Context ในระบบ" },
+      "full": { "en": "A Context Map is a diagram that shows all the Bounded Contexts in a system and how they integrate. It documents the relationships (e.g. Shared Kernel, Customer-Supplier, Conformist, Anti-Corruption Layer) between contexts. It is a valuable communication tool for teams and helps expose organisational dynamics that affect software design.", "th": "Context Map คือแผนภาพที่แสดง Bounded Context ทั้งหมดในระบบและวิธีการเชื่อมต่อ" },
+      "example": { "en": "The Context Map shows that the Order service uses an Anti-Corruption Layer to translate Payment service responses, protecting the Order domain model from Payment's terminology.", "th": "Context Map แสดงว่า service คำสั่งซื้อใช้ Anti-Corruption Layer เพื่อแปลคำตอบจาก service การชำระเงิน" },
+      "sourceRef": "Eric Evans, Domain-Driven Design (2003)"
+    },
+    {
+      "id": "entity",
+      "term": { "en": "Entity", "th": "เอนทิตี" },
+      "short": { "en": "A domain object with a unique identity that persists over time, regardless of attribute changes.", "th": "วัตถุโดเมนที่มีเอกลักษณ์เฉพาะตัวที่คงอยู่ตลอดเวลา โดยไม่คำนึงถึงการเปลี่ยนแปลงแอตทริบิวต์" },
+      "full": { "en": "An Entity is a domain object defined by a thread of continuity and identity, rather than by its attributes. Two Entities are the same if they have the same identity, even if all other attributes differ. Entities are mutable — their state can change over time. Common examples: Customer, Order, Product (when tracked by SKU).", "th": "Entity คือวัตถุโดเมนที่กำหนดโดยความต่อเนื่องและเอกลักษณ์ ไม่ใช่โดยแอตทริบิวต์" },
+      "example": { "en": "A Customer entity has an ID (e.g. cust-42). Even if the customer changes their name and address, they are still the same customer.", "th": "Entity ลูกค้ามี ID (เช่น cust-42) แม้ลูกค้าจะเปลี่ยนชื่อและที่อยู่ พวกเขายังคงเป็นลูกค้าเดิม" },
+      "sourceRef": "Eric Evans, Domain-Driven Design (2003)"
+    },
+    {
+      "id": "value-object",
+      "term": { "en": "Value Object", "th": "วัตถุค่า" },
+      "short": { "en": "An immutable domain object defined entirely by its attributes, with no identity of its own.", "th": "วัตถุโดเมนที่ไม่เปลี่ยนแปลง กำหนดโดยแอตทริบิวต์ทั้งหมด ไม่มีเอกลักษณ์เป็นของตัวเอง" },
+      "full": { "en": "A Value Object is a domain object that describes some characteristic or attribute but carries no concept of identity. Two Value Objects with identical attributes are considered equal and interchangeable. Value Objects are always immutable — to 'change' one, you replace it with a new instance. Common examples: Money, Address, DateRange, Colour.", "th": "Value Object คือวัตถุโดเมนที่อธิบายลักษณะหรือแอตทริบิวต์บางอย่าง แต่ไม่มีแนวคิดเรื่องเอกลักษณ์" },
+      "example": { "en": "Money(100, 'USD') is a Value Object. Two Money(100, 'USD') instances are equal. To give a customer a $10 discount, you replace Money(100) with Money(90), not mutate the original.", "th": "Money(100, 'USD') คือ Value Object สอง Money(100, 'USD') เท่ากัน" },
+      "sourceRef": "Eric Evans, Domain-Driven Design (2003)"
+    },
+    {
+      "id": "aggregate",
+      "term": { "en": "Aggregate", "th": "กลุ่มวัตถุโดเมน" },
+      "short": { "en": "A cluster of domain objects treated as a single unit, with an Aggregate Root controlling access.", "th": "กลุ่มวัตถุโดเมนที่ถือว่าเป็นหน่วยเดียว โดยมี Aggregate Root ควบคุมการเข้าถึง" },
+      "full": { "en": "An Aggregate is a cluster of associated domain objects (Entities and Value Objects) that are treated as a single unit for data changes. Each Aggregate has an Aggregate Root — an Entity that is the entry point for all external access. The Aggregate Root ensures consistency by controlling all modifications to the objects within its boundary.", "th": "Aggregate คือกลุ่มวัตถุโดเมน (Entity และ Value Object) ที่ถือว่าเป็นหน่วยเดียวสำหรับการเปลี่ยนแปลงข้อมูล" },
+      "example": { "en": "An Order Aggregate contains the Order (root), OrderItems, and ShippingAddress. External code can only access OrderItems through the Order root, never directly.", "th": "Aggregate Order ประกอบด้วย Order (root), OrderItems, และ ShippingAddress" },
+      "sourceRef": "Eric Evans, Domain-Driven Design (2003)"
+    },
+    {
+      "id": "repository",
+      "term": { "en": "Repository", "th": "ที่เก็บ" },
+      "short": { "en": "An abstraction over the data store that provides collection-like access to Aggregates.", "th": "การแยกส่วนเหนือที่เก็บข้อมูลที่ให้การเข้าถึงแบบ collection ต่อ Aggregate" },
+      "full": { "en": "A Repository provides an abstraction over the data store, allowing the domain layer to work with domain objects without caring about persistence details. It mimics a collection interface (add, remove, findById, etc.) but internally uses a database, ORM, or other storage. Only Aggregate Roots should have Repositories.", "th": "Repository ให้การแยกส่วนเหนือที่เก็บข้อมูล ช่วยให้ domain layer ทำงานกับวัตถุโดเมนโดยไม่สนใจรายละเอียดการจัดเก็บ" },
+      "example": { "en": "OrderRepository.findById(orderId) returns an Order Aggregate. The calling code doesn't know if data came from PostgreSQL, MongoDB, or a cache.", "th": "OrderRepository.findById(orderId) คืน Order Aggregate โดยโค้ดที่เรียกไม่รู้ว่าข้อมูลมาจาก PostgreSQL, MongoDB หรือ cache" },
+      "sourceRef": "Eric Evans, Domain-Driven Design (2003)"
+    },
+    {
+      "id": "domain-service",
+      "term": { "en": "Domain Service", "th": "บริการโดเมน" },
+      "short": { "en": "A stateless operation in the domain that doesn't naturally fit on an Entity or Value Object.", "th": "การดำเนินการ stateless ในโดเมนที่ไม่เหมาะกับ Entity หรือ Value Object" },
+      "full": { "en": "A Domain Service is a stateless service in the domain layer that encapsulates domain logic that doesn't naturally belong to an Entity or Value Object. It operates on domain objects and expresses a domain concept. Domain Services should be named using Ubiquitous Language verbs. They are distinct from Application Services, which orchestrate use cases.", "th": "Domain Service คือ service แบบ stateless ใน domain layer ที่ห่อหุ้ม domain logic ที่ไม่เหมาะจะอยู่ใน Entity หรือ Value Object" },
+      "example": { "en": "TransferFunds(fromAccount, toAccount, amount) is a Domain Service — it coordinates two Account entities and enforces business rules that span both.", "th": "TransferFunds(fromAccount, toAccount, amount) คือ Domain Service — ประสานงาน Entity บัญชีสองรายการ" },
+      "sourceRef": "Eric Evans, Domain-Driven Design (2003)"
+    },
+    {
+      "id": "application-service",
+      "term": { "en": "Application Service", "th": "บริการแอปพลิเคชัน" },
+      "short": { "en": "An orchestration layer that coordinates domain objects to fulfil a use case.", "th": "ชั้นประสานงานที่จัดการวัตถุโดเมนเพื่อดำเนินการ use case" },
+      "full": { "en": "Application Services sit between the presentation layer and the domain layer. They are responsible for use case orchestration: loading Aggregates from Repositories, calling domain logic, committing transactions, and publishing events. Application Services should have no business logic themselves — they delegate everything to the domain. They are often mapped one-to-one with API endpoints.", "th": "Application Service อยู่ระหว่างชั้น presentation และ domain layer รับผิดชอบการประสานงาน use case" },
+      "example": { "en": "PlaceOrderService.execute(customerId, cartItems): loads Customer, validates cart, creates Order Aggregate, saves via Repository, publishes OrderPlaced event.", "th": "PlaceOrderService.execute(customerId, cartItems): โหลด Customer, ตรวจสอบตะกร้า, สร้าง Order Aggregate, บันทึกผ่าน Repository" },
+      "sourceRef": "Vaughn Vernon, Implementing Domain-Driven Design (2013)"
+    },
+    {
+      "id": "domain-event",
+      "term": { "en": "Domain Event", "th": "เหตุการณ์โดเมน" },
+      "short": { "en": "Something significant that happened within the domain that domain experts care about.", "th": "สิ่งสำคัญที่เกิดขึ้นในโดเมนที่ผู้เชี่ยวชาญโดเมนสนใจ" },
+      "full": { "en": "A Domain Event represents something that happened within the Bounded Context that the business cares about. It is always named in the past tense (OrderPlaced, PaymentReceived, CustomerRegistered). Domain Events are immutable facts — once published they cannot be changed. They are used to decouple Aggregates within a Bounded Context and to integrate between Bounded Contexts.", "th": "Domain Event แสดงถึงสิ่งที่เกิดขึ้นภายใน Bounded Context ที่ธุรกิจสนใจ ตั้งชื่อในรูปอดีตกาลเสมอ" },
+      "example": { "en": "When an order is confirmed, the Order Aggregate publishes an OrderConfirmed(orderId, customerId, totalAmount, confirmedAt) event.", "th": "เมื่อยืนยันคำสั่งซื้อ Order Aggregate เผยแพร่เหตุการณ์ OrderConfirmed(orderId, customerId, totalAmount, confirmedAt)" },
+      "sourceRef": "Eric Evans, Domain-Driven Design (2003)"
+    },
+    {
+      "id": "integration-event",
+      "term": { "en": "Integration Event", "th": "เหตุการณ์การผสานรวม" },
+      "short": { "en": "An event published to external systems or other Bounded Contexts to notify of something that happened.", "th": "เหตุการณ์ที่เผยแพร่ไปยังระบบภายนอกหรือ Bounded Context อื่นเพื่อแจ้งเตือน" },
+      "full": { "en": "An Integration Event is a Domain Event that has been translated into a message suitable for publishing to other Bounded Contexts or external systems via a message broker. Unlike Domain Events (which live inside a Bounded Context), Integration Events cross context boundaries and must be versioned carefully. They typically contain only the minimum data needed by consumers.", "th": "Integration Event คือ Domain Event ที่แปลเป็นข้อความเหมาะสมสำหรับเผยแพร่ไปยัง Bounded Context อื่นหรือระบบภายนอก" },
+      "example": { "en": "The Order service translates its internal OrderConfirmed domain event into an order.confirmed integration event published to Kafka, consumed by Inventory and Shipping services.", "th": "service Order แปล domain event OrderConfirmed ภายในเป็น integration event order.confirmed ที่เผยแพร่ไปยัง Kafka" },
+      "sourceRef": "Vaughn Vernon, Implementing Domain-Driven Design (2013)"
+    },
+    {
+      "id": "command",
+      "term": { "en": "Command", "th": "คำสั่ง" },
+      "short": { "en": "A request to change state in the system — named imperatively (PlaceOrder, CancelShipment).", "th": "คำขอเปลี่ยนสถานะในระบบ — ตั้งชื่อเป็นคำสั่ง (PlaceOrder, CancelShipment)" },
+      "full": { "en": "A Command is a message that expresses the intent to change the system state. Commands are named in the imperative (RegisterCustomer, PlaceOrder, CancelOrder). They are handled by exactly one handler and either succeed or fail. Commands are distinct from Queries (which only read state) in the CQS/CQRS pattern.", "th": "Command คือข้อความที่แสดงเจตนาจะเปลี่ยนสถานะระบบ ตั้งชื่อในรูปคำสั่ง (RegisterCustomer, PlaceOrder)" },
+      "example": { "en": "PlaceOrder(customerId: 'cust-42', items: [...], shippingAddress: {...}) is a Command. If the customer has sufficient credit, the Order is created; otherwise the command fails.", "th": "PlaceOrder(customerId: 'cust-42', items: [...], shippingAddress: {...}) คือ Command" },
+      "sourceRef": "Greg Young, CQRS Documents (2010)"
+    },
+    {
+      "id": "query",
+      "term": { "en": "Query", "th": "การสอบถาม" },
+      "short": { "en": "A read-only request that returns data without changing system state.", "th": "คำขออ่านอย่างเดียวที่คืนข้อมูลโดยไม่เปลี่ยนสถานะระบบ" },
+      "full": { "en": "A Query is a message that retrieves data from the system without causing any side effects or state changes. In CQRS, Queries are handled separately from Commands and can use optimised read models (e.g. denormalised views, search indexes, projections). The result of a Query is a Data Transfer Object (DTO) or a read model, never an Aggregate.", "th": "Query คือข้อความที่ดึงข้อมูลจากระบบโดยไม่ก่อให้เกิด side effect หรือการเปลี่ยนแปลงสถานะ" },
+      "example": { "en": "GetOrderSummary(orderId) is a Query that returns a flat DTO with order details from a denormalised read model, bypassing the Order Aggregate entirely.", "th": "GetOrderSummary(orderId) คือ Query ที่คืน DTO แบน พร้อมรายละเอียดคำสั่งซื้อจาก read model ที่ denormalised" },
+      "sourceRef": "Greg Young, CQRS Documents (2010)"
+    },
+    {
+      "id": "event-storming",
+      "term": { "en": "Event Storming", "th": "Event Storming" },
+      "short": { "en": "A workshop technique for rapidly exploring a business domain using sticky notes.", "th": "เทคนิคการประชุมเชิงปฏิบัติการเพื่อสำรวจโดเมนธุรกิจอย่างรวดเร็วโดยใช้โน้ตกาว" },
+      "full": { "en": "Event Storming is a collaborative workshop technique invented by Alberto Brandolini for exploring complex business domains. Participants use coloured sticky notes to map out Domain Events (orange), Commands (blue), Actors (yellow), Policies (purple), and Systems (pink) on a long paper roll. It reveals domain complexity quickly and builds shared understanding across technical and business stakeholders.", "th": "Event Storming คือเทคนิคการประชุมเชิงปฏิบัติการร่วมกันที่คิดค้นโดย Alberto Brandolini เพื่อสำรวจโดเมนธุรกิจที่ซับซ้อน" },
+      "example": { "en": "In a 4-hour Event Storming workshop, the team places 200+ orange sticky notes on a wall, revealing that the checkout process alone has 15 distinct domain events.", "th": "ในการประชุม Event Storming 4 ชั่วโมง ทีมวางโน้ตสีส้มกว่า 200 แผ่นบนกำแพง เผยให้เห็นว่ากระบวนการชำระเงินมีเหตุการณ์โดเมน 15 รายการ" },
+      "sourceRef": "Alberto Brandolini, Event Storming (2013)"
+    },
+    {
+      "id": "policy",
+      "term": { "en": "Policy", "th": "นโยบาย" },
+      "short": { "en": "A business rule that reacts to an event and triggers a command — 'whenever X happens, do Y'.", "th": "กฎธุรกิจที่ตอบสนองต่อเหตุการณ์และเรียกคำสั่ง — 'ทุกครั้งที่ X เกิดขึ้น ให้ทำ Y'" },
+      "full": { "en": "A Policy (shown on purple sticky notes in Event Storming) is a business rule or automation that says 'whenever [event] happens, [command] is triggered'. Policies capture the automation and reactive logic of a system. They bridge Domain Events and the Commands they cause, making implicit business logic explicit and visible.", "th": "Policy (แสดงด้วยโน้ตสีม่วงใน Event Storming) คือกฎธุรกิจหรือระบบอัตโนมัติที่กล่าวว่า 'ทุกครั้งที่ [เหตุการณ์] เกิดขึ้น [คำสั่ง] จะถูกเรียกใช้'" },
+      "example": { "en": "Policy: 'When OrderPlaced → Send confirmation email' (triggers SendConfirmationEmail command). Policy: 'When PaymentFailed 3 times → Cancel order'.", "th": "Policy: 'เมื่อ OrderPlaced → ส่งอีเมลยืนยัน' (เรียกคำสั่ง SendConfirmationEmail)" },
+      "sourceRef": "Alberto Brandolini, Event Storming (2013)"
+    },
+    {
+      "id": "actor",
+      "term": { "en": "Actor", "th": "ผู้กระทำ" },
+      "short": { "en": "A person or role that triggers Commands in the system.", "th": "บุคคลหรือบทบาทที่เรียกคำสั่งในระบบ" },
+      "full": { "en": "An Actor (shown on yellow sticky notes in Event Storming) is a person, role, or external system that initiates a Command. Identifying actors makes it clear who is responsible for each action in the business flow. Actors are distinct from External Systems (which are also yellow but represent automated systems outside the domain).", "th": "Actor (แสดงด้วยโน้ตสีเหลืองใน Event Storming) คือบุคคล บทบาท หรือระบบภายนอกที่เริ่มต้น Command" },
+      "example": { "en": "In a purchase flow: Customer (actor) triggers PlaceOrder command → OrderPlaced event → Warehouse Staff (actor) triggers ShipOrder command.", "th": "ในขั้นตอนการซื้อ: ลูกค้า (actor) เรียก command PlaceOrder → เหตุการณ์ OrderPlaced → พนักงานคลังสินค้า (actor) เรียก command ShipOrder" },
+      "sourceRef": "Alberto Brandolini, Event Storming (2013)"
+    },
+    {
+      "id": "external-system",
+      "term": { "en": "External System", "th": "ระบบภายนอก" },
+      "short": { "en": "A third-party system outside the domain that interacts with your Bounded Context.", "th": "ระบบบุคคลที่สามนอกโดเมนที่โต้ตอบกับ Bounded Context ของคุณ" },
+      "full": { "en": "An External System (shown on pink sticky notes in Event Storming) is a system outside the team's control that the domain integrates with. It can produce events (e.g. a Payment Gateway emitting PaymentProcessed) or consume commands (e.g. an Email Service receiving SendEmail). Identifying external systems early helps define integration boundaries.", "th": "External System (แสดงด้วยโน้ตสีชมพูใน Event Storming) คือระบบนอกการควบคุมของทีมที่โดเมนผสานรวมด้วย" },
+      "example": { "en": "Payment Gateway, Email Service, and Inventory System are external systems. The Order context integrates with Payment Gateway but treats it as a black box.", "th": "Payment Gateway, Email Service, และ Inventory System คือระบบภายนอก" },
+      "sourceRef": "Alberto Brandolini, Event Storming (2013)"
+    },
+    {
+      "id": "read-model",
+      "term": { "en": "Read Model", "th": "โมเดลอ่านข้อมูล" },
+      "short": { "en": "A denormalised projection of domain data optimised for a specific query use case.", "th": "การฉายภาพข้อมูลโดเมนที่ denormalized เพิ่มประสิทธิภาพสำหรับ use case การสืบค้นเฉพาะ" },
+      "full": { "en": "A Read Model (or projection) is a data structure derived from Domain Events and optimised for a specific query. In CQRS, write and read models are separated. The read model is built by consuming events and can be completely denormalised for fast lookups. It answers 'what is the current state?' without touching the write-side Aggregates.", "th": "Read Model คือโครงสร้างข้อมูลที่ได้จาก Domain Event และเพิ่มประสิทธิภาพสำหรับการสืบค้นเฉพาะ" },
+      "example": { "en": "OrderSummaryProjection updates a flat table whenever OrderPlaced, ItemAdded, or OrderShipped events arrive. The UI queries this table — fast and simple.", "th": "OrderSummaryProjection อัปเดตตารางแบนทุกครั้งที่เหตุการณ์ OrderPlaced, ItemAdded, หรือ OrderShipped มาถึง" },
+      "sourceRef": "Greg Young, CQRS Documents (2010)"
+    },
+    {
+      "id": "eda",
+      "term": { "en": "Event-Driven Architecture", "th": "สถาปัตยกรรมที่ขับเคลื่อนด้วยเหตุการณ์" },
+      "short": { "en": "An architectural style where services communicate by producing and consuming events asynchronously.", "th": "รูปแบบสถาปัตยกรรมที่ service สื่อสารโดยการสร้างและบริโภคเหตุการณ์แบบอะซิงโครนัส" },
+      "full": { "en": "Event-Driven Architecture (EDA) is a software design pattern in which services communicate through events — messages representing something that happened. EDA decouples producers from consumers: producers don't know who will consume their events, and consumers don't need to know who produced them. This enables loose coupling, scalability, and resilience.", "th": "Event-Driven Architecture (EDA) คือรูปแบบการออกแบบซอฟต์แวร์ที่ service สื่อสารผ่านเหตุการณ์" },
+      "example": { "en": "When a user places an order, the Order service publishes an OrderPlaced event. Inventory, Notification, and Analytics services independently consume this event without the Order service knowing.", "th": "เมื่อผู้ใช้สั่งซื้อ service Order เผยแพร่เหตุการณ์ OrderPlaced Inventory, Notification, และ Analytics service บริโภคเหตุการณ์นี้อย่างอิสระ" },
+      "sourceRef": "Martin Fowler, Enterprise Integration Patterns (2003)"
+    },
+    {
+      "id": "producer",
+      "term": { "en": "Producer", "th": "ผู้สร้างเหตุการณ์" },
+      "short": { "en": "A service or component that creates and publishes events to a message broker.", "th": "service หรือคอมโพเนนต์ที่สร้างและเผยแพร่เหตุการณ์ไปยัง message broker" },
+      "full": { "en": "A Producer is any service or component that creates events and publishes them to a message broker or event bus. Producers don't need to know who will consume their events — they simply fire and forget. In EDA, producers are decoupled from consumers, which means they can be deployed, scaled, and updated independently.", "th": "Producer คือ service หรือคอมโพเนนต์ใดๆ ที่สร้างเหตุการณ์และเผยแพร่ไปยัง message broker หรือ event bus" },
+      "example": { "en": "The Order service is a Producer that publishes OrderPlaced, OrderShipped, and OrderCancelled events to a Kafka topic. It doesn't know how many consumers are listening.", "th": "service Order คือ Producer ที่เผยแพร่เหตุการณ์ OrderPlaced, OrderShipped, และ OrderCancelled ไปยัง Kafka topic" },
+      "sourceRef": "Apache Kafka Documentation"
+    },
+    {
+      "id": "consumer",
+      "term": { "en": "Consumer", "th": "ผู้บริโภคเหตุการณ์" },
+      "short": { "en": "A service or component that subscribes to and processes events from a message broker.", "th": "service หรือคอมโพเนนต์ที่สมัครและประมวลผลเหตุการณ์จาก message broker" },
+      "full": { "en": "A Consumer is a service or component that subscribes to an event stream and processes incoming events. Consumers act on events to update their own state, trigger workflows, or produce new events. Multiple consumers can independently consume the same event (fan-out). Consumers are responsible for tracking their position in the event stream (offset management).", "th": "Consumer คือ service หรือคอมโพเนนต์ที่สมัครรับ event stream และประมวลผลเหตุการณ์ที่เข้ามา" },
+      "example": { "en": "The Inventory service and Email service are both Consumers of OrderPlaced events. Each maintains its own consumer group offset and processes events at its own pace.", "th": "service Inventory และ service Email ทั้งคู่เป็น Consumer ของเหตุการณ์ OrderPlaced" },
+      "sourceRef": "Apache Kafka Documentation"
+    },
+    {
+      "id": "message-broker",
+      "term": { "en": "Message Broker", "th": "ตัวกลางรับส่งข้อความ" },
+      "short": { "en": "Infrastructure that receives events from producers and routes them to consumers.", "th": "โครงสร้างพื้นฐานที่รับเหตุการณ์จาก producer และส่งต่อไปยัง consumer" },
+      "full": { "en": "A Message Broker is a middleware component that receives messages from Producers and routes them to the appropriate Consumers. It provides durability (messages are stored until consumed), decoupling (producers and consumers don't communicate directly), and reliability (retry, dead-letter queues). Common examples: Apache Kafka, RabbitMQ, AWS SQS/SNS, Azure Service Bus.", "th": "Message Broker คือคอมโพเนนต์ middleware ที่รับข้อความจาก Producer และส่งต่อไปยัง Consumer ที่เหมาะสม" },
+      "example": { "en": "Apache Kafka acts as the Message Broker in an e-commerce system. Producers publish to topics, Consumers read from topics. Kafka stores messages for up to 7 days by default.", "th": "Apache Kafka ทำหน้าที่เป็น Message Broker ในระบบอีคอมเมิร์ซ" },
+      "sourceRef": "Apache Kafka Documentation"
+    },
+    {
+      "id": "pub-sub",
+      "term": { "en": "Pub/Sub", "th": "รูปแบบผู้เผยแพร่/สมาชิก" },
+      "short": { "en": "A messaging pattern where publishers send events to topics and subscribers receive them independently.", "th": "รูปแบบการรับส่งข้อความที่ publisher ส่งเหตุการณ์ไปยัง topic และ subscriber รับอย่างอิสระ" },
+      "full": { "en": "Publish/Subscribe (Pub/Sub) is a messaging pattern where Publishers send messages to named channels (topics) without knowing who will receive them. Subscribers register interest in topics and receive all messages published to those topics. This achieves temporal decoupling (publisher and subscriber don't need to be running at the same time) and spatial decoupling (they don't need to know each other's location).", "th": "Publish/Subscribe (Pub/Sub) คือรูปแบบการรับส่งข้อความที่ Publisher ส่งข้อความไปยังช่อง (topic) โดยไม่รู้ว่าใครจะรับ" },
+      "example": { "en": "AWS SNS is a Pub/Sub service. An OrderPlaced SNS message fans out simultaneously to an SQS queue (Inventory), an SQS queue (Shipping), and an email endpoint (Operations).", "th": "AWS SNS คือ service Pub/Sub ข้อความ SNS ของ OrderPlaced fan out พร้อมกันไปยัง SQS queue (Inventory), SQS queue (Shipping), และ endpoint อีเมล (Operations)" },
+      "sourceRef": "Gregor Hohpe, Enterprise Integration Patterns (2003)"
+    },
+    {
+      "id": "eventual-consistency",
+      "term": { "en": "Eventual Consistency", "th": "ความสอดคล้องในที่สุด" },
+      "short": { "en": "A consistency model where distributed data will become consistent over time, not immediately.", "th": "โมเดลความสอดคล้องที่ข้อมูลกระจายจะสอดคล้องกันในที่สุด ไม่ใช่ทันที" },
+      "full": { "en": "Eventual Consistency is a consistency model in distributed systems that guarantees that, if no new updates are made to a data item, eventually all reads will return the last updated value. In EDA systems, when a producer publishes an event, consumers may not have processed it yet, so different services may briefly hold different views of the same data. This is a deliberate trade-off for scalability and availability.", "th": "Eventual Consistency คือโมเดลความสอดคล้องในระบบกระจายที่รับประกันว่า หากไม่มีการอัปเดตใหม่ สุดท้ายการอ่านทั้งหมดจะคืนค่าที่อัปเดตล่าสุด" },
+      "example": { "en": "When an order is placed, the Inventory service's stock count may lag by 50ms. During that window, two customers might both see '1 item left'. This is acceptable if eventual correction is guaranteed.", "th": "เมื่อสั่งซื้อ จำนวนสต็อกของ service Inventory อาจล่าช้า 50ms ในช่วงนั้น ลูกค้าสองคนอาจเห็น 'เหลือ 1 ชิ้น' ทั้งคู่" },
+      "sourceRef": "Werner Vogels, Amazon CTO (2008)"
+    },
+    {
+      "id": "idempotency",
+      "term": { "en": "Idempotency", "th": "ความต้านทานการซ้ำ" },
+      "short": { "en": "The property that an operation produces the same result when performed multiple times.", "th": "คุณสมบัติที่การดำเนินการให้ผลลัพธ์เดียวกันเมื่อดำเนินการหลายครั้ง" },
+      "full": { "en": "Idempotency means that performing an operation multiple times has the same effect as performing it once. In event-driven systems, consumers must be idempotent because events can be delivered more than once (at-least-once delivery guarantees). Idempotent consumers track which events they've already processed (using event IDs) and skip duplicates.", "th": "Idempotency หมายความว่าการดำเนินการหลายครั้งมีผลเหมือนกับการดำเนินการครั้งเดียว ใน event-driven system consumer ต้องเป็น idempotent เพราะเหตุการณ์อาจส่งมากกว่าหนึ่งครั้ง" },
+      "example": { "en": "PaymentService.processPayment(eventId: 'evt-123') checks if evt-123 was already processed. If yes, it skips without charging the customer twice.", "th": "PaymentService.processPayment(eventId: 'evt-123') ตรวจสอบว่า evt-123 ถูกประมวลผลแล้วหรือยัง ถ้าใช่ จะข้ามโดยไม่เรียกเก็บเงินลูกค้าสองครั้ง" },
+      "sourceRef": "Pat Helland, Idempotence Is Not a Medical Condition (2012)"
+    },
+    {
+      "id": "retry",
+      "term": { "en": "Retry", "th": "การลองใหม่" },
+      "short": { "en": "Automatically re-sending a failed message after a delay to handle transient failures.", "th": "การส่งข้อความที่ล้มเหลวซ้ำอัตโนมัติหลังจากหน่วงเวลาเพื่อจัดการความล้มเหลวชั่วคราว" },
+      "full": { "en": "Retry is the pattern of automatically re-attempting a failed operation after a delay. In event-driven systems, consumers that fail to process a message will have that message redelivered by the broker after a timeout. Retry policies often use exponential backoff (wait 1s, then 2s, then 4s...) to avoid overwhelming a failing service. Retries are safe only when consumers are idempotent.", "th": "Retry คือรูปแบบการลองดำเนินการที่ล้มเหลวซ้ำอัตโนมัติหลังจากหน่วงเวลา" },
+      "example": { "en": "Kafka consumer fails to call the payment API. The consumer commits no offset, so Kafka redelivers the message after 30s. After 3 retries, the message moves to the Dead Letter Queue.", "th": "Kafka consumer ล้มเหลวในการเรียก payment API ไม่ commit offset ดังนั้น Kafka จะส่งข้อความใหม่หลังจาก 30 วินาที" },
+      "sourceRef": "Michael Nygard, Release It! (2007)"
+    },
+    {
+      "id": "dead-letter-queue",
+      "term": { "en": "Dead Letter Queue", "th": "คิวข้อความที่ล้มเหลว" },
+      "short": { "en": "A holding area for messages that could not be processed after all retry attempts are exhausted.", "th": "พื้นที่เก็บข้อความที่ไม่สามารถประมวลผลได้หลังจากลองซ้ำทั้งหมดหมดแล้ว" },
+      "full": { "en": "A Dead Letter Queue (DLQ) is a special queue where messages that have failed processing after all retry attempts are sent. DLQs prevent message loss and allow operators to inspect failed messages, diagnose errors, and reprocess them once the underlying issue is fixed. Every consumer in a production EDA system should have a DLQ.", "th": "Dead Letter Queue (DLQ) คือ queue พิเศษที่ข้อความซึ่งล้มเหลวในการประมวลผลหลังจากลองซ้ำทั้งหมดจะถูกส่งไปที่นั่น" },
+      "example": { "en": "SQS queue ProcessPayment has a DLQ configured. After 3 delivery failures, the message moves to ProcessPayment-DLQ. An alert fires and a developer investigates.", "th": "SQS queue ProcessPayment มี DLQ ที่กำหนดค่าไว้ หลังจากส่งล้มเหลว 3 ครั้ง ข้อความจะย้ายไปยัง ProcessPayment-DLQ" },
+      "sourceRef": "AWS SQS Documentation"
+    },
+    {
+      "id": "event-schema",
+      "term": { "en": "Event Schema", "th": "โครงสร้างเหตุการณ์" },
+      "short": { "en": "The formal structure of an event — its fields, types, and required properties.", "th": "โครงสร้างอย่างเป็นทางการของเหตุการณ์ — ฟิลด์ ประเภท และคุณสมบัติที่จำเป็น" },
+      "full": { "en": "An Event Schema defines the structure, field names, data types, and constraints of an event message. Schemas are typically described using JSON Schema, Avro, or Protobuf. A Schema Registry allows producers and consumers to agree on the schema and ensures compatibility when schemas evolve. Well-defined schemas are the contract between producers and consumers.", "th": "Event Schema กำหนดโครงสร้าง ชื่อฟิลด์ ประเภทข้อมูล และข้อจำกัดของข้อความเหตุการณ์" },
+      "example": { "en": "OrderPlaced schema: { eventId: UUID, orderId: UUID, customerId: UUID, items: [{productId, qty, price}], totalAmount: Decimal, placedAt: ISO8601 }", "th": "Schema ของ OrderPlaced: { eventId: UUID, orderId: UUID, customerId: UUID, items: [{productId, qty, price}], totalAmount: Decimal, placedAt: ISO8601 }" },
+      "sourceRef": "Confluent Schema Registry Documentation"
+    },
+    {
+      "id": "event-versioning",
+      "term": { "en": "Event Versioning", "th": "การกำหนดเวอร์ชันเหตุการณ์" },
+      "short": { "en": "Managing changes to event schemas over time without breaking existing consumers.", "th": "การจัดการการเปลี่ยนแปลง schema เหตุการณ์เมื่อเวลาผ่านไปโดยไม่ทำลาย consumer ที่มีอยู่" },
+      "full": { "en": "Event Versioning is the practice of managing changes to event schemas in a backward and forward-compatible way. Adding optional fields is backward-compatible (old consumers ignore new fields). Removing or renaming required fields is a breaking change requiring a new version. Strategies include: version in the event type name (OrderPlaced.v2), schema evolution rules in a registry, or using a wrapper envelope with a version field.", "th": "Event Versioning คือการจัดการการเปลี่ยนแปลง schema เหตุการณ์ในลักษณะที่เข้ากันได้ทั้งแบบ backward และ forward" },
+      "example": { "en": "v1: OrderPlaced has customerId. v2 adds loyaltyPoints (optional). Old consumers reading v2 events safely ignore loyaltyPoints. No breaking change.", "th": "v1: OrderPlaced มี customerId v2 เพิ่ม loyaltyPoints (ไม่จำเป็น) Consumer เก่าที่อ่าน event v2 จะข้าม loyaltyPoints อย่างปลอดภัย" },
+      "sourceRef": "Confluent Schema Registry Documentation"
     }
   ]
 }

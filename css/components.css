@@ -121,3 +121,101 @@
 }
 .step-flow-item__body { flex: 1; }
 .step-flow-item__label { font-weight: 600; margin-bottom: 2px; }
+
+/* ── Tooltip system — DRE-15 ─────────────────────────────────── */
+.tooltip-trigger {
+  text-decoration: underline dotted var(--color-primary);
+  text-underline-offset: 3px;
+  cursor: pointer;
+  color: var(--color-primary);
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+}
+.tooltip-trigger:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* Desktop popover */
+.tooltip-bubble {
+  position: absolute;
+  z-index: 90;
+  max-width: 280px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  padding: 10px 14px;
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+.tooltip-bubble strong { display: block; margin-bottom: 4px; color: var(--color-primary); }
+.tooltip-bubble p { margin: 0; }
+.tooltip-bubble[hidden] { display: none; }
+
+/* Mobile sheet */
+.tooltip-sheet {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--color-surface);
+  border-radius: 16px 16px 0 0;
+  padding: 24px;
+  z-index: 100;
+  max-height: 60vh;
+  overflow-y: auto;
+  box-shadow: 0 -8px 24px rgba(0,0,0,0.12);
+  animation: tooltipSheetIn .18s ease-out;
+}
+.tooltip-sheet[hidden] { display: none; }
+.tooltip-sheet h2 { margin: 0 0 12px; font-size: 1.15rem; color: var(--color-primary); }
+.tooltip-sheet p { margin: 0 0 12px; }
+.tooltip-sheet__close {
+  position: absolute; top: 12px; right: 12px;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--color-surface-2); border: 0;
+  font-size: 1.4rem; cursor: pointer;
+}
+.tooltip-sheet__example { color: var(--color-text-muted); font-style: italic; }
+.tooltip-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.4); z-index: 99;
+}
+.tooltip-overlay[hidden] { display: none; }
+@keyframes tooltipSheetIn { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+/* ── Glossary page — DRE-15 ──────────────────────────────────── */
+.glossary-grid { display: grid; gap: 24px; grid-template-columns: 1fr; }
+@media (min-width: 768px) {
+  .glossary-grid { grid-template-columns: 1fr 1fr; }
+}
+.glossary-category h2 {
+  font-size: 1.1rem;
+  color: var(--color-primary);
+  border-bottom: 2px solid var(--color-primary-100);
+  padding-bottom: 4px;
+  margin-bottom: 12px;
+}
+.glossary-term {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow-sm);
+}
+.glossary-term h3 { margin: 0 0 4px; font-size: 1rem; }
+.glossary-term__def { margin: 0; font-size: 0.92rem; }
+.glossary-term__related { margin-top: 6px; font-size: 0.8rem; color: var(--color-text-muted); }
+.glossary-index { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 24px; }
+.glossary-index a {
+  display: inline-block; padding: 4px 10px;
+  background: var(--color-primary-50);
+  color: var(--color-primary);
+  border-radius: 9999px;
+  font-size: 0.8rem; text-decoration: none;
+}

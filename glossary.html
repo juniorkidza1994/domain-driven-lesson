@@ -11,9 +11,6 @@
   <link rel="stylesheet" href="css/tokens.css"/>
   <link rel="stylesheet" href="css/layout.css"/>
   <link rel="stylesheet" href="css/components.css"/>
-  <link rel="stylesheet" href="css/diagrams.css"/>
-  <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
-  <script defer src="js/diagrams.js"></script>
   <script defer src="js/nav.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
 </head>
@@ -21,10 +18,65 @@
 
   <div id="nav-root"></div>
 
-  <main class="section">
-    <h1>Glossary</h1>
-    <p>Coming in DRE-22.</p>
+  <main class="section" x-data="glossaryPage()" x-init="load()">
+    <h1 x-text="$store.app.lang === 'en' ? 'Glossary' : 'คำศัพท์'">Glossary</h1>
+    <p x-text="$store.app.lang === 'en'
+      ? 'Key terms used throughout the course, organised by topic.'
+      : 'คำศัพท์สำคัญที่ใช้ตลอดหลักสูตร จัดเรียงตามหัวข้อ'"></p>
+
+    <nav class="glossary-index" aria-label="Alphabetical index">
+      <template x-for="letter in letters" :key="letter">
+        <a :href="'#letter-' + letter" x-text="letter"></a>
+      </template>
+    </nav>
+
+    <div class="glossary-grid">
+      <template x-for="cat in data.categories" :key="cat.id">
+        <section class="glossary-category" :id="'cat-' + cat.id">
+          <h2 x-text="cat.name[$store.app.lang] || cat.name.en"></h2>
+          <template x-for="t in cat.terms" :key="t.id">
+            <article class="glossary-term" :id="'term-' + t.id">
+              <h3 x-text="t.term[$store.app.lang] || t.term.en"></h3>
+              <p class="glossary-term__def"
+                 x-text="t.definition[$store.app.lang] || t.definition.en"></p>
+              <div class="glossary-term__related" x-show="t.relatedTerms && t.relatedTerms.length">
+                <span x-text="$store.app.lang === 'en' ? 'Related: ' : 'ที่เกี่ยวข้อง: '"></span>
+                <span x-text="(t.relatedTerms || []).join(', ')"></span>
+              </div>
+            </article>
+          </template>
+        </section>
+      </template>
+    </div>
   </main>
+
+  <script>
+    function glossaryPage() {
+      return {
+        data: { categories: [] },
+        letters: [],
+        async load() {
+          Alpine.effect(() => {
+            const l = Alpine.store('app').lang;
+            fetch(`content/glossary/${l}.json`)
+              .then(r => r.ok ? r.json() : { categories: [] })
+              .then(d => {
+                this.data = d;
+                const set = new Set();
+                (d.categories || []).forEach(c =>
+                  (c.terms || []).forEach(t => {
+                    const txt = (t.term[l] || t.term.en || '').trim();
+                    if (txt) set.add(txt[0].toUpperCase());
+                  })
+                );
+                this.letters = [...set].sort();
+              })
+              .catch(() => { this.data = { categories: [] }; });
+          });
+        }
+      };
+    }
+  </script>
 
 </body>
 </html>
