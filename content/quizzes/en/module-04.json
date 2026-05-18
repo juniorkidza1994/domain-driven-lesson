@@ -4,76 +4,200 @@
     {
       "id": "q1",
       "type": "mcq",
-      "question": { "en": "After you cluster events into capability groups (step 4) and classify each cluster as Core, Supporting, or Generic (step 5), what have you produced?", "th": "" },
+      "question": {
+        "en": "After you cluster events into capability groups (step 4) and classify each cluster as Core, Supporting, or Generic (step 5), what have you produced?"
+      },
       "options": [
-        { "id": "a", "text": { "en": "A finished context map ready to ship as code.", "th": "" } },
-        { "id": "b", "text": { "en": "A list of candidate subdomains with strategic investment labels.", "th": "" } },
-        { "id": "c", "text": { "en": "A normalised database schema.", "th": "" } },
-        { "id": "d", "text": { "en": "A backlog of pink hotspots to resolve in the next workshop.", "th": "" } }
+        {
+          "id": "a",
+          "text": {
+            "en": "A finished context map ready to ship as code."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "A list of candidate subdomains with strategic investment labels."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "A normalised database schema."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "A backlog of pink hotspots to resolve in the next workshop."
+          }
+        }
       ],
       "correctOption": "b",
-      "explanation": { "en": "Steps 4 and 5 together produce candidate subdomains: each capability cluster becomes a subdomain, and each subdomain carries a Core / Supporting / Generic label. The label drives investment and build-vs-buy decisions. Bounded contexts (the solution-space artefact) are drawn later in step 6, after the subdomains and their language have been understood.", "th": "" }
+      "explanation": {
+        "en": "Steps 4 and 5 together produce candidate subdomains: each capability cluster becomes a subdomain, and each subdomain carries a Core / Supporting / Generic label. The label drives investment and build-vs-buy decisions. Bounded contexts (the solution-space artefact) are drawn later in step 6, after the subdomains and their language have been understood."
+      }
     },
     {
       "id": "q2",
       "type": "true-false",
-      "question": { "en": "Every orange sticky note on the Event Storming wall must become a Domain Event in the final DDD model.", "th": "" },
+      "question": {
+        "en": "Every orange sticky note on the Event Storming wall must become a Domain Event in the final DDD model."
+      },
       "options": [
-        { "id": "true",  "text": { "en": "True",  "th": "" } },
-        { "id": "false", "text": { "en": "False", "th": "" } }
+        {
+          "id": "true",
+          "text": {
+            "en": "True"
+          }
+        },
+        {
+          "id": "false",
+          "text": {
+            "en": "False"
+          }
+        }
       ],
       "correctOption": "false",
-      "explanation": { "en": "False. Orange stickies are the *candidate* event pool. Step 1 of the transformation deliberately filters: technical events (*Row Inserted*), UI events (*Button Clicked*), and operator-only events (*Report Generated*) are removed. Only past-tense facts the business itself cares about survive into the model. A finished e-commerce wall with 200 orange stickies typically yields 80–120 real domain events after filtering.", "th": "" }
+      "explanation": {
+        "en": "False. Orange stickies are the *candidate* event pool. Step 1 of the transformation deliberately filters: technical events (*Row Inserted*), UI events (*Button Clicked*), and operator-only events (*Report Generated*) are removed. Only past-tense facts the business itself cares about survive into the model. A finished e-commerce wall with 200 orange stickies typically yields 80–120 real domain events after filtering."
+      }
     },
     {
       "id": "q3",
       "type": "mcq",
-      "question": { "en": "What is the strongest signal that you have found a Bounded Context boundary?", "th": "" },
+      "question": {
+        "en": "What is the strongest signal that you have found a Bounded Context boundary?"
+      },
       "options": [
-        { "id": "a", "text": { "en": "Two teams report to different managers.", "th": "" } },
-        { "id": "b", "text": { "en": "Two areas of the wall use different database tables.", "th": "" } },
-        { "id": "c", "text": { "en": "The same word means something different on each side of the boundary.", "th": "" } },
-        { "id": "d", "text": { "en": "There is a network hop between the two sides at runtime.", "th": "" } }
+        {
+          "id": "a",
+          "text": {
+            "en": "Two teams report to different managers."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Two areas of the wall use different database tables."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "The same word means something different on each side of the boundary."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "There is a network hop between the two sides at runtime."
+          }
+        }
       ],
       "correctOption": "c",
-      "explanation": { "en": "A bounded context is fundamentally a *linguistic* boundary. The canonical signal is that the same term changes meaning when you cross it: *Product* means one thing in Catalog (a marketing artefact with images and copy) and something different in Inventory (a SKU with a stock count). Org charts, database structure, and network topology are sometimes correlated with context boundaries, but the meaning shift is the defining test.", "th": "" }
+      "explanation": {
+        "en": "A bounded context is fundamentally a *linguistic* boundary. The canonical signal is that the same term changes meaning when you cross it: *Product* means one thing in Catalog (a marketing artefact with images and copy) and something different in Inventory (a SKU with a stock count). Org charts, database structure, and network topology are sometimes correlated with context boundaries, but the meaning shift is the defining test."
+      }
     },
     {
       "id": "q4",
       "type": "mcq",
-      "question": { "en": "A policy on the wall reads \"When Payment Authorized → Place Order.\" In code, where does the reaction (placing the order) typically belong?", "th": "" },
+      "question": {
+        "en": "A policy on the wall reads \"When Payment Authorized → Place Order.\" In code, where does the reaction (placing the order) typically belong?"
+      },
       "options": [
-        { "id": "a", "text": { "en": "On a UI button click handler.", "th": "" } },
-        { "id": "b", "text": { "en": "Inside the database as a stored procedure trigger.", "th": "" } },
-        { "id": "c", "text": { "en": "As behaviour on a Domain Service or an Aggregate that reacts to the Payment Authorized event.", "th": "" } },
-        { "id": "d", "text": { "en": "In a configuration file consumed by the deployment pipeline.", "th": "" } }
+        {
+          "id": "a",
+          "text": {
+            "en": "On a UI button click handler."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Inside the database as a stored procedure trigger."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "As behaviour on a Domain Service or an Aggregate that reacts to the Payment Authorized event."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "In a configuration file consumed by the deployment pipeline."
+          }
+        }
       ],
       "correctOption": "c",
-      "explanation": { "en": "A policy is a reactive business rule (\"when event X, issue command Y\"). In code it is implemented either as a method on an aggregate that subscribes to the event, or as a Domain Service / process manager when the reaction spans multiple aggregates. Step 3 of the transformation explicitly tags each policy with where it will live. Stored procedures, UI handlers, and config files are infrastructure — they do not own domain behaviour.", "th": "" }
+      "explanation": {
+        "en": "A policy is a reactive business rule (\"when event X, issue command Y\"). In code it is implemented either as a method on an aggregate that subscribes to the event, or as a Domain Service / process manager when the reaction spans multiple aggregates. Step 3 of the transformation explicitly tags each policy with where it will live. Stored procedures, UI handlers, and config files are infrastructure — they do not own domain behaviour."
+      }
     },
     {
       "id": "q5",
       "type": "true-false",
-      "question": { "en": "It is safe to draw bounded context boundaries before you have listened to the vocabulary used in each part of the wall.", "th": "" },
+      "question": {
+        "en": "It is safe to draw bounded context boundaries before you have listened to the vocabulary used in each part of the wall."
+      },
       "options": [
-        { "id": "true",  "text": { "en": "True",  "th": "" } },
-        { "id": "false", "text": { "en": "False", "th": "" } }
+        {
+          "id": "true",
+          "text": {
+            "en": "True"
+          }
+        },
+        {
+          "id": "false",
+          "text": {
+            "en": "False"
+          }
+        }
       ],
       "correctOption": "false",
-      "explanation": { "en": "False. Drawing bounded contexts before understanding the language is one of the five common mistakes in this module. Without listening to the vocabulary, teams tend to group by org chart, database, or team ownership — none of which are the right seam. The boundary is *linguistic*: it goes where the meaning of a term changes. Step 8 (build the ubiquitous language) explicitly comes after step 6 (define bounded contexts) for this reason — but step 6 itself is informed by listening for vocabulary shifts during the clustering work of step 4.", "th": "" }
+      "explanation": {
+        "en": "False. Drawing bounded contexts before understanding the language is one of the five common mistakes in this module. Without listening to the vocabulary, teams tend to group by org chart, database, or team ownership — none of which are the right seam. The boundary is *linguistic*: it goes where the meaning of a term changes. Step 8 (build the ubiquitous language) explicitly comes after step 6 (define bounded contexts) for this reason — but step 6 itself is informed by listening for vocabulary shifts during the clustering work of step 4."
+      }
     },
     {
       "id": "q6",
       "type": "mcq",
-      "question": { "en": "Why is step 9 — validating the model against real business scenarios — necessary even after the first eight steps look complete?", "th": "" },
+      "question": {
+        "en": "Why is step 9 — validating the model against real business scenarios — necessary even after the first eight steps look complete?"
+      },
       "options": [
-        { "id": "a", "text": { "en": "To produce a deployment topology for the operations team.", "th": "" } },
-        { "id": "b", "text": { "en": "To confirm the model can express every real-world scenario the domain experts care about, before any code is written.", "th": "" } },
-        { "id": "c", "text": { "en": "To pick a programming language and ORM.", "th": "" } },
-        { "id": "d", "text": { "en": "To estimate story points for the development backlog.", "th": "" } }
+        {
+          "id": "a",
+          "text": {
+            "en": "To produce a deployment topology for the operations team."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "To confirm the model can express every real-world scenario the domain experts care about, before any code is written."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "To pick a programming language and ORM."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "To estimate story points for the development backlog."
+          }
+        }
       ],
       "correctOption": "b",
-      "explanation": { "en": "Steps 1–8 produce a model on paper. Step 9 stress-tests it: replay real scenarios (especially the weird edge cases and the last three production hotfixes) through the model and see whether it bends, breaks, or holds. A scenario that the model cannot express cleanly is a model bug, not a scenario bug. Catching it at step 9 costs an afternoon; catching it after launch costs a quarter. Language, deployment, and estimation are downstream concerns and are not what step 9 is for.", "th": "" }
+      "explanation": {
+        "en": "Steps 1–8 produce a model on paper. Step 9 stress-tests it: replay real scenarios (especially the weird edge cases and the last three production hotfixes) through the model and see whether it bends, breaks, or holds. A scenario that the model cannot express cleanly is a model bug, not a scenario bug. Catching it at step 9 costs an afternoon; catching it after launch costs a quarter. Language, deployment, and estimation are downstream concerns and are not what step 9 is for."
+      }
     }
   ]
 }

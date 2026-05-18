@@ -4,76 +4,200 @@
     {
       "id": "q1",
       "type": "mcq",
-      "question": { "en": "Which sticky-note colour represents a Domain Event in Event Storming?", "th": "" },
+      "question": {
+        "en": "Which sticky-note colour represents a Domain Event in Event Storming?"
+      },
       "options": [
-        { "id": "a", "text": { "en": "Blue", "th": "" } },
-        { "id": "b", "text": { "en": "Orange", "th": "" } },
-        { "id": "c", "text": { "en": "Purple", "th": "" } },
-        { "id": "d", "text": { "en": "Pink", "th": "" } }
+        {
+          "id": "a",
+          "text": {
+            "en": "Blue"
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Orange"
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Purple"
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Pink"
+          }
+        }
       ],
       "correctOption": "b",
-      "explanation": { "en": "Orange sticky notes represent Domain Events — things that happened in the past, written in past tense (e.g. *Order Placed*, *Payment Authorized*). Blue is for Commands, Purple is for Policies, and Pink is for Hotspots. The orange-event convention is the foundation of every Event Storming session.", "th": "" }
+      "explanation": {
+        "en": "Orange sticky notes represent Domain Events — things that happened in the past, written in past tense (e.g. *Order Placed*, *Payment Authorized*). Blue is for Commands, Purple is for Policies, and Pink is for Hotspots. The orange-event convention is the foundation of every Event Storming session."
+      }
     },
     {
       "id": "q2",
       "type": "true-false",
-      "question": { "en": "A Command and a Domain Event are the same thing in Event Storming.", "th": "" },
+      "question": {
+        "en": "A Command and a Domain Event are the same thing in Event Storming."
+      },
       "options": [
-        { "id": "true",  "text": { "en": "True",  "th": "" } },
-        { "id": "false", "text": { "en": "False", "th": "" } }
+        {
+          "id": "true",
+          "text": {
+            "en": "True"
+          }
+        },
+        {
+          "id": "false",
+          "text": {
+            "en": "False"
+          }
+        }
       ],
       "correctOption": "false",
-      "explanation": { "en": "False. A Command is a request (imperative tense, e.g. *Place Order*) that may be accepted or rejected by an aggregate. A Domain Event is a fact (past tense, e.g. *Order Placed*) that has already happened and cannot be undone. Commands are blue stickies; Events are orange. Keeping them distinct is the heart of the Event Storming grammar.", "th": "" }
+      "explanation": {
+        "en": "False. A Command is a request (imperative tense, e.g. *Place Order*) that may be accepted or rejected by an aggregate. A Domain Event is a fact (past tense, e.g. *Order Placed*) that has already happened and cannot be undone. Commands are blue stickies; Events are orange. Keeping them distinct is the heart of the Event Storming grammar."
+      }
     },
     {
       "id": "q3",
       "type": "mcq",
-      "question": { "en": "Which of the following is the correct definition of a Policy in Event Storming?", "th": "" },
+      "question": {
+        "en": "Which of the following is the correct definition of a Policy in Event Storming?"
+      },
       "options": [
-        { "id": "a", "text": { "en": "A database constraint enforced by the schema.", "th": "" } },
-        { "id": "b", "text": { "en": "A document that describes the company's HR rules.", "th": "" } },
-        { "id": "c", "text": { "en": "A reactive business rule of the form 'whenever event X happens, issue command Y'.", "th": "" } },
-        { "id": "d", "text": { "en": "A signed legal agreement between two teams.", "th": "" } }
+        {
+          "id": "a",
+          "text": {
+            "en": "A database constraint enforced by the schema."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "A document that describes the company's HR rules."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "A reactive business rule of the form 'whenever event X happens, issue command Y'."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "A signed legal agreement between two teams."
+          }
+        }
       ],
       "correctOption": "c",
-      "explanation": { "en": "A Policy (purple sticky) is a reactive automation rule expressed as \"whenever event X happens, issue command Y.\" For example: 'When Payment Authorized → Place Order.' Policies make tacit business automation explicit on the wall, and in code they typically become sagas or process managers.", "th": "" }
+      "explanation": {
+        "en": "A Policy (purple sticky) is a reactive automation rule expressed as \"whenever event X happens, issue command Y.\" For example: 'When Payment Authorized → Place Order.' Policies make tacit business automation explicit on the wall, and in code they typically become sagas or process managers."
+      }
     },
     {
       "id": "q4",
       "type": "mcq",
-      "question": { "en": "At which level of Event Storming are Aggregates identified?", "th": "" },
+      "question": {
+        "en": "At which level of Event Storming are Aggregates identified?"
+      },
       "options": [
-        { "id": "a", "text": { "en": "Big Picture level", "th": "" } },
-        { "id": "b", "text": { "en": "Process Level", "th": "" } },
-        { "id": "c", "text": { "en": "Design Level", "th": "" } },
-        { "id": "d", "text": { "en": "Aggregates are identified before the session even begins", "th": "" } }
+        {
+          "id": "a",
+          "text": {
+            "en": "Big Picture level"
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Process Level"
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Design Level"
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Aggregates are identified before the session even begins"
+          }
+        }
       ],
       "correctOption": "c",
-      "explanation": { "en": "Aggregates appear only at the Design Level — the deepest, most code-focused of the three Event Storming formats. At Design Level, command-event pairs (a command received and an event emitted) are grouped to reveal aggregate boundaries. Big Picture deals with the whole business; Process Level adds commands, actors, and policies but stops short of aggregate identification.", "th": "" }
+      "explanation": {
+        "en": "Aggregates appear only at the Design Level — the deepest, most code-focused of the three Event Storming formats. At Design Level, command-event pairs (a command received and an event emitted) are grouped to reveal aggregate boundaries. Big Picture deals with the whole business; Process Level adds commands, actors, and policies but stops short of aggregate identification."
+      }
     },
     {
       "id": "q5",
       "type": "true-false",
-      "question": { "en": "A pink Hotspot sticky always means something in the system is broken and must be fixed immediately.", "th": "" },
+      "question": {
+        "en": "A pink Hotspot sticky always means something in the system is broken and must be fixed immediately."
+      },
       "options": [
-        { "id": "true",  "text": { "en": "True",  "th": "" } },
-        { "id": "false", "text": { "en": "False", "th": "" } }
+        {
+          "id": "true",
+          "text": {
+            "en": "True"
+          }
+        },
+        {
+          "id": "false",
+          "text": {
+            "en": "False"
+          }
+        }
       ],
       "correctOption": "false",
-      "explanation": { "en": "False. A Hotspot marks a place that deserves a conversation — a question nobody can answer, a disagreement between two domain experts, a pain point in the current process, or a risk. It does not imply something is broken. Brandolini's famous facilitator rule is that the *absence* of hotspots is the real warning sign: 'If there are no hotspots, you are not doing it right.' Hotspots become a prioritised backlog for follow-up design work.", "th": "" }
+      "explanation": {
+        "en": "False. A Hotspot marks a place that deserves a conversation — a question nobody can answer, a disagreement between two domain experts, a pain point in the current process, or a risk. It does not imply something is broken. Brandolini's famous facilitator rule is that the *absence* of hotspots is the real warning sign: 'If there are no hotspots, you are not doing it right.' Hotspots become a prioritised backlog for follow-up design work."
+      }
     },
     {
       "id": "q6",
       "type": "mcq",
-      "question": { "en": "What is the primary output of a Big Picture Event Storming session?", "th": "" },
+      "question": {
+        "en": "What is the primary output of a Big Picture Event Storming session?"
+      },
       "options": [
-        { "id": "a", "text": { "en": "A finished microservice deployment topology.", "th": "" } },
-        { "id": "b", "text": { "en": "A database schema for the entire business.", "th": "" } },
-        { "id": "c", "text": { "en": "A left-to-right timeline of Domain Events spanning the whole business, with hotspots marked.", "th": "" } },
-        { "id": "d", "text": { "en": "A complete API specification including request and response payloads.", "th": "" } }
+        {
+          "id": "a",
+          "text": {
+            "en": "A finished microservice deployment topology."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "A database schema for the entire business."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "A left-to-right timeline of Domain Events spanning the whole business, with hotspots marked."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "A complete API specification including request and response payloads."
+          }
+        }
       ],
       "correctOption": "c",
-      "explanation": { "en": "A Big Picture session produces a left-to-right timeline of Domain Events that covers the entire business on one wall, together with pink hotspots marking conflicts and open questions, and candidate subdomain boundaries. It deliberately stops short of technical artefacts like schemas, APIs, or deployment topology — those come from later Process-Level and Design-Level sessions and from subsequent DDD work.", "th": "" }
+      "explanation": {
+        "en": "A Big Picture session produces a left-to-right timeline of Domain Events that covers the entire business on one wall, together with pink hotspots marking conflicts and open questions, and candidate subdomain boundaries. It deliberately stops short of technical artefacts like schemas, APIs, or deployment topology — those come from later Process-Level and Design-Level sessions and from subsequent DDD work."
+      }
     }
   ]
 }

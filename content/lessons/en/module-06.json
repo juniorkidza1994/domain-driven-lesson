@@ -2,107 +2,201 @@
   "module": {
     "id": "module-06",
     "number": 6,
-    "title": { "en": "How to Convert Event Storming into Event-Driven Architecture", "th": "" },
-    "description": { "en": "Learn the systematic 7-step process for translating Event Storming output into a production-ready Event-Driven Architecture — from filtering domain events to designing contracts, adding reliability, and handling failure flows.", "th": "" },
+    "title": {
+      "en": "How to Convert Event Storming into Event-Driven Architecture"
+    },
+    "description": {
+      "en": "Learn the systematic 7-step process for translating Event Storming output into a production-ready Event-Driven Architecture — from filtering domain events to designing contracts, adding reliability, and handling failure flows."
+    },
     "estimatedMinutes": 40,
     "sections": [
       {
         "id": "from-workshop-to-architecture",
         "type": "callout",
-        "title": { "en": "From Workshop to Architecture", "th": "" },
-        "content": { "en": "An Event Storming workshop produces invaluable domain insight — orange sticky notes capturing business facts, blue commands, yellow actors, and purple policies. But those stickies are not an architecture. They are raw material.\n\nConverting that material into a working Event-Driven Architecture is a deliberate engineering activity, not a mechanical translation. The single most important rule: **not every sticky note domain event should become a published integration event.** Doing so floods your broker with noise, couples every service to every other, and buries the signals that actually matter.\n\nThis module walks you through a 7-step process that takes you from a completed Event Storming wall to an observable, reliable, failure-tolerant EDA. Each step asks a clear question and produces a concrete output.", "th": "" },
-        "tooltipRefs": ["event-storming", "eda"]
+        "title": {
+          "en": "From Workshop to Architecture"
+        },
+        "content": {
+          "en": "An Event Storming workshop produces invaluable domain insight — orange sticky notes capturing business facts, blue commands, yellow actors, and purple policies. But those stickies are not an architecture. They are raw material.\n\nConverting that material into a working Event-Driven Architecture is a deliberate engineering activity, not a mechanical translation. The single most important rule: **not every sticky note domain event should become a published integration event.** Doing so floods your broker with noise, couples every service to every other, and buries the signals that actually matter.\n\nThis module walks you through a 7-step process that takes you from a completed Event Storming wall to an observable, reliable, failure-tolerant EDA. Each step asks a clear question and produces a concrete output."
+        },
+        "tooltipRefs": [
+          "event-storming",
+          "eda"
+        ]
       },
       {
         "id": "full-transformation-flow",
         "type": "flow",
-        "title": { "en": "Full Transformation Flow", "th": "" },
-        "content": { "en": "The transformation from Event Storming output to a production EDA follows nine stages. Each stage filters, refines, or enriches the previous one. The process is intentionally lossy at the start — most domain events stay private — and adds progressively more engineering concern as it proceeds.\n\n**Stage 1 — Filter cross-context events:** Only events that other Bounded Contexts genuinely need survive. Internal aggregate state changes are discarded.\n\n**Stage 2 — Identify producers and consumers:** Every surviving event has exactly one owner (producer) and zero-to-many reactors (consumers).\n\n**Stage 3 — Design event contracts:** Define the envelope (eventId, eventType, version, occurredAt, correlationId) and lean payload. Treat this as a public API.\n\n**Stage 4 — Choose delivery semantics:** At-least-once is the default. Exactly-once is expensive and rarely necessary if consumers are idempotent.\n\n**Stage 5 — Add idempotency:** Every consumer that performs side effects must deduplicate on eventId.\n\n**Stage 6 — Add retry and DLQ:** Transient failures retry with exponential backoff. Exhausted retries route to a Dead Letter Queue with alerting.\n\n**Stage 7 — Handle failure with sagas:** Distributed rollbacks are impossible. Use compensating events to move the system forward into a consistent state.\n\n**Stage 8 — Add observability:** Thread correlation IDs through every event. Instrument consumer lag, DLQ depth, and end-to-end latency.", "th": "" },
+        "title": {
+          "en": "Full Transformation Flow"
+        },
+        "content": {
+          "en": "The transformation from Event Storming output to a production EDA follows nine stages. Each stage filters, refines, or enriches the previous one. The process is intentionally lossy at the start — most domain events stay private — and adds progressively more engineering concern as it proceeds.\n\n**Stage 1 — Filter cross-context events:** Only events that other Bounded Contexts genuinely need survive. Internal aggregate state changes are discarded.\n\n**Stage 2 — Identify producers and consumers:** Every surviving event has exactly one owner (producer) and zero-to-many reactors (consumers).\n\n**Stage 3 — Design event contracts:** Define the envelope (eventId, eventType, version, occurredAt, correlationId) and lean payload. Treat this as a public API.\n\n**Stage 4 — Choose delivery semantics:** At-least-once is the default. Exactly-once is expensive and rarely necessary if consumers are idempotent.\n\n**Stage 5 — Add idempotency:** Every consumer that performs side effects must deduplicate on eventId.\n\n**Stage 6 — Add retry and DLQ:** Transient failures retry with exponential backoff. Exhausted retries route to a Dead Letter Queue with alerting.\n\n**Stage 7 — Handle failure with sagas:** Distributed rollbacks are impossible. Use compensating events to move the system forward into a consistent state.\n\n**Stage 8 — Add observability:** Thread correlation IDs through every event. Instrument consumer lag, DLQ depth, and end-to-end latency."
+        },
         "diagram": {
           "type": "mermaid",
           "source": "flowchart LR\n  DE[Domain Events from ES Wall] --> F1[Filter: Cross-Context?]\n  F1 --> PC[Identify Producers and Consumers]\n  PC --> EC[Design Event Contracts]\n  EC --> DS[Choose Delivery Semantics]\n  DS --> ID[Add Idempotency]\n  ID --> RT[Add Retry and DLQ]\n  RT --> SG[Handle Failure with Sagas]\n  SG --> OB[Add Observability]\n  OB --> SYS([Observable EDA System])\n  style DE fill:#f97316,stroke:#c2410c,color:#fff\n  style SYS fill:#34d399,stroke:#059669,color:#fff\n  style F1 fill:#6366f1,stroke:#3730a3,color:#fff\n  style PC fill:#6366f1,stroke:#3730a3,color:#fff\n  style EC fill:#6366f1,stroke:#3730a3,color:#fff\n  style DS fill:#6366f1,stroke:#3730a3,color:#fff\n  style ID fill:#14b8a6,stroke:#0f766e,color:#fff\n  style RT fill:#14b8a6,stroke:#0f766e,color:#fff\n  style SG fill:#14b8a6,stroke:#0f766e,color:#fff\n  style OB fill:#f59e0b,stroke:#b45309,color:#1e1b4b"
         },
-        "tooltipRefs": ["event-storming", "domain-event", "integration-event", "eda"]
+        "tooltipRefs": [
+          "event-storming",
+          "domain-event",
+          "integration-event",
+          "eda"
+        ]
       },
       {
         "id": "step-1-start-from-domain-events",
         "type": "text",
-        "title": { "en": "Step 1: Start from Domain Events", "th": "" },
-        "content": { "en": "Your starting point is the orange sticky notes from the Event Storming wall. These represent business facts — things that happened and that domain experts care about.\n\n**Business events** (keep these as candidates):\n- `OrderPlaced` — a customer submitted an order\n- `PaymentCaptured` — money moved\n- `InventoryReserved` — stock allocated to an order\n- `ShipmentDispatched` — the parcel left the warehouse\n\n**Technical events** (discard these):\n- `DatabaseRowUpdated` — implementation detail\n- `CacheInvalidated` — infrastructure concern\n- `SessionRefreshed` — frontend housekeeping\n\n**The filter rule:** if a domain expert — someone who understands the business but not the software — would not recognise the event as a meaningful business fact, it does not belong on the Event Storming wall and should not become an integration event.\n\nGo through every orange sticky from your session and apply this test. Typically 60–80% of events survive. The remainder were premature implementation decisions that sneaked onto the wall.", "th": "" },
-        "tooltipRefs": ["domain-event", "event-storming", "ubiquitous-language"]
+        "title": {
+          "en": "Step 1: Start from Domain Events"
+        },
+        "content": {
+          "en": "Your starting point is the orange sticky notes from the Event Storming wall. These represent business facts — things that happened and that domain experts care about.\n\n**Business events** (keep these as candidates):\n- `OrderPlaced` — a customer submitted an order\n- `PaymentCaptured` — money moved\n- `InventoryReserved` — stock allocated to an order\n- `ShipmentDispatched` — the parcel left the warehouse\n\n**Technical events** (discard these):\n- `DatabaseRowUpdated` — implementation detail\n- `CacheInvalidated` — infrastructure concern\n- `SessionRefreshed` — frontend housekeeping\n\n**The filter rule:** if a domain expert — someone who understands the business but not the software — would not recognise the event as a meaningful business fact, it does not belong on the Event Storming wall and should not become an integration event.\n\nGo through every orange sticky from your session and apply this test. Typically 60–80% of events survive. The remainder were premature implementation decisions that sneaked onto the wall."
+        },
+        "tooltipRefs": [
+          "domain-event",
+          "event-storming",
+          "ubiquitous-language"
+        ]
       },
       {
         "id": "step-2-cross-context-boundaries",
         "type": "diagram",
-        "title": { "en": "Step 2: Which Events Cross Bounded Context Boundaries?", "th": "" },
-        "content": { "en": "Not every business domain event needs to leave its home Bounded Context. The second filter asks: **does at least one other Bounded Context legitimately need to react to this event?**\n\n**Internal Domain Event** — stays inside its producing context. Example: `Order.ItemAdded` is meaningful within the Order context for recalculating totals, but no other context cares about this intermediate step.\n\n**Integration Event** — published to the broker for other contexts to consume. Example: `OrderPlaced` triggers reactions in Inventory (reserve stock), Payment (authorise charge), and Notification (send confirmation).\n\n**Practical decision rule:**\n1. List the consumers that would react if this event were published.\n2. If the list is empty → internal event, keep it private.\n3. If the list has at least one context → integration event candidate.\n\n**Start conservative.** Publish less. You can always add integration events later; removing one breaks consumers immediately.\n\nThe diagram shows how the Order context publishes one integration event (`sales.order.placed`) through an Anti-Corruption Layer to the broker, while its internal domain events never leave the context boundary.", "th": "" },
+        "title": {
+          "en": "Step 2: Which Events Cross Bounded Context Boundaries?"
+        },
+        "content": {
+          "en": "Not every business domain event needs to leave its home Bounded Context. The second filter asks: **does at least one other Bounded Context legitimately need to react to this event?**\n\n**Internal Domain Event** — stays inside its producing context. Example: `Order.ItemAdded` is meaningful within the Order context for recalculating totals, but no other context cares about this intermediate step.\n\n**Integration Event** — published to the broker for other contexts to consume. Example: `OrderPlaced` triggers reactions in Inventory (reserve stock), Payment (authorise charge), and Notification (send confirmation).\n\n**Practical decision rule:**\n1. List the consumers that would react if this event were published.\n2. If the list is empty → internal event, keep it private.\n3. If the list has at least one context → integration event candidate.\n\n**Start conservative.** Publish less. You can always add integration events later; removing one breaks consumers immediately.\n\nThe diagram shows how the Order context publishes one integration event (`sales.order.placed`) through an Anti-Corruption Layer to the broker, while its internal domain events never leave the context boundary."
+        },
         "diagram": {
           "type": "mermaid",
           "source": "flowchart LR\n  OC[Order Context] -->|sales.order.placed| ACL[Anti-Corruption Layer]\n  ACL -->|Integration Event| B[(Message Broker)]\n  B --> IC[Inventory Context]\n  B --> PC[Payment Context]\n  B --> NC[Notification Context]\n  OC -.->|internal domain event| OC\n  style OC fill:#6366f1,stroke:#3730a3,color:#fff\n  style ACL fill:#a78bfa,stroke:#6d28d9,color:#fff\n  style B fill:#f59e0b,stroke:#b45309,color:#1e1b4b\n  style IC fill:#14b8a6,stroke:#0f766e,color:#fff\n  style PC fill:#14b8a6,stroke:#0f766e,color:#fff\n  style NC fill:#14b8a6,stroke:#0f766e,color:#fff"
         },
-        "tooltipRefs": ["bounded-context", "integration-event", "domain-event", "message-broker"]
+        "tooltipRefs": [
+          "bounded-context",
+          "integration-event",
+          "domain-event",
+          "message-broker"
+        ]
       },
       {
         "id": "step-3-producers-and-consumers",
         "type": "diagram",
-        "title": { "en": "Step 3: Identify Producers and Consumers", "th": "" },
-        "content": { "en": "Every Integration Event has **exactly one producer** — the Bounded Context that owns the business fact and is the authoritative source of truth for it — and **zero-to-many consumers** that react to it.\n\nReturn to your Event Storming wall. For each integration event candidate:\n- **Producer:** which Bounded Context owns this fact? The sticky note's position on the wall (which aggregate/context cluster it sits in) tells you.\n- **Consumers:** which policies (purple stickies) react to this event? Each reactive policy lives in a consuming context.\n\n**E-commerce event ownership:**\n\n| Event | Producer | Consumers |\n|---|---|---|\n| `sales.order.placed` | Order Context | Inventory, Payment, Notification |\n| `payments.payment.captured` | Payment Context | Order Context |\n| `inventory.stock.reserved` | Inventory Context | Order Context |\n| `sales.order.confirmed` | Order Context | Notification |\n\nThe sequence diagram below shows the full happy-path order flow with all producers and consumers interacting through the broker.", "th": "" },
+        "title": {
+          "en": "Step 3: Identify Producers and Consumers"
+        },
+        "content": {
+          "en": "Every Integration Event has **exactly one producer** — the Bounded Context that owns the business fact and is the authoritative source of truth for it — and **zero-to-many consumers** that react to it.\n\nReturn to your Event Storming wall. For each integration event candidate:\n- **Producer:** which Bounded Context owns this fact? The sticky note's position on the wall (which aggregate/context cluster it sits in) tells you.\n- **Consumers:** which policies (purple stickies) react to this event? Each reactive policy lives in a consuming context.\n\n**E-commerce event ownership:**\n\n| Event | Producer | Consumers |\n|---|---|---|\n| `sales.order.placed` | Order Context | Inventory, Payment, Notification |\n| `payments.payment.captured` | Payment Context | Order Context |\n| `inventory.stock.reserved` | Inventory Context | Order Context |\n| `sales.order.confirmed` | Order Context | Notification |\n\nThe sequence diagram below shows the full happy-path order flow with all producers and consumers interacting through the broker."
+        },
         "diagram": {
           "type": "mermaid",
           "source": "sequenceDiagram\n  participant C as Customer\n  participant O as Order Service\n  participant B as Broker\n  participant P as Payment Service\n  participant I as Inventory Service\n  participant N as Notification Service\n  C->>O: PlaceOrder\n  O->>B: publish sales.order.placed\n  B-->>P: sales.order.placed\n  B-->>I: sales.order.placed\n  B-->>N: sales.order.placed\n  P->>B: publish payments.payment.captured\n  I->>B: publish inventory.stock.reserved\n  B-->>O: payments.payment.captured\n  B-->>O: inventory.stock.reserved\n  O->>B: publish sales.order.confirmed\n  B-->>N: sales.order.confirmed\n  N->>C: confirmation email"
         },
-        "tooltipRefs": ["producer", "consumer", "pub-sub", "integration-event"]
+        "tooltipRefs": [
+          "producer",
+          "consumer",
+          "pub-sub",
+          "integration-event"
+        ]
       },
       {
         "id": "step-4-design-event-contracts",
         "type": "text",
-        "title": { "en": "Step 4: Design Event Contracts", "th": "" },
-        "content": { "en": "An Integration Event is a public API. Once a consumer depends on it, you cannot remove or rename fields without a coordinated migration. Design it with the same discipline you would apply to a REST endpoint.\n\n**Standard envelope fields (include in every event):**\n- `eventId` — UUID, used for idempotency deduplication\n- `eventType` — fully qualified name, e.g. `sales.order.placed`\n- `eventVersion` — integer, incremented on breaking schema changes\n- `occurredAt` — ISO-8601 timestamp of when the fact occurred (not when the message was sent)\n- `correlationId` — traces the end-to-end flow through multiple services\n- `causationId` — the eventId of the event that caused this one\n\n**Lean payload principle:** include only the fields consumers need to do their job. Do not include the full aggregate state — that turns every internal field into a public contract.\n\nExample `sales.order.placed` contract:\n\n```json\n{\n  \"eventId\": \"01HX2V9QKPN3Y8Z7W4C5D6E0\",\n  \"eventType\": \"sales.order.placed\",\n  \"eventVersion\": 1,\n  \"occurredAt\": \"2025-11-01T09:32:11Z\",\n  \"correlationId\": \"web-session-a3f9\",\n  \"causationId\": null,\n  \"payload\": {\n    \"orderId\": \"order-88142\",\n    \"customerId\": \"cust-5521\",\n    \"totalAmount\": 1250.00,\n    \"currency\": \"THB\",\n    \"itemCount\": 3\n  }\n}\n```\n\nNotice: the payload contains identifiers and summary figures, not the full list of line items, customer address, or payment method — those are fetched by consumers that need them.", "th": "" },
-        "tooltipRefs": ["event-schema", "event-versioning", "integration-event"]
+        "title": {
+          "en": "Step 4: Design Event Contracts"
+        },
+        "content": {
+          "en": "An Integration Event is a public API. Once a consumer depends on it, you cannot remove or rename fields without a coordinated migration. Design it with the same discipline you would apply to a REST endpoint.\n\n**Standard envelope fields (include in every event):**\n- `eventId` — UUID, used for idempotency deduplication\n- `eventType` — fully qualified name, e.g. `sales.order.placed`\n- `eventVersion` — integer, incremented on breaking schema changes\n- `occurredAt` — ISO-8601 timestamp of when the fact occurred (not when the message was sent)\n- `correlationId` — traces the end-to-end flow through multiple services\n- `causationId` — the eventId of the event that caused this one\n\n**Lean payload principle:** include only the fields consumers need to do their job. Do not include the full aggregate state — that turns every internal field into a public contract.\n\nExample `sales.order.placed` contract:\n\n```json\n{\n  \"eventId\": \"01HX2V9QKPN3Y8Z7W4C5D6E0\",\n  \"eventType\": \"sales.order.placed\",\n  \"eventVersion\": 1,\n  \"occurredAt\": \"2025-11-01T09:32:11Z\",\n  \"correlationId\": \"web-session-a3f9\",\n  \"causationId\": null,\n  \"payload\": {\n    \"orderId\": \"order-88142\",\n    \"customerId\": \"cust-5521\",\n    \"totalAmount\": 1250.00,\n    \"currency\": \"THB\",\n    \"itemCount\": 3\n  }\n}\n```\n\nNotice: the payload contains identifiers and summary figures, not the full list of line items, customer address, or payment method — those are fetched by consumers that need them."
+        },
+        "tooltipRefs": [
+          "event-schema",
+          "event-versioning",
+          "integration-event"
+        ]
       },
       {
         "id": "step-5-add-reliability-patterns",
         "type": "flow",
-        "title": { "en": "Step 5: Add Reliability Patterns", "th": "" },
-        "content": { "en": "At-least-once delivery is the default guarantee offered by message brokers. This means your consumers **will** occasionally receive the same event twice. Design for this from the start.\n\n**Idempotency** — every consumer that performs a side effect (charge a payment, reserve stock, send an email) must check whether it has already processed this eventId before acting. Store processed IDs in a deduplication table or use a conditional write.\n\n**Retry with exponential backoff and jitter** — transient failures (network blips, database timeouts) should be retried. Use exponential backoff (100ms → 200ms → 400ms → 800ms) with random jitter to avoid retry storms when many consumers fail simultaneously.\n\n**Dead Letter Queue (DLQ)** — when a message exhausts its retry budget, route it to a DLQ rather than discarding it. A DLQ is not an error bin; it is a repair station. Alert on DLQ depth. Operators must review, fix the root cause, and replay.\n\n**Non-negotiable rule:** if your consumer is not idempotent, retry is dangerous. Fix idempotency first, then enable retry.", "th": "" },
+        "title": {
+          "en": "Step 5: Add Reliability Patterns"
+        },
+        "content": {
+          "en": "At-least-once delivery is the default guarantee offered by message brokers. This means your consumers **will** occasionally receive the same event twice. Design for this from the start.\n\n**Idempotency** — every consumer that performs a side effect (charge a payment, reserve stock, send an email) must check whether it has already processed this eventId before acting. Store processed IDs in a deduplication table or use a conditional write.\n\n**Retry with exponential backoff and jitter** — transient failures (network blips, database timeouts) should be retried. Use exponential backoff (100ms → 200ms → 400ms → 800ms) with random jitter to avoid retry storms when many consumers fail simultaneously.\n\n**Dead Letter Queue (DLQ)** — when a message exhausts its retry budget, route it to a DLQ rather than discarding it. A DLQ is not an error bin; it is a repair station. Alert on DLQ depth. Operators must review, fix the root cause, and replay.\n\n**Non-negotiable rule:** if your consumer is not idempotent, retry is dangerous. Fix idempotency first, then enable retry."
+        },
         "diagram": {
           "type": "mermaid",
           "source": "flowchart LR\n  D[At-Least-Once Delivery] --> IDM{Consumer Idempotent?}\n  IDM -->|no| FIX[Add eventId Dedup Table]\n  IDM -->|yes| RTY[Retry with Exponential Backoff + Jitter]\n  FIX --> RTY\n  RTY --> OK{Success?}\n  OK -->|yes| ACK([Ack Message])\n  OK -->|budget exhausted| DLQ[(Dead Letter Queue)]\n  DLQ --> ALERT[Alert + Operator Replay]\n  style ACK fill:#34d399,stroke:#059669,color:#fff\n  style DLQ fill:#fb7185,stroke:#e11d48,color:#fff\n  style ALERT fill:#f59e0b,stroke:#b45309,color:#1e1b4b\n  style IDM fill:#a78bfa,stroke:#6d28d9,color:#fff\n  style OK fill:#a78bfa,stroke:#6d28d9,color:#fff"
         },
-        "tooltipRefs": ["idempotency", "retry", "dead-letter-queue"]
+        "tooltipRefs": [
+          "idempotency",
+          "retry",
+          "dead-letter-queue"
+        ]
       },
       {
         "id": "step-6-handle-failure-flows",
         "type": "flow",
-        "title": { "en": "Step 6: Handle Failure Flows with Compensating Events", "th": "" },
-        "content": { "en": "Distributed systems cannot use database transactions that span multiple services. When a multi-step process fails halfway through, you cannot roll back — you must move forward.\n\n**The Saga pattern** handles this by using compensating events: new events that semantically undo the business effect of prior events.\n\n**Example: payment failure in the order flow**\n\n1. `sales.order.placed` → Inventory reserves stock, Payment attempts authorisation\n2. `payments.payment.failed` → Order must be cancelled, stock must be released\n3. Order service publishes `sales.order.cancelled`\n4. Inventory service reacts, publishes `inventory.stock.released`\n\nThe compensating events (`sales.order.cancelled`, `inventory.stock.released`) do not erase history — the original events remain in the log. They add new facts that bring the system to a consistent final state.\n\n**Designing compensating events:**\n- Name them as business facts, not rollback commands (`OrderCancelled`, not `RollbackOrder`)\n- Each step in a saga must have a defined compensating event\n- Document the full compensation chain before building\n- Test failure paths as rigorously as the happy path", "th": "" },
+        "title": {
+          "en": "Step 6: Handle Failure Flows with Compensating Events"
+        },
+        "content": {
+          "en": "Distributed systems cannot use database transactions that span multiple services. When a multi-step process fails halfway through, you cannot roll back — you must move forward.\n\n**The Saga pattern** handles this by using compensating events: new events that semantically undo the business effect of prior events.\n\n**Example: payment failure in the order flow**\n\n1. `sales.order.placed` → Inventory reserves stock, Payment attempts authorisation\n2. `payments.payment.failed` → Order must be cancelled, stock must be released\n3. Order service publishes `sales.order.cancelled`\n4. Inventory service reacts, publishes `inventory.stock.released`\n\nThe compensating events (`sales.order.cancelled`, `inventory.stock.released`) do not erase history — the original events remain in the log. They add new facts that bring the system to a consistent final state.\n\n**Designing compensating events:**\n- Name them as business facts, not rollback commands (`OrderCancelled`, not `RollbackOrder`)\n- Each step in a saga must have a defined compensating event\n- Document the full compensation chain before building\n- Test failure paths as rigorously as the happy path"
+        },
         "diagram": {
           "type": "mermaid",
           "source": "flowchart LR\n  OP[sales.order.placed] --> PA[Payment Service]\n  PA -->|success| PC[payments.payment.captured]\n  PA -->|failure| PF[payments.payment.failed]\n  PF --> OC[sales.order.cancelled]\n  OC --> IR[inventory.stock.released]\n  PC --> OK([Order Confirmed])\n  style OP fill:#f97316,stroke:#c2410c,color:#fff\n  style PF fill:#fb7185,stroke:#e11d48,color:#fff\n  style OC fill:#fb7185,stroke:#e11d48,color:#fff\n  style IR fill:#fb7185,stroke:#e11d48,color:#fff\n  style PC fill:#34d399,stroke:#059669,color:#fff\n  style OK fill:#34d399,stroke:#059669,color:#fff"
         },
-        "tooltipRefs": ["domain-event", "integration-event", "eventual-consistency"]
+        "tooltipRefs": [
+          "domain-event",
+          "integration-event",
+          "eventual-consistency"
+        ]
       },
       {
         "id": "step-7-observability",
         "type": "text",
-        "title": { "en": "Step 7: Make the System Observable", "th": "" },
-        "content": { "en": "An event-driven system that cannot be observed is a black box. When something goes wrong — and it will — you need to trace a business transaction across multiple services and event hops.\n\n**Correlation ID** — a unique identifier generated at the entry point (e.g. the HTTP request that placed the order) and propagated unchanged through every event in the downstream chain. Every log entry includes it. Searching your log platform for one correlation ID shows you every action taken for that business transaction.\n\n**Causation ID** — the eventId of the event that caused the current event. Together with correlation ID, this reconstructs the exact causal chain.\n\n**Metrics to instrument per consumer:**\n- Processing lag (time between event published and event processed)\n- Error rate by eventType\n- DLQ depth (alert when non-zero)\n- Retry count distribution\n\n**Practical tooling:** structured JSON logging (not string messages), distributed tracing (OpenTelemetry), and broker-native metrics (Kafka consumer group lag, RabbitMQ queue depth).\n\nObservability is not optional. It is the difference between a system you can operate confidently and one you fear changing.", "th": "" },
-        "tooltipRefs": ["event-schema", "consumer", "message-broker"]
+        "title": {
+          "en": "Step 7: Make the System Observable"
+        },
+        "content": {
+          "en": "An event-driven system that cannot be observed is a black box. When something goes wrong — and it will — you need to trace a business transaction across multiple services and event hops.\n\n**Correlation ID** — a unique identifier generated at the entry point (e.g. the HTTP request that placed the order) and propagated unchanged through every event in the downstream chain. Every log entry includes it. Searching your log platform for one correlation ID shows you every action taken for that business transaction.\n\n**Causation ID** — the eventId of the event that caused the current event. Together with correlation ID, this reconstructs the exact causal chain.\n\n**Metrics to instrument per consumer:**\n- Processing lag (time between event published and event processed)\n- Error rate by eventType\n- DLQ depth (alert when non-zero)\n- Retry count distribution\n\n**Practical tooling:** structured JSON logging (not string messages), distributed tracing (OpenTelemetry), and broker-native metrics (Kafka consumer group lag, RabbitMQ queue depth).\n\nObservability is not optional. It is the difference between a system you can operate confidently and one you fear changing."
+        },
+        "tooltipRefs": [
+          "event-schema",
+          "consumer",
+          "message-broker"
+        ]
       },
       {
         "id": "common-mistakes",
         "type": "callout",
         "variant": "warning",
-        "title": { "en": "Common Mistakes When Converting ES to EDA", "th": "" },
-        "content": { "en": "**Mistake 1: Publishing every sticky note event**\nTreating the Event Storming wall as a direct mapping to integration events produces a broker flooded with internal noise. Other contexts subscribe to things they don't need, creating hidden coupling. Only cross-context events belong on the broker.\n\n**Mistake 2: Skipping the Anti-Corruption Layer**\nPublishing internal aggregate fields directly exposes your internal data model as a contract. Every refactoring of your domain model becomes a breaking change for all consumers.\n\n**Mistake 3: Naming events as commands**\n`UpdateInventory` is a command. `InventoryReserved` is an event. Events are immutable facts; they state what happened, not what should happen next. Wrong naming signals wrong thinking about ownership.\n\n**Mistake 4: No compensating events for failure paths**\nTeams build the happy path and assume failures are rare. They are not. Inventory reservation failures, payment timeouts, and shipment errors all require defined compensation chains. Design them before you build.\n\n**Mistake 5: Confusing Event Sourcing with EDA**\nEvent Sourcing stores service state as an append-only event log — a persistence pattern within one service. EDA is a communication pattern between services. They are orthogonal. You can have EDA without Event Sourcing. You can have Event Sourcing without EDA. Combining them is a deliberate architectural choice with significant complexity.", "th": "" },
-        "tooltipRefs": ["integration-event", "domain-event", "eventual-consistency"]
+        "title": {
+          "en": "Common Mistakes When Converting ES to EDA"
+        },
+        "content": {
+          "en": "**Mistake 1: Publishing every sticky note event**\nTreating the Event Storming wall as a direct mapping to integration events produces a broker flooded with internal noise. Other contexts subscribe to things they don't need, creating hidden coupling. Only cross-context events belong on the broker.\n\n**Mistake 2: Skipping the Anti-Corruption Layer**\nPublishing internal aggregate fields directly exposes your internal data model as a contract. Every refactoring of your domain model becomes a breaking change for all consumers.\n\n**Mistake 3: Naming events as commands**\n`UpdateInventory` is a command. `InventoryReserved` is an event. Events are immutable facts; they state what happened, not what should happen next. Wrong naming signals wrong thinking about ownership.\n\n**Mistake 4: No compensating events for failure paths**\nTeams build the happy path and assume failures are rare. They are not. Inventory reservation failures, payment timeouts, and shipment errors all require defined compensation chains. Design them before you build.\n\n**Mistake 5: Confusing Event Sourcing with EDA**\nEvent Sourcing stores service state as an append-only event log — a persistence pattern within one service. EDA is a communication pattern between services. They are orthogonal. You can have EDA without Event Sourcing. You can have Event Sourcing without EDA. Combining them is a deliberate architectural choice with significant complexity."
+        },
+        "tooltipRefs": [
+          "integration-event",
+          "domain-event",
+          "eventual-consistency"
+        ]
       },
       {
         "id": "connecting-to-module-7",
         "type": "callout",
-        "title": { "en": "Connecting to Module 7", "th": "" },
-        "content": { "en": "You now have the complete toolkit for translating Event Storming output into a production Event-Driven Architecture:\n\n✓ Filter domain events by cross-context relevance\n✓ Identify producers and consumers from the ES wall\n✓ Design lean, versioned event contracts\n✓ Build idempotent consumers with retry and DLQ\n✓ Handle failure with compensating events and sagas\n✓ Instrument for observability\n\n**Module 7** brings everything together in a full end-to-end case study: a Thai e-commerce marketplace called ShopSphere. You will see a complete Event Storming wall, the DDD Bounded Context map derived from it, and the full EDA topology — producers, consumers, contracts, failure flows, and reliability patterns — applied to a realistic ordering domain.\n\nProceed to Module 7 to see the complete picture.", "th": "" },
-        "tooltipRefs": ["eda", "event-storming", "bounded-context"]
+        "title": {
+          "en": "Connecting to Module 7"
+        },
+        "content": {
+          "en": "You now have the complete toolkit for translating Event Storming output into a production Event-Driven Architecture:\n\n✓ Filter domain events by cross-context relevance\n✓ Identify producers and consumers from the ES wall\n✓ Design lean, versioned event contracts\n✓ Build idempotent consumers with retry and DLQ\n✓ Handle failure with compensating events and sagas\n✓ Instrument for observability\n\n**Module 7** brings everything together in a full end-to-end case study: a Thai e-commerce marketplace called ShopSphere. You will see a complete Event Storming wall, the DDD Bounded Context map derived from it, and the full EDA topology — producers, consumers, contracts, failure flows, and reliability patterns — applied to a realistic ordering domain.\n\nProceed to Module 7 to see the complete picture."
+        },
+        "tooltipRefs": [
+          "eda",
+          "event-storming",
+          "bounded-context"
+        ]
       }
     ]
   }

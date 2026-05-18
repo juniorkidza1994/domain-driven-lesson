@@ -43,7 +43,7 @@
   margin-block: 12px;
 }
 .callout-warning {
-  background: #fef3c7;
+  background: var(--color-warning-bg);
   border-left-color: var(--color-accent);
 }
 
@@ -287,14 +287,14 @@
 .quiz-locked .quiz-option:hover { background: var(--color-surface); }
 
 .quiz-option.quiz-correct {
-  background: #d1fae5;
+  background: var(--color-success-light);
   border-color: var(--color-success);
-  color: #065f46;
+  color: var(--color-success-dark);
 }
 .quiz-option.quiz-incorrect {
-  background: #fee2e2;
+  background: var(--color-danger-light);
   border-color: var(--color-danger);
-  color: #991b1b;
+  color: var(--color-danger-dark);
 }
 
 .quiz-explanation {

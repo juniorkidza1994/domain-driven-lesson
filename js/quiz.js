@@ -36,7 +36,7 @@
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const data = await res.json();
         this.questions = (data.questions || []).map(q => {
-          if (q.type === 'truefalse' && !q.options) {
+          if (q.type === 'true-false' && !q.options) {
             return Object.assign({}, q, { options: TF_OPTIONS });
           }
           return q;
