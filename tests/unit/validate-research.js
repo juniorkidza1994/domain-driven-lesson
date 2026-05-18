@@ -118,3 +118,29 @@ test('event-storming.md has >= 3 Brandolini citations', () => {
   const matches = esContent.match(/\(Brandolini/g) || [];
   assert.ok(matches.length >= 3, `found ${matches.length} (Brandolini citations, need >= 3`);
 });
+
+// --- DRE-12: eda.md structural assertions ---
+
+const EDA_MD = path.join(__dirname, '../../research/eda.md');
+
+let edaContent;
+test('research/eda.md exists', () => {
+  assert.ok(fs.existsSync(EDA_MD), 'research/eda.md not found');
+  edaContent = fs.readFileSync(EDA_MD, 'utf8');
+});
+
+test('eda.md word count > 800', () => {
+  const words = edaContent.split(/\s+/).filter(Boolean);
+  assert.ok(words.length > 800, `found ${words.length} words, need > 800`);
+});
+
+test('eda.md has required headings', () => {
+  for (const h of ['## Sources', '## Core Patterns', '## Reliability Patterns']) {
+    assert.ok(edaContent.includes(h), `missing heading: ${h}`);
+  }
+});
+
+test('eda.md defines both Domain Event and Integration Event', () => {
+  assert.ok(edaContent.includes('Domain Event'), 'missing text: Domain Event');
+  assert.ok(edaContent.includes('Integration Event'), 'missing text: Integration Event');
+});
