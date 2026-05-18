@@ -2,14 +2,269 @@
   "module": {
     "id": "module-03",
     "number": 3,
-    "title": { "en": "Tactical Design: Building Blocks", "th": "" },
-    "estimatedMinutes": 30,
+    "title": { "en": "Event Storming: Discovering the Domain on a Wall", "th": "" },
+    "estimatedMinutes": 35,
     "sections": [
       {
-        "id": "intro",
+        "id": "what-is-event-storming",
         "type": "text",
-        "title": { "en": "Introduction", "th": "" },
-        "content": { "en": "TBD — populated in DRE-18..24", "th": "" }
+        "title": { "en": "What is Event Storming?", "th": "" },
+        "content": {
+          "en": "**Event Storming** is a workshop technique for rapidly exploring a complex business domain by putting *domain events* — things that happened and matter to the business — at the centre of the conversation. It was invented by Alberto Brandolini around 2012–2013, first published on his blog in 2013, and formalised in the Leanpub book *Introducing EventStorming*. Martin Fowler later summarised it in 2017 as \"a workshop format for quickly exploring complex business domains.\"\n\nThe setup is deliberately low-tech. A long roll of butcher paper — eight metres or more — taped to a wall. A stack of sticky notes in specific colours. Sharpie markers (not ballpoint pens — the text has to be readable from across the room). And a mixed group of people: domain experts who know how the business actually works, developers who will build the system, and a facilitator whose job is to keep the wall moving.\n\nThe central rule is that everything starts with **events written in the past tense**: *Order Placed*, *Payment Authorized*, *Item Added to Cart*. Not *Place Order* (that is a command — a request, not a fact). Not *Order Processing* (that is a state, not a thing that happened). Past tense forces participants to describe what the business actually does, not what they wish it did. Brandolini's insight is that past-tense facts are the easiest thing for a mixed room of business and engineers to agree on. Two domain experts may disagree about *how* something should work, but they rarely disagree about whether *Order Placed* is a real event in their business.\n\nThe name combines \"Event\" (the modelling artefact) and \"Brainstorming\" (the generative, open-ended spirit). Everyone in the room contributes. There is no presenter; there is no audience. The act of placing a sticky on the wall externalises a tacit assumption so the whole room can challenge it. After a couple of hours, a previously invisible business process is on a wall, sorted in time order, and everyone in the room sees it the same way — usually for the first time.",
+          "th": ""
+        },
+        "tooltipRefs": ["event-storming", "domain-event"]
+      },
+      {
+        "id": "why-teams-use-es",
+        "type": "callout",
+        "title": { "en": "Why Teams Use Event Storming", "th": "" },
+        "content": {
+          "en": "Most software fails because the team built the wrong thing — not because the code was bad. The wrong thing is usually built because the people writing the code never quite understood the business, and the people who understood the business never quite saw what was being built.\n\nEvent Storming solves this by being the **fastest known way** to surface tacit, tribal knowledge from a mixed group of stakeholders. Critical business rules live in the heads of a handful of senior domain experts — undocumented, contradicted by what the software actually implements, and impossible to extract through interviews because the experts themselves don't know which parts are non-obvious. A workshop, by contrast, forces contradictions into the open: when two domain experts place conflicting events on the wall, the conflict is visible and cannot be dismissed as a misunderstanding.\n\nThe physical sticky-note medium is not nostalgia. Moving a sticky costs nothing, which lowers the barrier to challenging a placement, which lowers the barrier to disagreement. Ten people can place stickies simultaneously — in a meeting, only one person talks at a time. Colour becomes a shared visual grammar that an experienced practitioner can parse at a glance. And the unlimited modelling space — eight metres of paper, no scroll bar — lets the whole flow live in everyone's peripheral vision at once.\n\nThe outputs are concrete: a timeline of domain events, a list of pink **hotspots** (problems, conflicts, open questions) that becomes a prioritised backlog, and — at the deeper levels — a sketch of commands, policies, read models, and aggregates that maps almost directly onto Domain-Driven Design building blocks.",
+          "th": ""
+        }
+      },
+      {
+        "id": "sticky-note-colors",
+        "type": "infographic",
+        "title": { "en": "Sticky Note Color Guide", "th": "" },
+        "content": {
+          "en": "Brandolini's colour conventions are now a de-facto industry standard. The exact colours matter because they create a visual grammar readable at a glance — an experienced facilitator can scan a wall and immediately identify flow, causation, automation, and risk. Memorise the eight colours below; you will see them in every Event Storming session for the rest of your career.",
+          "th": ""
+        },
+        "items": [
+          {
+            "icon": "🟧",
+            "label": { "en": "Orange — Domain Event", "th": "" },
+            "body": { "en": "Something relevant that happened in the past. Always written in past tense. The atomic unit of Event Storming and the only colour used in the first phase. Examples: *Order Placed*, *Payment Authorized*, *Item Added to Cart*.", "th": "" }
+          },
+          {
+            "icon": "🟦",
+            "label": { "en": "Blue — Command", "th": "" },
+            "body": { "en": "An intention or request that, if accepted by an aggregate, produces a Domain Event. Written in imperative form. Commands can be rejected; events cannot be undone. Examples: *Place Order*, *Authorize Payment*, *Add Item to Cart*.", "th": "" }
+          },
+          {
+            "icon": "🟨",
+            "label": { "en": "Yellow (small) — Actor", "th": "" },
+            "body": { "en": "The person or role issuing a command. A role, not an individual — one human can play many roles in different flows. Answers \"who decides to issue this command?\" Examples: *Customer*, *Warehouse Operator*, *Fraud Analyst*.", "th": "" }
+          },
+          {
+            "icon": "🟪",
+            "label": { "en": "Purple — Policy", "th": "" },
+            "body": { "en": "A reactive rule of the form \"whenever event X happens, issue command Y.\" Policies are the invisible glue of most businesses — they encode rules that are widely known but rarely written down. In code, a policy often becomes a saga or process manager.", "th": "" }
+          },
+          {
+            "icon": "🟥",
+            "label": { "en": "Pink — Hotspot", "th": "" },
+            "body": { "en": "A problem, conflict, open question, or pain point. The highest-value stickies in Big Picture sessions. Brandolini's rule: \"If there are no hotspots, you are not doing it right.\" After the session, hotspot density is a prioritisation map.", "th": "" }
+          },
+          {
+            "icon": "🟩",
+            "label": { "en": "Green — Read Model", "th": "" },
+            "body": { "en": "The information an actor needs in order to decide to issue a command — the data visible on a screen. Maps naturally to the Query side of CQRS. Examples: *Cart Summary*, *Order History*, *Available Inventory*.", "th": "" }
+          },
+          {
+            "icon": "🟡",
+            "label": { "en": "Yellow (large) — External System", "th": "" },
+            "body": { "en": "A system outside the modelled domain that emits or consumes events. Identifying these early forces a conversation about integration contracts and is the first step toward Anti-Corruption Layers. Examples: *Stripe*, *Shipping Carrier API*, *Tax Service*.", "th": "" }
+          },
+          {
+            "icon": "⬜",
+            "label": { "en": "White — Aggregate", "th": "" },
+            "body": { "en": "A cluster of objects treated as a single consistency unit. Appears only at Design Level. Receives commands, emits events, enforces invariants. Examples: *Order*, *Cart*, *Inventory Item*, *Payment*.", "th": "" }
+          }
+        ]
+      },
+      {
+        "id": "three-levels",
+        "type": "comparison",
+        "title": { "en": "Three Levels of Event Storming", "th": "" },
+        "content": {
+          "en": "Brandolini defines three progressively zoomed-in formats of Event Storming. All three use the same notation (sticky note colours and conventions), but differ in scope, participant set, output artefacts, and duration. Most teams start with Big Picture for a half-day, move to Process Level when one slice needs deeper attention, and reach Design Level only when they are ready to write code.",
+          "th": ""
+        },
+        "left": {
+          "heading": { "en": "Big Picture", "th": "" },
+          "items": [
+            { "en": "**Scope:** the entire business — every domain event across the company on one wall.", "th": "" },
+            { "en": "**Duration:** 2–4 hours, half-day format.", "th": "" },
+            { "en": "**Audience:** whole organisation — executives, domain experts, all development teams.", "th": "" },
+            { "en": "**Output:** a left-to-right event timeline, pink hotspots, and candidate subdomain boundaries.", "th": "" },
+            { "en": "**Use it to:** build shared understanding, surface conflicts, find pivotal events that mark context seams.", "th": "" }
+          ]
+        },
+        "right": {
+          "heading": { "en": "Process Level", "th": "" },
+          "items": [
+            { "en": "**Scope:** one process or value stream (e.g. checkout, returns, onboarding).", "th": "" },
+            { "en": "**Duration:** half-day to a full day.", "th": "" },
+            { "en": "**Audience:** cross-functional process team.", "th": "" },
+            { "en": "**Output:** events + commands + policies + actors + read models + external systems for one process.", "th": "" },
+            { "en": "**Use it to:** make causation explicit, formalise policies that were tacit, identify automation opportunities and read-model needs.", "th": "" }
+          ]
+        }
+      },
+      {
+        "id": "running-a-session",
+        "type": "flow",
+        "title": { "en": "Running an Event Storming Session", "th": "" },
+        "content": {
+          "en": "A typical Big Picture session takes a half-day and produces immediate value. The ten steps below describe Brandolini's canonical facilitation pattern. Steps are not rigid — a confident facilitator adapts pace and emphasis to the room — but the order matters: events first, structure later.",
+          "th": ""
+        },
+        "diagram": {
+          "type": "mermaid",
+          "source": "flowchart LR\n  A[1. Setup wall] --> B[2. Chaotic exploration]\n  B --> C[3. Enforce timeline]\n  C --> D[4. Add actors and commands]\n  D --> E[5. Mark hotspots]\n  E --> F[6. Add policies and read models]\n  F --> G[7. Identify external systems]\n  G --> H[8. Walk the timeline]\n  H --> I[9. Cluster into contexts]\n  I --> J[10. Capture and photograph]\n  style A fill:#f97316,stroke:#c2410c,color:#fff\n  style E fill:#fb7185,stroke:#e11d48,color:#fff\n  style I fill:#6366f1,stroke:#3730a3,color:#fff\n  style J fill:#14b8a6,stroke:#0f766e,color:#fff"
+        },
+        "steps": [
+          {
+            "label": { "en": "1. Set up the wall", "th": "" },
+            "body": { "en": "Tape 8+ metres of butcher paper to a long wall. Stock the canonical sticky-note colours and Sharpies. Brief the room: past-tense events only, no discussion of databases or technical implementation.", "th": "" }
+          },
+          {
+            "label": { "en": "2. Chaotic exploration", "th": "" },
+            "body": { "en": "Set a timer for 10–15 minutes. Every participant writes orange events independently — anything they can think of — and sticks them on the wall in any order. The wall fills up quickly with hundreds of events, deliberately unsorted.", "th": "" }
+          },
+          {
+            "label": { "en": "3. Enforce the timeline", "th": "" },
+            "body": { "en": "Together, sort the events left-to-right in time order. Earliest events go left, latest go right. Duplicates get merged. This is where the first disagreements surface — let them surface; do not smooth them over.", "th": "" }
+          },
+          {
+            "label": { "en": "4. Add actors and commands", "th": "" },
+            "body": { "en": "For each event, ask \"who or what caused this?\" Place a small yellow Actor sticky next to the trigger and a blue Command sticky just before the event. The causation chain starts to become visible.", "th": "" }
+          },
+          {
+            "label": { "en": "5. Mark hotspots", "th": "" },
+            "body": { "en": "Whenever there is disagreement, an unanswered question, or pain in the current process, stick a pink Hotspot sticky. Encourage these — they are the most valuable output. \"If there are no hotspots, you are not doing it right\" (Brandolini).", "th": "" }
+          },
+          {
+            "label": { "en": "6. Add policies and read models", "th": "" },
+            "body": { "en": "Look for places where an event automatically triggers a command — those are purple Policies (\"whenever X → do Y\"). For each actor decision, ask what information they need to see; that becomes a green Read Model sticky.", "th": "" }
+          },
+          {
+            "label": { "en": "7. Identify external systems", "th": "" },
+            "body": { "en": "Place large-yellow External System stickies wherever the flow crosses into a system the team does not control — payment gateways, shipping carriers, tax services. These mark candidate Anti-Corruption Layers in DDD terms.", "th": "" }
+          },
+          {
+            "label": { "en": "8. Walk the timeline", "th": "" },
+            "body": { "en": "Have one participant narrate the wall end-to-end as a story. Where the story breaks, refines, or reveals contradictions, capture them as new hotspots. This is the strongest validation step.", "th": "" }
+          },
+          {
+            "label": { "en": "9. Cluster into bounded contexts", "th": "" },
+            "body": { "en": "Look for vocabulary shifts and natural seams in the event flow. Group neighbouring events that share language into candidate Bounded Contexts. Mark pivotal events — events that sit on the boundary between two contexts.", "th": "" }
+          },
+          {
+            "label": { "en": "10. Capture and photograph", "th": "" },
+            "body": { "en": "Photograph the wall in sections. Transcribe events, hotspots, and candidate contexts into a digital tool. Schedule follow-up Process-Level sessions for high-hotspot areas. The wall itself is disposable; the shared understanding is the deliverable.", "th": "" }
+          }
+        ]
+      },
+      {
+        "id": "artifacts-explained",
+        "type": "text",
+        "title": { "en": "Event Storming Artifacts Explained", "th": "" },
+        "content": {
+          "en": "Each sticky note element carries specific semantics. Getting the semantics right is what turns a colourful wall into a useful design artefact.\n\n**Domain Event.** A business-meaningful fact recorded in the past tense — *Order Placed*, not *Place Order* or *Order Placing*. The tense is not arbitrary: past tense forces participants to describe things that actually happen. The most common mistake is writing technical events like \"Database Row Inserted\" or \"Cache Invalidated\" — those are implementation details, not domain facts. Domain Events appear at all three levels; at Big Picture they are deliberately vague and numerous, at Design Level they are precise and carry a defined payload.\n\n**Command.** An intention that, if accepted by an aggregate, produces a Domain Event. Commands can be **rejected** — if a customer tries to place an order with an out-of-stock item, the *Place Order* command may be refused. That is the key distinction from events, which cannot be undone: an event is a historical fact, a command is a request.\n\n**Policy.** A reactive rule of the form \"whenever event X happens, do Y.\" Policies are the invisible glue of most businesses — they encode rules that are widely known but rarely written down. Event Storming reliably surfaces them because placing an event on the wall and asking \"so what happens next?\" usually elicits a policy response. In code, a policy often becomes a saga, a process manager, or a scheduled job.\n\n**Actor.** A role — a category of person — not an individual. One human can play multiple roles: the same person might act as a *Customer* in one flow and an *Administrator* in another. At Design Level, actors are sometimes replaced by policies (when the decision is automated) or by external systems (when the trigger is outside the domain).\n\n**External System.** Any system outside the boundary of the domain being modelled. External systems force an important conversation: what is the integration contract? Does the domain own the data format, or does the external system dictate it? Mapping external systems is the first step toward identifying Anti-Corruption Layers and Open Host Services in DDD context-mapping terms.\n\n**Read Model.** The information an actor needs to make a decision before issuing a command. The *Cart Summary* a customer sees before clicking *Place Order* is a Read Model. Read Models map naturally to the Query side of CQRS architectures: they are projections of Domain Events onto a form useful for decision-making.\n\n**Hotspot.** The most operationally valuable sticky in a Big Picture session. Pink stickies mark questions nobody can answer, conflicts between two domain experts, pain points in the current process, and risks. A hotspot does **not** mean something is broken — it means it deserves a conversation. Brandolini: \"If there are no hotspots, you are not doing it right.\"\n\n**Aggregate.** Appears only at Design Level. A cluster of Domain Objects treated as a consistency unit. Identified by grouping commands and events: a command received by an aggregate produces an event emitted by that aggregate. The aggregate's name is often the most stable part of the Ubiquitous Language.",
+          "th": ""
+        },
+        "tooltipRefs": ["domain-event", "command", "policy", "actor", "external-system", "read-model", "aggregate"]
+      },
+      {
+        "id": "es-board-example",
+        "type": "es-board",
+        "title": { "en": "E-Commerce ES Board Example", "th": "" },
+        "content": {
+          "en": "A Design-Level slice of an e-commerce checkout flow. Read left-to-right: the **Customer** lane begins the flow by viewing a cart and starting checkout; **Checkout** validates the address and creates the order; **Inventory** reserves stock; **Payment** authorises the card via Stripe. Pivotal event *Order Placed* (between Checkout and Inventory) marks the seam between the Sales and Fulfilment bounded contexts. The pink hotspot in the Inventory lane captures an unresolved business question.",
+          "th": ""
+        },
+        "diagram": {
+          "type": "es-board",
+          "source": "lanes-rendered-inline"
+        },
+        "lanes": [
+          {
+            "id": "customer",
+            "label": { "en": "Customer", "th": "" },
+            "items": [
+              { "type": "actor",     "text": { "en": "Customer",            "th": "" } },
+              { "type": "readmodel", "text": { "en": "Cart Summary",        "th": "" } },
+              { "type": "command",   "text": { "en": "Review Cart",         "th": "" } },
+              { "type": "event",     "text": { "en": "Cart Reviewed",       "th": "" } },
+              { "type": "command",   "text": { "en": "Start Checkout",      "th": "" } },
+              { "type": "event",     "text": { "en": "Checkout Started",    "th": "" } }
+            ]
+          },
+          {
+            "id": "checkout",
+            "label": { "en": "Checkout", "th": "" },
+            "items": [
+              { "type": "aggregate", "text": { "en": "Order",                "th": "" } },
+              { "type": "command",   "text": { "en": "Validate Address",     "th": "" } },
+              { "type": "event",     "text": { "en": "Address Validated",    "th": "" } },
+              { "type": "policy",    "text": { "en": "When Payment Authorized → Place Order", "th": "" } },
+              { "type": "command",   "text": { "en": "Place Order",          "th": "" } },
+              { "type": "event",     "text": { "en": "Order Placed",         "th": "" } }
+            ]
+          },
+          {
+            "id": "inventory",
+            "label": { "en": "Inventory", "th": "" },
+            "items": [
+              { "type": "aggregate", "text": { "en": "Inventory Item",       "th": "" } },
+              { "type": "policy",    "text": { "en": "When Order Placed → Reserve Inventory", "th": "" } },
+              { "type": "command",   "text": { "en": "Reserve Inventory",    "th": "" } },
+              { "type": "event",     "text": { "en": "Inventory Reserved",   "th": "" } },
+              { "type": "hotspot",   "text": { "en": "Partial stock? Split shipment or cancel?", "th": "" } }
+            ]
+          },
+          {
+            "id": "payment",
+            "label": { "en": "Payment", "th": "" },
+            "items": [
+              { "type": "aggregate", "text": { "en": "Payment",              "th": "" } },
+              { "type": "command",   "text": { "en": "Authorize Payment",    "th": "" } },
+              { "type": "external",  "text": { "en": "Stripe",               "th": "" } },
+              { "type": "event",     "text": { "en": "Payment Authorized",   "th": "" } },
+              { "type": "readmodel", "text": { "en": "Order Confirmation",   "th": "" } }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "es-to-bounded-contexts",
+        "type": "flow",
+        "title": { "en": "How Event Storming Leads to Bounded Contexts", "th": "" },
+        "content": {
+          "en": "Event Storming is not just a discovery activity — its outputs feed directly into Domain-Driven Design. The wall of events, commands, and policies becomes the raw material from which Bounded Contexts are drawn, ubiquitous languages are extracted, and aggregates are identified. The five steps below trace the path from a finished Big Picture wall to a DDD context map.",
+          "th": ""
+        },
+        "diagram": {
+          "type": "mermaid",
+          "source": "flowchart LR\n  ES[Event Storming wall<br/>events, commands, policies] --> V[Listen for<br/>vocabulary shifts]\n  V --> P[Mark pivotal events<br/>between clusters]\n  P --> BC[Draw bounded<br/>context boundaries]\n  BC --> UL[Lock in ubiquitous<br/>language per context]\n  UL --> AGG[Identify aggregates<br/>from command-event pairs]\n  style ES fill:#f97316,stroke:#c2410c,color:#fff\n  style BC fill:#6366f1,stroke:#3730a3,color:#fff\n  style AGG fill:#14b8a6,stroke:#0f766e,color:#fff"
+        },
+        "steps": [
+          {
+            "label": { "en": "1. Listen for vocabulary shifts", "th": "" },
+            "body": { "en": "Walk along the timeline and pay attention to the words. If participants notice that *Order* means a cart being built in one part of the wall and a packing list in another, that vocabulary shift is the strongest signal of a context boundary. The same word means different things on either side.", "th": "" }
+          },
+          {
+            "label": { "en": "2. Mark pivotal events", "th": "" },
+            "body": { "en": "A pivotal event is a Domain Event that sits on the seam between two contexts. *Order Placed* is the canonical e-commerce example: everything to the left (Cart, Checkout) belongs to the Sales context; everything to the right (Fulfilment, Shipping, Inventory) belongs to Operations. The event name appears on both sides but the teams who care differ.", "th": "" }
+          },
+          {
+            "label": { "en": "3. Draw bounded context boundaries", "th": "" },
+            "body": { "en": "Group neighbouring events that share vocabulary into candidate Bounded Contexts. Each cluster gets a name (Sales, Fulfilment, Billing, Catalog…). Boundaries are not committed yet — they will move as Process-Level sessions reveal more detail.", "th": "" }
+          },
+          {
+            "label": { "en": "4. Lock in the ubiquitous language", "th": "" },
+            "body": { "en": "Inside each candidate context, list the terms used: nouns, verbs, event names. This becomes the seed of that context's Ubiquitous Language. The same real-world concept may have different names in different contexts — and that is correct, not a bug.", "th": "" }
+          },
+          {
+            "label": { "en": "5. Identify aggregates from command-event pairs", "th": "" },
+            "body": { "en": "At Design Level, every command-event pair points to an aggregate: the command is received by the aggregate, the event is emitted by the aggregate. *Place Order → Order Placed* points to an *Order* aggregate. The white sticky notes from the Design-Level session become candidate aggregate names — and from there, classes in code.", "th": "" }
+          }
+        ],
+        "tooltipRefs": ["bounded-context", "ubiquitous-language", "aggregate"]
       }
     ]
   }
