@@ -2,15 +2,128 @@
   "moduleId": "module-07",
   "questions": [
     {
-      "id": "q1",
+      "id": "notification-is-generic",
       "type": "mcq",
-      "question": { "en": "Which of the following best describes the relationship between Event Storming and DDD?", "th": "ข้อใดอธิบายความสัมพันธ์ระหว่าง Event Storming กับ DDD ได้ดีที่สุด?" },
+      "question": { "en": "In ShopSphere, why is the Notification context classified as a Generic subdomain rather than Core or Supporting?", "th": "ใน ShopSphere ทำไม Notification context ถึงถูกจัดเป็น Generic subdomain แทนที่จะเป็น Core หรือ Supporting?" },
       "options": [
-        { "id": "a", "text": { "en": "Event Storming is a collaborative technique for discovering the domain model used in DDD", "th": "Event Storming เป็นเทคนิคร่วมมือเพื่อค้นพบ domain model ที่ใช้ใน DDD" } },
-        { "id": "b", "text": { "en": "They are unrelated practices", "th": "เป็นแนวทางปฏิบัติที่ไม่เกี่ยวข้องกัน" } }
+        { "id": "a", "text": { "en": "Email and SMS dispatch provides no competitive differentiation — any mature company can buy this capability off the shelf (SendGrid, Twilio), so it is a commodity function", "th": "การส่งอีเมลและ SMS ไม่ให้ความแตกต่างในการแข่งขัน บริษัทที่เติบโตแล้วทุกแห่งสามารถซื้อความสามารถนี้สำเร็จรูปได้ (SendGrid, Twilio) จึงเป็นฟังก์ชัน commodity" } },
+        { "id": "b", "text": { "en": "Notification only sends messages in English, so it cannot be Core for a Thai marketplace", "th": "Notification ส่งข้อความเป็นภาษาอังกฤษเท่านั้น จึงไม่สามารถเป็น Core สำหรับตลาดออนไลน์ไทยได้" } },
+        { "id": "c", "text": { "en": "It has the fewest events flowing into it compared to other contexts", "th": "มี event ไหลเข้าน้อยที่สุดเมื่อเทียบกับ context อื่น" } },
+        { "id": "d", "text": { "en": "Generic subdomains are always the last context added to a context map", "th": "Generic subdomain เป็น context ที่เพิ่มเข้า context map เป็นสุดท้ายเสมอ" } }
       ],
       "correctOption": "a",
-      "explanation": { "en": "Event Storming is a workshop technique that helps teams discover and model their domain, feeding directly into DDD implementation.", "th": "" }
+      "explanation": { "en": "A Generic subdomain is a commodity capability where the business has no reason to differentiate. Email and SMS dispatch are exactly that — every e-commerce company sends transactional messages the same way. ShopSphere consumes SendGrid or Twilio rather than building it in-house, leaving developer effort for the Core domains (Customer, Order, Payment).", "th": "Generic subdomain คือความสามารถ commodity ที่ธุรกิจไม่มีเหตุผลต้องแตกต่างจากคู่แข่ง การส่งอีเมลและ SMS เป็นเช่นนั้นพอดี บริษัท e-commerce ทุกแห่งส่งข้อความ transaction แบบเดียวกัน ShopSphere ใช้ SendGrid หรือ Twilio แทนการสร้างเอง เพื่อให้นักพัฒนาโฟกัสกับ Core domain (Customer, Order, Payment)" }
+    },
+    {
+      "id": "who-publishes-orderconfirmed",
+      "type": "true-false",
+      "question": { "en": "In the ShopSphere happy-path saga, the Payment context is the producer of the OrderConfirmed integration event.", "th": "ใน ShopSphere happy-path saga Payment context เป็น producer ของ OrderConfirmed Integration Event" },
+      "options": [
+        { "id": "true",  "text": { "en": "True", "th": "จริง" } },
+        { "id": "false", "text": { "en": "False", "th": "เท็จ" } }
+      ],
+      "correctOption": "false",
+      "explanation": { "en": "False. OrderConfirmed is published by the Order context after it consumes PaymentAuthorized. The rule: every integration event has exactly one producer — the context that owns the business fact. The Order aggregate is authoritative for the order's lifecycle state, so it owns the confirmed-state transition and the event that announces it.", "th": "เท็จ OrderConfirmed publish โดย Order context หลังจาก consume PaymentAuthorized กฎ: ทุก Integration Event มีผู้ส่งหนึ่งเดียวเสมอ ซึ่งเป็น context ที่เป็นเจ้าของ business fact Order aggregate มีอำนาจเหนือ lifecycle state ของ order จึงเป็นเจ้าของการเปลี่ยนสถานะ confirmed และ event ที่ประกาศมัน" }
+    },
+    {
+      "id": "payment-idempotency",
+      "type": "mcq",
+      "question": { "en": "Why must the Payment context be idempotent on the eventId of every InventoryReserved event it consumes?", "th": "ทำไม Payment context จึงต้องเป็น Idempotent ต่อ eventId ของทุก InventoryReserved event ที่ consume?" },
+      "options": [
+        { "id": "a", "text": { "en": "To prevent double-charging the customer when at-least-once delivery causes the same event to be redelivered after a transient consumer failure", "th": "เพื่อป้องกันการเก็บเงินลูกค้าสองครั้งเมื่อ at-least-once delivery ทำให้ event เดิมถูกส่งซ้ำหลังจาก consumer ล้มเหลวชั่วคราว" } },
+        { "id": "b", "text": { "en": "Because Stripe rejects requests without an idempotency key", "th": "เพราะ Stripe ปฏิเสธ request ที่ไม่มี idempotency key" } },
+        { "id": "c", "text": { "en": "Because Thai banking regulations require it", "th": "เพราะกฎระเบียบธนาคารไทยกำหนด" } },
+        { "id": "d", "text": { "en": "To make event payloads compress better in the broker", "th": "เพื่อให้ event payload บีบอัดได้ดีขึ้นใน broker" } }
+      ],
+      "correctOption": "a",
+      "explanation": { "en": "Message brokers offer at-least-once delivery — Payment will occasionally see the same InventoryReserved event twice (consumer crash before offset commit, broker rebalance, Outbox relay retry). Without idempotency the gateway would be called twice and the customer would be charged twice. Payment maintains a processed-eventId table and skips duplicates.", "th": "Message broker รับประกัน at-least-once delivery Payment จะเห็น InventoryReserved event เดิมสองครั้งเป็นบางครั้ง (consumer crash ก่อน commit offset, broker rebalance, Outbox relay retry) หากไม่มี Idempotency gateway จะถูกเรียกสองครั้งและลูกค้าจะถูกเก็บเงินสองครั้ง Payment มีตาราง processed-eventId และข้ามข้อความซ้ำ" }
+    },
+    {
+      "id": "inventory-reservation-failed",
+      "type": "mcq",
+      "question": { "en": "When InventoryReservationFailed fires in ShopSphere, what is the next event the Order context publishes, and is any Payment compensation required?", "th": "เมื่อ InventoryReservationFailed เกิดขึ้นใน ShopSphere event ถัดไปที่ Order context publish คืออะไร และจำเป็นต้อง compensate Payment หรือไม่?" },
+      "options": [
+        { "id": "a", "text": { "en": "Order publishes OrderCancelled; no Payment compensation is needed because authorisation was never attempted", "th": "Order publish OrderCancelled ไม่จำเป็นต้อง compensate Payment เพราะไม่เคยพยายามอนุมัติการชำระเงิน" } },
+        { "id": "b", "text": { "en": "Order publishes OrderRetried and Payment issues a refund", "th": "Order publish OrderRetried และ Payment ออกคืนเงิน" } },
+        { "id": "c", "text": { "en": "Order publishes PaymentFailed because the customer cannot pay for unavailable stock", "th": "Order publish PaymentFailed เพราะลูกค้าไม่สามารถจ่ายเงินสำหรับสต็อกที่ไม่มีได้" } },
+        { "id": "d", "text": { "en": "Nothing — the Order stays Pending and a human Admin must intervene", "th": "ไม่มีอะไรเกิดขึ้น Order ยังอยู่ในสถานะ Pending และ Admin ต้องเข้ามาดำเนินการ" } }
+      ],
+      "correctOption": "a",
+      "explanation": { "en": "Inventory reservation comes before payment authorisation in the ShopSphere saga. If reservation fails, Payment has not been called yet, so there is nothing to refund. Order simply transitions Pending → Cancelled and publishes OrderCancelled. The Notification context sends an out-of-stock email.", "th": "การจองสต็อกมาก่อนการอนุมัติการชำระเงินใน ShopSphere saga ถ้าการจองล้มเหลว Payment ยังไม่ถูกเรียก จึงไม่มีอะไรต้องคืนเงิน Order เพียงเปลี่ยนสถานะ Pending → Cancelled และ publish OrderCancelled Notification context ส่งอีเมลสินค้าหมด" }
+    },
+    {
+      "id": "customer-same-across-contexts",
+      "type": "true-false",
+      "question": { "en": "Across ShopSphere's eight bounded contexts, the word 'Customer' refers to exactly the same concept and the same data — there is no legitimate reason to model it differently in different contexts.", "th": "ในแปด Bounded Context ของ ShopSphere คำว่า 'Customer' หมายถึงแนวคิดและข้อมูลเดียวกันทุกที่ ไม่มีเหตุผลสมเหตุสมผลที่จะ model มันแตกต่างกันในแต่ละ context" },
+      "options": [
+        { "id": "true",  "text": { "en": "True", "th": "จริง" } },
+        { "id": "false", "text": { "en": "False", "th": "เท็จ" } }
+      ],
+      "correctOption": "false",
+      "explanation": { "en": "False. 'Customer' is the canonical example of legitimate linguistic divergence. In the Customer context it is a registered person with credentials. In Order it is the buyer (a snapshot of identity at checkout). In Shipping it is the recipient at the destination — possibly a different person entirely if the order is a gift. Forcing one universal definition would collapse the ubiquitous language and re-couple every team.", "th": "เท็จ 'Customer' คือตัวอย่างมาตรฐานของการแยกทางภาษาที่สมเหตุสมผล ใน Customer context คือบุคคลที่ลงทะเบียนพร้อม credentials ใน Order คือผู้ซื้อ (snapshot ของ identity ตอน checkout) ใน Shipping คือผู้รับที่ปลายทาง ซึ่งอาจเป็นคนคนละคนเลยถ้าเป็นของขวัญ การบังคับให้มีนิยามสากลเดียวจะทำให้ Ubiquitous Language พังและเชื่อมทุกทีมเข้าหากันอีกครั้ง" }
+    },
+    {
+      "id": "shipment-creation-trigger",
+      "type": "mcq",
+      "question": { "en": "Which event triggers the Shipping context to create a shipment in ShopSphere's happy path?", "th": "Event ใดที่กระตุ้นให้ Shipping context สร้าง shipment ใน happy path ของ ShopSphere?" },
+      "options": [
+        { "id": "a", "text": { "en": "OrderConfirmed — Shipping subscribes to OrderConfirmed and only then generates the pick list and shipment record", "th": "OrderConfirmed — Shipping subscribe ต่อ OrderConfirmed และสร้าง pick list กับ shipment record เฉพาะเมื่อได้รับ event นี้" } },
+        { "id": "b", "text": { "en": "OrderPlaced — to start picking immediately and shorten delivery time", "th": "OrderPlaced — เพื่อเริ่มหยิบสินค้าทันทีและลดเวลาจัดส่ง" } },
+        { "id": "c", "text": { "en": "InventoryReserved — because stock is already held at that point", "th": "InventoryReserved — เพราะสต็อกถูกจองแล้ว ณ จุดนั้น" } },
+        { "id": "d", "text": { "en": "PaymentAuthorized — because authorisation guarantees payment", "th": "PaymentAuthorized — เพราะการอนุมัติรับประกันการชำระเงิน" } }
+      ],
+      "correctOption": "a",
+      "explanation": { "en": "Shipping waits for OrderConfirmed. Authorisation alone is not sufficient — the Order context must complete its own state transition (consuming PaymentAuthorized) before announcing OrderConfirmed. Triggering shipment on OrderPlaced or InventoryReserved would risk shipping orders that ultimately fail payment.", "th": "Shipping รอ OrderConfirmed การอนุมัติเพียงอย่างเดียวไม่เพียงพอ Order context ต้องทำการเปลี่ยนสถานะของตัวเองให้เสร็จ (consume PaymentAuthorized) ก่อนประกาศ OrderConfirmed การสร้าง shipment ตอน OrderPlaced หรือ InventoryReserved จะเสี่ยงส่งพัสดุสำหรับ order ที่สุดท้ายแล้วชำระเงินไม่ผ่าน" }
+    },
+    {
+      "id": "saga-pattern-name",
+      "type": "mcq",
+      "question": { "en": "What pattern does the ShopSphere order fulfilment saga use, and what would Sam Newman recommend in production?", "th": "ShopSphere order fulfilment saga ใช้ pattern อะไร และ Sam Newman จะแนะนำอะไรในสภาพแวดล้อม production?" },
+      "options": [
+        { "id": "a", "text": { "en": "Choreography Saga — Newman recommends switching to orchestration (a Process Manager) at four or more steps for monitoring and compensation legibility", "th": "Choreography Saga — Newman แนะนำให้เปลี่ยนเป็น Orchestration (Process Manager) เมื่อมีสี่ขั้นตอนขึ้นไปเพื่อความชัดเจนในการ monitor และ compensation" } },
+        { "id": "b", "text": { "en": "Two-Phase Commit — Newman recommends keeping 2PC across services for strong consistency", "th": "Two-Phase Commit — Newman แนะนำให้ใช้ 2PC ข้าม service เพื่อ strong consistency" } },
+        { "id": "c", "text": { "en": "Request-Response — Newman recommends synchronous HTTP for clarity", "th": "Request-Response — Newman แนะนำ synchronous HTTP เพื่อความชัดเจน" } },
+        { "id": "d", "text": { "en": "Event Sourcing Saga — Newman recommends rebuilding state from the event log on every transition", "th": "Event Sourcing Saga — Newman แนะนำให้สร้าง state จาก event log ใหม่ทุกครั้งที่มีการเปลี่ยนสถานะ" } }
+      ],
+      "correctOption": "a",
+      "explanation": { "en": "ShopSphere uses choreography (each context reacts to the previous context's event with no central coordinator) because the event chain is visible for teaching. Newman warns this becomes hazardous beyond three to four steps; ShopSphere's nine-step saga would in production warrant a Process Manager (orchestrator) that holds the saga state machine explicitly. Netflix built Conductor for exactly this reason.", "th": "ShopSphere ใช้ Choreography (แต่ละ context ตอบสนองต่อ event ของ context ก่อนหน้าโดยไม่มี coordinator กลาง) เพราะ event chain มองเห็นได้ง่ายสำหรับการสอน Newman เตือนว่าสิ่งนี้อันตรายเกินสามถึงสี่ขั้นตอน nine-step saga ของ ShopSphere ใน production ควรมี Process Manager (orchestrator) ที่ถือ state machine ของ saga อย่างชัดเจน Netflix สร้าง Conductor ด้วยเหตุผลนี้พอดี" }
+    },
+    {
+      "id": "publish-every-domain-event",
+      "type": "true-false",
+      "question": { "en": "Every domain event raised inside a bounded context aggregate should be published as an integration event onto the message broker.", "th": "ทุก Domain Event ที่เกิดขึ้นภายใน aggregate ของ Bounded Context ควร publish เป็น Integration Event ขึ้น message broker" },
+      "options": [
+        { "id": "true",  "text": { "en": "True", "th": "จริง" } },
+        { "id": "false", "text": { "en": "False", "th": "เท็จ" } }
+      ],
+      "correctOption": "false",
+      "explanation": { "en": "False. Most domain events stay private to their producing context. Only the subset that other bounded contexts legitimately need to react to are translated into integration events. Publishing everything floods the broker, couples internal aggregate fields to remote consumers, and turns every refactor into a breaking change. Order.LineItemAdded stays inside Order; only OrderPlaced, OrderConfirmed, OrderCancelled cross the wire.", "th": "เท็จ Domain Event ส่วนใหญ่อยู่ส่วนตัวใน context ที่ผลิตมัน เฉพาะส่วนย่อยที่ Bounded Context อื่นต้องตอบสนองจริงๆ เท่านั้นที่แปลงเป็น Integration Event การ publish ทุกอย่างทำให้ broker เต็มไปด้วย noise เชื่อม field ภายในของ aggregate กับ Consumer ห่างๆ และทำให้การ refactor ทุกครั้งกลายเป็น breaking change Order.LineItemAdded อยู่ภายใน Order เฉพาะ OrderPlaced, OrderConfirmed, OrderCancelled เท่านั้นที่ข้าม wire" }
+    },
+    {
+      "id": "notification-fails-permanently",
+      "type": "mcq",
+      "question": { "en": "The Notification Service tries to send a delivery-confirmation email but SendGrid keeps returning permanent failures (the customer's email domain is suppressed). What should ShopSphere's reliability design do?", "th": "Notification Service พยายามส่งอีเมลยืนยันการจัดส่งแต่ SendGrid คืน permanent failure ตลอด (domain อีเมลของลูกค้าถูก suppress) การออกแบบ reliability ของ ShopSphere ควรทำอย่างไร?" },
+      "options": [
+        { "id": "a", "text": { "en": "Retry a bounded number of times with exponential backoff, then route the message to a Dead Letter Queue and alert the Admin for investigation and replay", "th": "Retry จำนวนครั้งที่จำกัดด้วย exponential backoff จากนั้นส่งข้อความไปยัง Dead Letter Queue และแจ้งเตือน Admin เพื่อตรวจสอบและ replay" } },
+        { "id": "b", "text": { "en": "Retry forever — eventually SendGrid will accept it", "th": "Retry ตลอดไป สุดท้าย SendGrid จะยอมรับ" } },
+        { "id": "c", "text": { "en": "Drop the message silently — notifications are not business-critical", "th": "ทิ้งข้อความโดยไม่แจ้ง notification ไม่ใช่สิ่งสำคัญทางธุรกิจ" } },
+        { "id": "d", "text": { "en": "Republish OrderDelivered to make every consumer reprocess the saga from scratch", "th": "Publish OrderDelivered ใหม่เพื่อให้ทุก Consumer ประมวลผล saga ตั้งแต่ต้น" } }
+      ],
+      "correctOption": "a",
+      "explanation": { "en": "Bounded retry with exponential backoff and jitter handles transient failures. A permanently undeliverable message is routed to a DLQ so an Admin can review, fix the contact record, and replay. The DLQ is a repair station, not a graveyard. Retrying forever burns resources; silent drop hides real customer-impacting issues; republishing upstream events corrupts the saga history.", "th": "Retry ที่จำกัดด้วย exponential backoff และ jitter จัดการ transient failure ข้อความที่ส่งไม่ได้อย่างถาวรถูกส่งไป Dead Letter Queue เพื่อให้ Admin ตรวจสอบ แก้ไขบันทึกที่ติดต่อ และ replay Dead Letter Queue คือสถานีซ่อม ไม่ใช่สุสาน การ retry ตลอดไปสิ้นเปลืองทรัพยากร การทิ้งเงียบซ่อนปัญหาที่กระทบลูกค้าจริงๆ การ publish event ต้นน้ำซ้ำทำให้ประวัติ saga เสียหาย" }
+    },
+    {
+      "id": "price-snapshot",
+      "type": "mcq",
+      "question": { "en": "Why does ShopSphere include the unit prices of every line item on the OrderPlaced event payload, rather than letting consumers look them up from the Catalog context?", "th": "ทำไม ShopSphere ถึงใส่ราคาต่อหน่วยของทุก line item ใน OrderPlaced event payload แทนที่จะให้ Consumer ดึงจาก Catalog context เอง?" },
+      "options": [
+        { "id": "a", "text": { "en": "The price at the moment of order is a historical fact — it must be frozen on the event so a later Catalog price change cannot retroactively alter what the customer agreed to pay", "th": "ราคา ณ เวลาสั่งซื้อคือ historical fact ต้องถูกแช่แข็งบน event เพื่อให้การเปลี่ยนราคาของ Catalog ในภายหลังไม่สามารถเปลี่ยนแปลงสิ่งที่ลูกค้าตกลงจ่ายย้อนหลัง" } },
+        { "id": "b", "text": { "en": "To avoid making any HTTP calls during event processing", "th": "เพื่อหลีกเลี่ยงการเรียก HTTP ระหว่างการประมวลผล event" } },
+        { "id": "c", "text": { "en": "Because Kafka rejects events smaller than 1 KB", "th": "เพราะ Kafka ปฏิเสธ event ที่มีขนาดเล็กกว่า 1 KB" } },
+        { "id": "d", "text": { "en": "So that the Notification context can recompute promotional discounts", "th": "เพื่อให้ Notification context คำนวณส่วนลดโปรโมชันใหม่ได้" } }
+      ],
+      "correctOption": "a",
+      "explanation": { "en": "The OrderPlaced event captures the immutable business fact: 'at this moment the customer agreed to these items at these prices.' If Catalog raises a price one second later, the order is unaffected — the snapshot is the contract. This is why Order's line items are an immutable snapshot, and why Customer-Supplier relationships are typically implemented via data snapshots, not live queries.", "th": "OrderPlaced event บันทึก immutable business fact: 'ณ เวลานี้ลูกค้าตกลงซื้อสินค้าเหล่านี้ในราคาเหล่านี้' ถ้า Catalog ขึ้นราคาหนึ่งวินาทีต่อมา order ไม่ได้รับผลกระทบ snapshot คือ contract นี่เป็นเหตุผลที่ line item ของ Order เป็น immutable snapshot และทำไมความสัมพันธ์ Customer-Supplier มักถูก implement ผ่าน data snapshot ไม่ใช่ live query" }
     }
   ]
 }

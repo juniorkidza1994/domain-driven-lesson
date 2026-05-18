@@ -4,13 +4,76 @@
     {
       "id": "q1",
       "type": "mcq",
-      "question": { "en": "In Event Storming, what colour sticky note represents a Domain Event?", "th": "ใน Event Storming สีใดของ sticky note แทน Domain Event?" },
+      "question": { "en": "After you cluster events into capability groups (step 4) and classify each cluster as Core, Supporting, or Generic (step 5), what have you produced?", "th": "หลังจากจัดกลุ่ม event เป็นกลุ่ม capability (ขั้นตอนที่ 4) และจำแนกแต่ละกลุ่มเป็น Core, Supporting หรือ Generic (ขั้นตอนที่ 5) คุณได้ผลิตอะไร?" },
       "options": [
-        { "id": "a", "text": { "en": "Orange", "th": "ส้ม" } },
-        { "id": "b", "text": { "en": "Blue", "th": "น้ำเงิน" } }
+        { "id": "a", "text": { "en": "A finished context map ready to ship as code.", "th": "context map ที่เสร็จสมบูรณ์พร้อม ship เป็นโค้ด" } },
+        { "id": "b", "text": { "en": "A list of candidate subdomains with strategic investment labels.", "th": "รายการ subdomain ผู้สมัครพร้อม label การลงทุนเชิงกลยุทธ์" } },
+        { "id": "c", "text": { "en": "A normalised database schema.", "th": "database schema ที่ normalize แล้ว" } },
+        { "id": "d", "text": { "en": "A backlog of pink hotspots to resolve in the next workshop.", "th": "backlog ของ hotspot สีชมพูที่ต้องแก้ไขใน workshop ถัดไป" } }
       ],
-      "correctOption": "a",
-      "explanation": { "en": "Domain Events are represented by orange sticky notes in Event Storming sessions.", "th": "" }
+      "correctOption": "b",
+      "explanation": { "en": "Steps 4 and 5 together produce candidate subdomains: each capability cluster becomes a subdomain, and each subdomain carries a Core / Supporting / Generic label. The label drives investment and build-vs-buy decisions. Bounded contexts (the solution-space artefact) are drawn later in step 6, after the subdomains and their language have been understood.", "th": "ขั้นตอนที่ 4 และ 5 ร่วมกันผลิต subdomain ผู้สมัคร: แต่ละ capability cluster กลายเป็น subdomain และแต่ละ subdomain มี label Core / Supporting / Generic label ขับเคลื่อนการตัดสินใจการลงทุนและการสร้างกับซื้อ bounded context (artefact ใน solution space) วาดในขั้นตอนที่ 6 ภายหลัง หลังจากเข้าใจ subdomain และภาษาของพวกมันแล้ว" }
+    },
+    {
+      "id": "q2",
+      "type": "true-false",
+      "question": { "en": "Every orange sticky note on the Event Storming wall must become a Domain Event in the final DDD model.", "th": "sticky note สีส้มทุกใบบนกำแพง Event Storming ต้องกลายเป็น Domain Event ใน DDD model สุดท้าย" },
+      "options": [
+        { "id": "true",  "text": { "en": "True",  "th": "จริง" } },
+        { "id": "false", "text": { "en": "False", "th": "เท็จ" } }
+      ],
+      "correctOption": "false",
+      "explanation": { "en": "False. Orange stickies are the *candidate* event pool. Step 1 of the transformation deliberately filters: technical events (*Row Inserted*), UI events (*Button Clicked*), and operator-only events (*Report Generated*) are removed. Only past-tense facts the business itself cares about survive into the model. A finished e-commerce wall with 200 orange stickies typically yields 80–120 real domain events after filtering.", "th": "เท็จ sticky สีส้มคือ pool ผู้สมัคร event ขั้นตอนที่ 1 ของการแปลงกรองโดยเจตนา: event ทางเทคนิค (Row Inserted), event ของ UI (Button Clicked) และ event เฉพาะ operator (Report Generated) ถูกลบออก มีเฉพาะข้อเท็จจริงอดีตกาลที่ธุรกิจเองสนใจรอดเข้า model กำแพง e-commerce ที่เสร็จแล้วพร้อม sticky สีส้ม 200 ใบ มักให้ domain event จริง 80-120 อันหลังกรอง" }
+    },
+    {
+      "id": "q3",
+      "type": "mcq",
+      "question": { "en": "What is the strongest signal that you have found a Bounded Context boundary?", "th": "สัญญาณที่แข็งแกร่งที่สุดว่าคุณพบขอบเขต Bounded Context คืออะไร?" },
+      "options": [
+        { "id": "a", "text": { "en": "Two teams report to different managers.", "th": "สองทีมรายงานต่อผู้จัดการคนละคน" } },
+        { "id": "b", "text": { "en": "Two areas of the wall use different database tables.", "th": "สองบริเวณของกำแพงใช้ตารางฐานข้อมูลต่างกัน" } },
+        { "id": "c", "text": { "en": "The same word means something different on each side of the boundary.", "th": "คำเดียวกันมีความหมายต่างกันในแต่ละฝั่งของขอบเขต" } },
+        { "id": "d", "text": { "en": "There is a network hop between the two sides at runtime.", "th": "มี network hop ระหว่างสองฝั่งตอน runtime" } }
+      ],
+      "correctOption": "c",
+      "explanation": { "en": "A bounded context is fundamentally a *linguistic* boundary. The canonical signal is that the same term changes meaning when you cross it: *Product* means one thing in Catalog (a marketing artefact with images and copy) and something different in Inventory (a SKU with a stock count). Org charts, database structure, and network topology are sometimes correlated with context boundaries, but the meaning shift is the defining test.", "th": "bounded context เป็นขอบเขตเชิงภาษาในพื้นฐาน สัญญาณมาตรฐานคือคำเดียวกันเปลี่ยนความหมายเมื่อข้ามมัน: Product หมายความอย่างหนึ่งใน Catalog (marketing artefact พร้อมรูปภาพและข้อความ) และอีกความหมายใน Inventory (SKU พร้อมจำนวนสต็อก) org chart, โครงสร้างฐานข้อมูล และ network topology บางครั้งสัมพันธ์กับขอบเขต context แต่การเปลี่ยนความหมายคือการทดสอบที่กำหนด" }
+    },
+    {
+      "id": "q4",
+      "type": "mcq",
+      "question": { "en": "A policy on the wall reads \"When Payment Authorized → Place Order.\" In code, where does the reaction (placing the order) typically belong?", "th": "policy บนกำแพงอ่านว่า \"เมื่อ Payment Authorized → Place Order\" ในโค้ด ปฏิกิริยา (การวาง order) มักอยู่ที่ไหน?" },
+      "options": [
+        { "id": "a", "text": { "en": "On a UI button click handler.", "th": "บน handler คลิกปุ่ม UI" } },
+        { "id": "b", "text": { "en": "Inside the database as a stored procedure trigger.", "th": "ภายในฐานข้อมูลเป็น stored procedure trigger" } },
+        { "id": "c", "text": { "en": "As behaviour on a Domain Service or an Aggregate that reacts to the Payment Authorized event.", "th": "เป็น behaviour บน Domain Service หรือ Aggregate ที่โต้ตอบต่อ event Payment Authorized" } },
+        { "id": "d", "text": { "en": "In a configuration file consumed by the deployment pipeline.", "th": "ในไฟล์ configuration ที่ใช้โดย deployment pipeline" } }
+      ],
+      "correctOption": "c",
+      "explanation": { "en": "A policy is a reactive business rule (\"when event X, issue command Y\"). In code it is implemented either as a method on an aggregate that subscribes to the event, or as a Domain Service / process manager when the reaction spans multiple aggregates. Step 3 of the transformation explicitly tags each policy with where it will live. Stored procedures, UI handlers, and config files are infrastructure — they do not own domain behaviour.", "th": "policy คือกฎธุรกิจเชิงโต้ตอบ (\"เมื่อ event X ออก command Y\") ในโค้ด implement เป็น method บน aggregate ที่ subscribe event หรือเป็น Domain Service / process manager เมื่อปฏิกิริยาครอบคลุมหลาย aggregate ขั้นตอนที่ 3 ของการแปลง tag แต่ละ policy อย่างชัดเจนว่าจะอยู่ที่ไหน stored procedure, UI handler และไฟล์ config คือ infrastructure ไม่เป็นเจ้าของ domain behaviour" }
+    },
+    {
+      "id": "q5",
+      "type": "true-false",
+      "question": { "en": "It is safe to draw bounded context boundaries before you have listened to the vocabulary used in each part of the wall.", "th": "การวาดขอบเขต bounded context ก่อนฟังคำศัพท์ที่ใช้ในแต่ละส่วนของกำแพงเป็นสิ่งที่ปลอดภัย" },
+      "options": [
+        { "id": "true",  "text": { "en": "True",  "th": "จริง" } },
+        { "id": "false", "text": { "en": "False", "th": "เท็จ" } }
+      ],
+      "correctOption": "false",
+      "explanation": { "en": "False. Drawing bounded contexts before understanding the language is one of the five common mistakes in this module. Without listening to the vocabulary, teams tend to group by org chart, database, or team ownership — none of which are the right seam. The boundary is *linguistic*: it goes where the meaning of a term changes. Step 8 (build the ubiquitous language) explicitly comes after step 6 (define bounded contexts) for this reason — but step 6 itself is informed by listening for vocabulary shifts during the clustering work of step 4.", "th": "เท็จ การวาด bounded context ก่อนเข้าใจภาษาคือหนึ่งในข้อผิดพลาดทั่วไปห้าอย่างใน module นี้ โดยไม่ฟังคำศัพท์ ทีมมักจัดกลุ่มตาม org chart, ฐานข้อมูล หรือความเป็นเจ้าของทีม ซึ่งไม่มีอันใดเป็นรอยต่อที่ถูกต้อง ขอบเขตเป็นเชิงภาษา มันอยู่ที่ความหมายของคำเปลี่ยน ขั้นตอนที่ 8 (สร้าง ubiquitous language) อยู่หลังขั้นตอนที่ 6 (กำหนด bounded context) อย่างชัดเจน แต่ขั้นตอนที่ 6 เองก็ได้รับข้อมูลจากการฟังการเปลี่ยนคำศัพท์ระหว่างงานการจัดกลุ่มของขั้นตอนที่ 4" }
+    },
+    {
+      "id": "q6",
+      "type": "mcq",
+      "question": { "en": "Why is step 9 — validating the model against real business scenarios — necessary even after the first eight steps look complete?", "th": "ทำไมขั้นตอนที่ 9 ซึ่งตรวจสอบ model กับ business scenario จริงจึงจำเป็น แม้แปดขั้นตอนแรกดูสมบูรณ์แล้ว?" },
+      "options": [
+        { "id": "a", "text": { "en": "To produce a deployment topology for the operations team.", "th": "เพื่อผลิต deployment topology สำหรับทีม operations" } },
+        { "id": "b", "text": { "en": "To confirm the model can express every real-world scenario the domain experts care about, before any code is written.", "th": "เพื่อยืนยันว่า model สามารถแสดง scenario โลกจริงทุกอันที่ผู้เชี่ยวชาญโดเมนสนใจ ก่อนเขียนโค้ด" } },
+        { "id": "c", "text": { "en": "To pick a programming language and ORM.", "th": "เพื่อเลือกภาษา programming และ ORM" } },
+        { "id": "d", "text": { "en": "To estimate story points for the development backlog.", "th": "เพื่อประมาณ story point สำหรับ development backlog" } }
+      ],
+      "correctOption": "b",
+      "explanation": { "en": "Steps 1–8 produce a model on paper. Step 9 stress-tests it: replay real scenarios (especially the weird edge cases and the last three production hotfixes) through the model and see whether it bends, breaks, or holds. A scenario that the model cannot express cleanly is a model bug, not a scenario bug. Catching it at step 9 costs an afternoon; catching it after launch costs a quarter. Language, deployment, and estimation are downstream concerns and are not what step 9 is for.", "th": "ขั้นตอนที่ 1-8 ผลิต model บนกระดาษ ขั้นตอนที่ 9 ทดสอบความเครียด: เล่น scenario จริงซ้ำ (โดยเฉพาะ edge case แปลกๆ และ hotfix production สามอันล่าสุด) ผ่าน model และดูว่ามันโก่ง แตก หรือยืนหยัด scenario ที่ model ไม่สามารถแสดงออกได้อย่างชัดเจนคือ bug ใน model ไม่ใช่ใน scenario การจับมันที่ขั้นตอนที่ 9 ใช้เวลาบ่ายวันหนึ่ง การจับหลัง launch ใช้เวลาหนึ่งไตรมาส ภาษา, deployment และการประมาณเป็นงานปลายน้ำและไม่ใช่สิ่งที่ขั้นตอนที่ 9 มีไว้เพื่อ" }
     }
   ]
 }

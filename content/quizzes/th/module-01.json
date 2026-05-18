@@ -4,13 +4,63 @@
     {
       "id": "q1",
       "type": "mcq",
-      "question": { "en": "What does DDD stand for?", "th": "DDD ย่อมาจากอะไร?" },
+      "question": { "en": "What is the primary purpose of an Event Storming workshop?", "th": "จุดประสงค์หลักของ workshop Event Storming คืออะไร?" },
       "options": [
-        { "id": "a", "text": { "en": "Domain-Driven Design", "th": "Domain-Driven Design" } },
-        { "id": "b", "text": { "en": "Data-Driven Development", "th": "Data-Driven Development" } }
+        { "id": "a", "text": { "en": "To produce a UML class diagram for the engineering team", "th": "เพื่อผลิต UML class diagram ให้ทีมวิศวกร" } },
+        { "id": "b", "text": { "en": "To build shared understanding of how the business works by mapping domain events on a timeline", "th": "เพื่อสร้างความเข้าใจร่วมกันเกี่ยวกับการทำงานของธุรกิจโดยการวาง domain event บนเส้นเวลา" } },
+        { "id": "c", "text": { "en": "To choose which message broker to use in production", "th": "เพื่อเลือก message broker ที่จะใช้ใน production" } },
+        { "id": "d", "text": { "en": "To document the existing database schema", "th": "เพื่อบันทึก database schema ที่มีอยู่" } }
       ],
-      "correctOption": "a",
-      "explanation": { "en": "DDD stands for Domain-Driven Design, a software development approach focused on the core domain.", "th": "" }
+      "correctOption": "b",
+      "explanation": { "en": "Event Storming is a discovery technique. Its main output is shared understanding — a roomful of developers, domain experts, and stakeholders aligning on how the business actually works, expressed as a timeline of domain events. Diagrams, broker choices, and schemas come later, if at all.", "th": "Event Storming คือเทคนิคการค้นพบ ผลลัพธ์หลักคือความเข้าใจร่วมกัน นักพัฒนา ผู้เชี่ยวชาญธุรกิจ และผู้มีส่วนได้ส่วนเสียในห้องเดียวกันสอดคล้องกันในเรื่องที่ธุรกิจทำงานอย่างไรจริงๆ ซึ่งแสดงเป็นเส้นเวลาของ domain event Diagram, การเลือก broker และ schema มาทีหลัง" }
+    },
+    {
+      "id": "q2",
+      "type": "true-false",
+      "question": { "en": "Domain-Driven Design requires you to use Event-Driven Architecture.", "th": "Domain-Driven Design บังคับให้ใช้ Event-Driven Architecture" },
+      "options": [
+        { "id": "true", "text": { "en": "True", "th": "จริง" } },
+        { "id": "false", "text": { "en": "False", "th": "เท็จ" } }
+      ],
+      "correctOption": "false",
+      "explanation": { "en": "False. DDD and EDA are complementary but independent. You can apply DDD inside a single monolith with synchronous calls and benefit fully from bounded contexts and ubiquitous language. EDA is one possible way to wire DDD bounded contexts together, but it is not required.", "th": "เท็จ DDD และ EDA เสริมกันแต่เป็นอิสระจากกัน คุณสามารถใช้ DDD ภายใน monolith เดียวด้วย synchronous call และได้ประโยชน์เต็มจาก bounded context และ ubiquitous language EDA เป็นหนึ่งในวิธีเชื่อม bounded context ของ DDD แต่ไม่ได้บังคับ" }
+    },
+    {
+      "id": "q3",
+      "type": "mcq",
+      "question": { "en": "If you are new to all three (DDD, Event Storming, EDA), which is the recommended one to learn and apply first?", "th": "ถ้าคุณใหม่กับทั้งสาม (DDD, Event Storming, EDA) ควรเรียนและนำไปใช้อะไรก่อน?" },
+      "options": [
+        { "id": "a", "text": { "en": "Event-Driven Architecture — pick a broker and start publishing events", "th": "Event-Driven Architecture — เลือก broker แล้วเริ่ม publish event" } },
+        { "id": "b", "text": { "en": "Tactical DDD — start refactoring code into aggregates and repositories", "th": "Tactical DDD — เริ่ม refactor โค้ดเป็น Aggregate และ Repository" } },
+        { "id": "c", "text": { "en": "Event Storming — get people in a room and map the business as events", "th": "Event Storming — รวมคนเข้าห้องแล้ววาดแผนผังธุรกิจเป็น event" } },
+        { "id": "d", "text": { "en": "All three simultaneously on a new green-field project", "th": "ทั้งสามพร้อมกันในโปรเจกต์ใหม่" } }
+      ],
+      "correctOption": "c",
+      "explanation": { "en": "Event Storming is the cheapest, fastest, and most visual of the three. A single afternoon session produces events and ubiquitous language that become the raw material for DDD (drawing bounded contexts) and for EDA (the actual events on the broker). Starting with EDA or tactical DDD without this groundwork is the classic mistake.", "th": "Event Storming ถูก เร็ว และมองเห็นได้มากที่สุดในสามอย่าง session บ่ายวันเดียวผลิต event และ ubiquitous language ที่เป็นวัตถุดิบสำหรับ DDD (การวาด bounded context) และ EDA (event จริงบน broker) การเริ่มด้วย EDA หรือ Tactical DDD โดยไม่มีพื้นฐานนี้คือความผิดพลาดคลาสสิก" }
+    },
+    {
+      "id": "q4",
+      "type": "true-false",
+      "question": { "en": "Event-Driven Architecture means services communicate primarily through direct synchronous API calls.", "th": "Event-Driven Architecture หมายความว่า service สื่อสารกันเป็นหลักผ่าน synchronous API call โดยตรง" },
+      "options": [
+        { "id": "true", "text": { "en": "True", "th": "จริง" } },
+        { "id": "false", "text": { "en": "False", "th": "เท็จ" } }
+      ],
+      "correctOption": "false",
+      "explanation": { "en": "False. EDA is precisely the opposite. In EDA, services communicate by publishing events to a message broker and subscribing to events they care about. The publisher does not know — and does not care — who is listening. Direct synchronous API calls are the request/response style EDA is designed to avoid.", "th": "เท็จ EDA คือตรงกันข้ามพอดี ใน EDA service สื่อสารกันโดย publish event ไปยัง message broker และ subscribe event ที่สนใจ ผู้ publish ไม่รู้และไม่สนใจว่าใครกำลังฟัง synchronous API call โดยตรงคือสไตล์ request/response ที่ EDA ออกแบบมาเพื่อหลีกเลี่ยง" }
+    },
+    {
+      "id": "q5",
+      "type": "mcq",
+      "question": { "en": "Which of the following is the LEAST suitable scenario for adopting Domain-Driven Design?", "th": "สถานการณ์ใดต่อไปนี้ไม่เหมาะสมที่สุดสำหรับการนำ Domain-Driven Design มาใช้?" },
+      "options": [
+        { "id": "a", "text": { "en": "A large e-commerce platform with separate teams for catalog, checkout, fulfillment, and billing", "th": "แพลตฟอร์ม e-commerce ขนาดใหญ่ที่มีทีมแยกสำหรับ catalog, checkout, fulfillment และ billing" } },
+        { "id": "b", "text": { "en": "A regulated banking system where multiple departments disagree on what 'account' means", "th": "ระบบธนาคารที่มีกฎระเบียบซึ่งหลายฝ่ายไม่เห็นด้วยกันว่า 'account' หมายความว่าอะไร" } },
+        { "id": "c", "text": { "en": "A simple internal CRUD app that lets staff edit a list of office locations", "th": "แอป CRUD ภายในธรรมดาที่ให้พนักงานแก้ไขรายการสถานที่ทำงาน" } },
+        { "id": "d", "text": { "en": "A logistics platform where business rules change frequently and the code cannot keep up", "th": "แพลตฟอร์มโลจิสติกส์ที่กฎธุรกิจเปลี่ยนบ่อยและโค้ดตามไม่ทัน" } }
+      ],
+      "correctOption": "c",
+      "explanation": { "en": "DDD pays off when the domain is complex, the language is contested, or multiple teams are stepping on each other. A simple CRUD app — forms saving rows to tables, no business rules of note, one developer — gains nothing from bounded contexts and aggregates and only pays the ceremony cost. The other three scenarios all have the complexity, ambiguity, or pace of change that DDD is designed for.", "th": "DDD คุ้มค่าเมื่อโดเมนซับซ้อน ภาษาถกเถียงกัน หรือหลายทีมเหยียบเท้ากัน แอป CRUD ธรรมดา แบบฟอร์มบันทึกแถวลงตาราง ไม่มีกฎธุรกิจสำคัญ นักพัฒนาคนเดียว ไม่ได้ประโยชน์อะไรจาก bounded context และ Aggregate และต้องจ่ายค่า overhead ทั้งนั้น สามสถานการณ์อื่นล้วนมีความซับซ้อน ความคลุมเครือ หรือความเร็วในการเปลี่ยนแปลงที่ DDD ออกแบบมาเพื่อแก้" }
     }
   ]
 }
