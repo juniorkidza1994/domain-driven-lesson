@@ -92,3 +92,29 @@ test('ddd.md has no raw [uncertain] values in output', () => {
   const badLines = lines.filter(l => l.includes('[uncertain]'));
   assert.equal(badLines.length, 0, `Found [uncertain] in output:\n${badLines.join('\n')}`);
 });
+
+// --- DRE-11: event-storming.md structural assertions ---
+
+const ES_MD = path.join(__dirname, '../../research/event-storming.md');
+
+let esContent;
+test('research/event-storming.md exists', () => {
+  assert.ok(fs.existsSync(ES_MD), 'research/event-storming.md not found');
+  esContent = fs.readFileSync(ES_MD, 'utf8');
+});
+
+test('event-storming.md word count > 800', () => {
+  const words = esContent.split(/\s+/).filter(Boolean);
+  assert.ok(words.length > 800, `found ${words.length} words, need > 800`);
+});
+
+test('event-storming.md has required headings', () => {
+  for (const h of ['## Sources', '## Three Levels', '## Sticky Note Elements']) {
+    assert.ok(esContent.includes(h), `missing heading: ${h}`);
+  }
+});
+
+test('event-storming.md has >= 3 Brandolini citations', () => {
+  const matches = esContent.match(/\(Brandolini/g) || [];
+  assert.ok(matches.length >= 3, `found ${matches.length} (Brandolini citations, need >= 3`);
+});
