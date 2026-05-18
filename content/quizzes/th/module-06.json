@@ -2,15 +2,65 @@
   "moduleId": "module-06",
   "questions": [
     {
-      "id": "q1",
+      "id": "first-filter-integration-events",
       "type": "mcq",
-      "question": { "en": "In an e-commerce system, which is most likely a separate Bounded Context?", "th": "ในระบบ e-commerce สิ่งใดมีแนวโน้มเป็น Bounded Context แยกต่างหากมากที่สุด?" },
+      "question": { "en": "What is the first filter when deciding which Domain Events should become Integration Events?", "th": "ตัวกรองแรกในการตัดสินใจว่า Domain Event ใดควรกลายเป็น Integration Event คืออะไร?" },
       "options": [
-        { "id": "a", "text": { "en": "Inventory management", "th": "การจัดการสินค้าคงคลัง" } },
-        { "id": "b", "text": { "en": "A database table", "th": "ตารางฐานข้อมูล" } }
+        { "id": "a", "text": { "en": "Whether at least one other Bounded Context legitimately needs to react to the event", "th": "มี Bounded Context อื่นอย่างน้อยหนึ่งที่ต้องตอบสนองต่อ event นี้อย่างสมเหตุสมผลหรือไม่" } },
+        { "id": "b", "text": { "en": "Whether the event has a unique eventId", "th": "event มี eventId เฉพาะตัวหรือไม่" } },
+        { "id": "c", "text": { "en": "Whether the producing service uses Kafka", "th": "service ที่ผลิต event ใช้ Kafka หรือไม่" } },
+        { "id": "d", "text": { "en": "Whether the event payload is smaller than 4 KB", "th": "payload ของ event มีขนาดเล็กกว่า 4 KB หรือไม่" } }
       ],
       "correctOption": "a",
-      "explanation": { "en": "Inventory management has its own domain language, rules, and team — making it a natural Bounded Context.", "th": "การจัดการสินค้าคงคลังมีภาษาโดเมน กฎ และทีมของตัวเอง ทำให้เป็น Bounded Context ตามธรรมชาติ" }
+      "explanation": { "en": "A Domain Event only graduates to an Integration Event when another Bounded Context genuinely needs to react to it. Publishing every event indiscriminately floods the broker with noise and couples internal aggregate fields to remote consumers.", "th": "Domain Event จะกลายเป็น Integration Event ก็ต่อเมื่อ Bounded Context อื่นต้องการตอบสนองต่อมันจริงๆ การ publish ทุก event โดยไม่เลือกจะทำให้ broker เต็มไปด้วย noise และเชื่อม field ภายในของ aggregate เข้ากับ Consumer ที่อยู่ห่างออกไป" }
+    },
+    {
+      "id": "publish-every-event",
+      "type": "true-false",
+      "question": { "en": "Every Domain Event identified during an Event Storming workshop should be published as an Integration Event to the message broker.", "th": "ทุก Domain Event ที่พบในระหว่าง Event Storming workshop ควร publish เป็น Integration Event ไปยัง message broker" },
+      "options": [
+        { "id": "true", "text": { "en": "True", "th": "จริง" } },
+        { "id": "false", "text": { "en": "False", "th": "เท็จ" } }
+      ],
+      "correctOption": "false",
+      "explanation": { "en": "Most Domain Events stay inside their producing context. Only the subset that other Bounded Contexts legitimately need to react to are translated into Integration Events. Start conservative — internal events should stay internal.", "th": "Domain Event ส่วนใหญ่อยู่ภายใน context ที่ผลิตมัน เฉพาะส่วนย่อยที่ Bounded Context อื่นต้องตอบสนองจริงๆ เท่านั้นที่แปลงเป็น Integration Event เริ่มต้นแบบอนุรักษ์นิยม event ภายในควรอยู่ส่วนตัว" }
+    },
+    {
+      "id": "compensating-event-definition",
+      "type": "mcq",
+      "question": { "en": "What is a compensating event in an Event-Driven Architecture?", "th": "Compensating Event ใน Event-Driven Architecture คืออะไร?" },
+      "options": [
+        { "id": "a", "text": { "en": "A new event that semantically undoes the business effect of a prior event, since distributed rollbacks are not possible across services", "th": "event ใหม่ที่เลิกล้าง business effect ของ event ก่อนหน้าในเชิงความหมาย เนื่องจาก distributed rollback ไม่สามารถทำได้ข้ามหลาย service" } },
+        { "id": "b", "text": { "en": "An event that the broker automatically replays when a consumer crashes", "th": "event ที่ broker replay โดยอัตโนมัติเมื่อ consumer หยุดทำงาน" } },
+        { "id": "c", "text": { "en": "A duplicate event sent to a backup region for disaster recovery", "th": "event ซ้ำที่ส่งไปยัง backup region สำหรับ disaster recovery" } },
+        { "id": "d", "text": { "en": "An event published only when the retry budget is exhausted", "th": "event ที่ publish เฉพาะเมื่อ retry budget หมดลง" } }
+      ],
+      "correctOption": "a",
+      "explanation": { "en": "Distributed transactions cannot span independent services. The Saga pattern emits compensating events — forward-moving facts that semantically reverse earlier effects. For example, OrderCancelled compensates for a PaymentFailed scenario.", "th": "Distributed transaction ไม่สามารถครอบคลุม service อิสระได้ Saga Pattern ปล่อย compensating event ซึ่งเป็น fact ที่เดินหน้าต่อและเลิกล้าง effect ก่อนหน้าในเชิงความหมาย ตัวอย่างเช่น OrderCancelled ชดเชย PaymentFailed" }
+    },
+    {
+      "id": "lean-payload-rationale",
+      "type": "mcq",
+      "question": { "en": "Why should Integration Event payloads be lean — typically IDs and a small set of stable fields rather than full aggregate snapshots?", "th": "ทำไม payload ของ Integration Event ถึงควรกระชับ มักเป็นแค่ ID และชุด field ที่เสถียรขนาดเล็ก แทนที่จะเป็น snapshot ของ aggregate ทั้งหมด?" },
+      "options": [
+        { "id": "a", "text": { "en": "Lean payloads minimise the surface area of the public contract, reducing coupling and the blast radius of internal model changes", "th": "Lean payload ลดพื้นที่ผิวของ public contract ลดการเชื่อมโยงและผลกระทบจากการเปลี่ยน internal model" } },
+        { "id": "b", "text": { "en": "Lean payloads are required by the CloudEvents specification", "th": "Lean payload เป็นข้อกำหนดของ CloudEvents specification" } },
+        { "id": "c", "text": { "en": "Message brokers reject payloads larger than 1 KB", "th": "Message broker ปฏิเสธ payload ที่ใหญ่กว่า 1 KB" } },
+        { "id": "d", "text": { "en": "Lean payloads guarantee exactly-once delivery", "th": "Lean payload รับประกัน exactly-once delivery" } }
+      ],
+      "correctOption": "a",
+      "explanation": { "en": "Every field in an Integration Event is a contract with every downstream consumer. Including internal aggregate fields turns any internal refactoring into a breaking change for all consumers. Lean payloads keep the contract minimal.", "th": "ทุก field ใน Integration Event เป็น contract กับ Consumer ปลายน้ำทุกราย การใส่ field ภายในของ aggregate ทำให้การ refactor ภายในกลายเป็น breaking change สำหรับ Consumer ทั้งหมด Lean payload ทำให้ contract เล็กที่สุด" }
+    },
+    {
+      "id": "event-sourcing-equals-eda",
+      "type": "true-false",
+      "question": { "en": "Adopting Event Sourcing automatically gives you an Event-Driven Architecture.", "th": "การนำ Event Sourcing มาใช้จะทำให้ได้ Event-Driven Architecture โดยอัตโนมัติ" },
+      "options": [
+        { "id": "true", "text": { "en": "True", "th": "จริง" } },
+        { "id": "false", "text": { "en": "False", "th": "เท็จ" } }
+      ],
+      "correctOption": "false",
+      "explanation": { "en": "Event Sourcing is a persistence pattern (storing state as an append-only event log inside one service). EDA is a communication pattern (services exchanging events via a broker). Each can exist without the other; combining them is a deliberate choice with significant added complexity.", "th": "Event Sourcing คือ persistence pattern การเก็บ state เป็น append-only event log ภายใน service เดียว EDA คือ communication pattern การที่ service แลกเปลี่ยน event ผ่าน broker แต่ละอันมีได้โดยไม่ต้องมีอีกอัน การรวมกันเป็นการเลือกโดยตั้งใจซึ่งมีความซับซ้อนเพิ่มขึ้นมาก" }
     }
   ]
 }
