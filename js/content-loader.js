@@ -96,12 +96,54 @@
   }
 
   function renderEsBoard(s, lang) {
-    const notes = (s.notes || []).map(n => `
-      <span class="sticky-${esc(n.kind || 'event')}">${esc(pick(n.label, lang))}</span>
-    `).join('');
+    // Legend is fixed (one entry per sticky kind).
+    const LEGEND = [
+      { kind: 'event',     en: 'Event',           th: 'เหตุการณ์' },
+      { kind: 'command',   en: 'Command',         th: 'คำสั่ง' },
+      { kind: 'actor',     en: 'Actor',           th: 'ผู้กระทำ' },
+      { kind: 'policy',    en: 'Policy',          th: 'นโยบาย' },
+      { kind: 'hotspot',   en: 'Hotspot',         th: 'จุดร้อน' },
+      { kind: 'readmodel', en: 'Read Model',      th: 'โมเดลอ่าน' },
+      { kind: 'external',  en: 'External System', th: 'ระบบภายนอก' },
+      { kind: 'aggregate', en: 'Aggregate',       th: 'แอกกรีเกต' }
+    ];
+
+    function noteHtml(kind, text) {
+      return `<span class="sticky-note sticky-${esc(kind || 'event')}">${esc(text)}</span>`;
+    }
+
+    // Normalise: accept either `s.lanes[].items[]` (new) or flat `s.notes[]` (legacy).
+    let lanesHtml;
+    if (Array.isArray(s.lanes) && s.lanes.length) {
+      lanesHtml = s.lanes.map(lane => {
+        const items = (lane.items || []).map(it =>
+          noteHtml(it.type, pick(it.text, lang))
+        ).join('');
+        return `<div class="es-board-lane">
+        <div class="es-board-lane__label">${esc(pick(lane.label, lang))}</div>
+        <div class="es-board-lane__items">${items}</div>
+      </div>`;
+      }).join('');
+    } else {
+      // Legacy flat format (kept for backward compat with existing test fixture).
+      const items = (s.notes || []).map(n =>
+        noteHtml(n.kind, pick(n.label, lang))
+      ).join('');
+      lanesHtml = `<div class="es-board-lane">
+      <div class="es-board-lane__items">${items}</div>
+    </div>`;
+    }
+
+    const legendHtml = LEGEND.map(l =>
+      `<li><span class="sticky-swatch sticky-${l.kind}">&nbsp;</span> ${esc(lang === 'th' ? l.th : l.en)}</li>`
+    ).join('');
+
     return `<section class="content-section" data-section-id="${esc(s.id)}">
       ${s.title ? `<h2>${esc(pick(s.title, lang))}</h2>` : ''}
-      <div class="es-board">${notes}</div>
+      <div class="es-board-container">
+        <div class="es-board">${lanesHtml}</div>
+      </div>
+      <ul class="es-board-legend">${legendHtml}</ul>
     </section>`;
   }
 
