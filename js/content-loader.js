@@ -19,11 +19,19 @@
     return tpl.content.firstElementChild;
   }
 
+  function renderTipMarkup(html) {
+    return html.replace(
+      /\{\{tip:([a-z0-9-]+)\|([^}]+)\}\}/g,
+      (_, id, label) =>
+        `<span class="tooltip-trigger" data-tooltip="${id}" tabindex="0" role="button">${label}</span>`
+    );
+  }
+
   // ── section renderers ────────────────────────────────────────────────────
   function renderText(s, lang) {
     return `<section class="content-section" data-section-id="${esc(s.id)}">
       ${s.title ? `<h2>${esc(pick(s.title, lang))}</h2>` : ''}
-      <p>${esc(pick(s.content, lang))}</p>
+      <p>${renderTipMarkup(esc(pick(s.content, lang)))}</p>
     </section>`;
   }
 
@@ -32,7 +40,7 @@
     return `<section class="content-section" data-section-id="${esc(s.id)}">
       <div class="callout${variant}">
         ${s.title ? `<strong>${esc(pick(s.title, lang))}</strong><br/>` : ''}
-        ${esc(pick(s.content, lang))}
+        ${renderTipMarkup(esc(pick(s.content, lang)))}
       </div>
     </section>`;
   }
@@ -52,8 +60,8 @@
       <li class="step-flow-item">
         <span class="step-flow-item__num">${i + 1}</span>
         <div class="step-flow-item__body">
-          <div class="step-flow-item__label">${esc(pick(step.label, lang))}</div>
-          <div>${esc(pick(step.body, lang))}</div>
+          <div class="step-flow-item__label">${renderTipMarkup(esc(pick(step.label, lang)))}</div>
+          <div>${renderTipMarkup(esc(pick(step.body, lang)))}</div>
         </div>
       </li>`).join('');
     return `<section class="content-section" data-section-id="${esc(s.id)}">
@@ -66,7 +74,7 @@
     const side = (col) => `
       <div class="comparison-col">
         <h3>${esc(pick(col.heading, lang))}</h3>
-        <ul>${(col.items || []).map(it => `<li>${esc(pick(it, lang))}</li>`).join('')}</ul>
+        <ul>${(col.items || []).map(it => `<li>${renderTipMarkup(esc(pick(it, lang)))}</li>`).join('')}</ul>
       </div>`;
     return `<section class="content-section" data-section-id="${esc(s.id)}">
       ${s.title ? `<h2>${esc(pick(s.title, lang))}</h2>` : ''}
@@ -79,7 +87,7 @@
       <div class="infographic-item">
         <div class="infographic-icon">${esc(it.icon || '•')}</div>
         <div class="infographic-label">${esc(pick(it.label, lang))}</div>
-        <div class="infographic-body">${esc(pick(it.body, lang))}</div>
+        <div class="infographic-body">${renderTipMarkup(esc(pick(it.body, lang)))}</div>
       </div>`).join('');
     return `<section class="content-section" data-section-id="${esc(s.id)}">
       ${s.title ? `<h2>${esc(pick(s.title, lang))}</h2>` : ''}

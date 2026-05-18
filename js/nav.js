@@ -33,6 +33,7 @@ document.addEventListener('alpine:init', function () {
       this.lang = next;
       localStorage.setItem('lang', next);
       document.body.setAttribute('data-lang', next);
+      document.dispatchEvent(new CustomEvent('lang-change', { detail: next }));
     },
     toggleLang: function () {
       this.setLang(this.lang === 'en' ? 'th' : 'en');

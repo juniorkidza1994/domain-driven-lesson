@@ -2,54 +2,132 @@
   "categories": [
     {
       "id": "ddd-strategic",
-      "name": { "en": "DDD Strategic Patterns", "th": "รูปแบบเชิงกลยุทธ์ของ DDD" },
+      "name": { "en": "DDD Strategic Patterns", "th": "รูปแบบเชิงกลยุทธ์ DDD" },
       "terms": [
+        {
+          "id": "ddd",
+          "term": { "en": "Domain-Driven Design (DDD)", "th": "การออกแบบที่ขับเคลื่อนด้วยโดเมน" },
+          "definition": { "en": "A software development approach focused on building a shared model of the business domain.", "th": "แนวทางพัฒนาซอฟต์แวร์ที่เสนอโดย Eric Evans มุ่งเน้นการสร้างโมเดลร่วมของโดเมนธุรกิจระหว่างนักพัฒนาและผู้เชี่ยวชาญโดเมน เน้นการโฟกัสหลักที่โดเมนหลักและ domain logic เพื่อสร้างซอฟต์แวร์ที่สะท้อนความเป็นจริงทางธุรกิจ" },
+          "relatedTerms": ["bounded-context", "ubiquitous-language"],
+          "sourceRef": "Eric Evans, Domain-Driven Design (2003)"
+        },
+        {
+          "id": "domain",
+          "term": { "en": "Domain", "th": "โดเมน" },
+          "definition": { "en": "The subject area to which the user applies the software.", "th": "พื้นที่หัวข้อที่ผู้ใช้นำซอฟต์แวร์ไปใช้งาน ระบบซอฟต์แวร์ทุกระบบแก้ปัญหาในโดเมนใดโดเมนหนึ่ง การทำความเข้าใจโดเมนอย่างลึกซึ้ง — กฎ กระบวนการ และคำศัพท์ — เป็นจุดเริ่มต้นของการออกแบบที่ดี" },
+          "relatedTerms": ["subdomain", "core-domain"],
+          "sourceRef": "Eric Evans, Domain-Driven Design (2003)"
+        },
+        {
+          "id": "subdomain",
+          "term": { "en": "Subdomain", "th": "โดเมนย่อย" },
+          "definition": { "en": "A part of the overall problem domain.", "th": "ส่วนหนึ่งของโดเมนปัญหาโดยรวม โดเมนธุรกิจขนาดใหญ่มักแบ่งเป็น subdomain เพื่อจัดการความซับซ้อน มีสามประเภท: Core (ข้อได้เปรียบเชิงแข่งขัน), Supporting (จำเป็นแต่ไม่แตกต่าง), และ Generic (ฟังก์ชัน commodity)" },
+          "relatedTerms": ["domain", "core-domain"],
+          "sourceRef": "Vaughn Vernon, Implementing Domain-Driven Design (2013)"
+        },
+        {
+          "id": "core-domain",
+          "term": { "en": "Core Domain", "th": "โดเมนหลัก" },
+          "definition": { "en": "The part of the system that delivers the most business value and competitive differentiation.", "th": "Core Domain คือส่วนของระบบที่สร้างคุณค่าทางธุรกิจและความแตกต่างเชิงแข่งขันมากที่สุด เป็นเหตุผลที่ระบบมีอยู่และที่ที่นักพัฒนาที่มีความสามารถสูงสุดขององค์กรควรโฟกัส ควรสร้างภายในองค์กรด้วยแนวปฏิบัติที่ดีที่สุด" },
+          "relatedTerms": ["subdomain"],
+          "sourceRef": "Eric Evans, Domain-Driven Design (2003)"
+        },
         {
           "id": "bounded-context",
           "term": { "en": "Bounded Context", "th": "ขอบเขตที่มีบริบท" },
-          "definition": { "en": "An explicit boundary within which a particular domain model is defined and applicable.", "th": "" },
+          "definition": { "en": "An explicit boundary within which a particular domain model is defined and applicable.", "th": "Bounded Context คือรูปแบบหลักใน Domain-Driven Design กำหนดขอบเขตที่ชัดเจนซึ่งโมเดลโดเมนเฉพาะถูกกำหนดและนำไปใช้ ภายใน Bounded Context คำศัพท์ทั้งหมดของ Ubiquitous Language มีความหมายเฉพาะ และโมเดลสอดคล้องกันภายใน" },
           "relatedTerms": ["ubiquitous-language", "context-map"],
-          "sourceRef": "Evans 2003"
+          "sourceRef": "Eric Evans, Domain-Driven Design (2003)"
         },
         {
           "id": "ubiquitous-language",
           "term": { "en": "Ubiquitous Language", "th": "ภาษากลางที่ใช้ร่วมกัน" },
-          "definition": { "en": "A common, rigorous language built between developers and domain experts within a Bounded Context.", "th": "" },
+          "definition": { "en": "A common, rigorous language built between developers and domain experts within a Bounded Context.", "th": "Ubiquitous Language คือการสร้างภาษาร่วมที่เข้มงวดระหว่างนักพัฒนาและผู้เชี่ยวชาญโดเมนภายใน Bounded Context ภาษานี้ใช้ในการสนทนา โค้ด การทดสอบ และเอกสาร วิวัฒน์ตามเวลาที่ทีมเข้าใจโดเมนลึกขึ้น" },
           "relatedTerms": ["bounded-context"],
-          "sourceRef": "Evans 2003"
+          "sourceRef": "Eric Evans, Domain-Driven Design (2003)"
         },
         {
           "id": "context-map",
           "term": { "en": "Context Map", "th": "แผนที่บริบท" },
-          "definition": { "en": "A visual representation of the relationships and integration patterns between different Bounded Contexts in a system.", "th": "" },
+          "definition": { "en": "A diagram showing all Bounded Contexts in a system and how they integrate.", "th": "Context Map คือแผนภาพที่แสดง Bounded Context ทั้งหมดในระบบและวิธีการเชื่อมต่อ บันทึกความสัมพันธ์เช่น Shared Kernel, Customer-Supplier, Conformist, Anti-Corruption Layer เป็นเครื่องมือสื่อสารที่มีคุณค่า" },
           "relatedTerms": ["bounded-context"],
-          "sourceRef": "Evans 2003"
+          "sourceRef": "Eric Evans, Domain-Driven Design (2003)"
         }
       ]
     },
     {
       "id": "ddd-tactical",
-      "name": { "en": "DDD Tactical Patterns", "th": "รูปแบบเชิงยุทธวิธีของ DDD" },
+      "name": { "en": "DDD Tactical Patterns", "th": "รูปแบบเชิงยุทธวิธี DDD" },
       "terms": [
-        {
-          "id": "aggregate",
-          "term": { "en": "Aggregate", "th": "กลุ่มวัตถุโดเมน" },
-          "definition": { "en": "A cluster of associated domain objects treated as a single unit for data changes.", "th": "" },
-          "relatedTerms": ["entity", "value-object"],
-          "sourceRef": "Evans 2003"
-        },
         {
           "id": "entity",
           "term": { "en": "Entity", "th": "เอนทิตี" },
-          "definition": { "en": "A domain object defined by a thread of continuity and identity, rather than by its attributes.", "th": "" },
-          "sourceRef": "Evans 2003"
+          "definition": { "en": "A domain object defined by identity rather than attributes.", "th": "Entity คือวัตถุโดเมนที่กำหนดโดยความต่อเนื่องและเอกลักษณ์ ไม่ใช่โดยแอตทริบิวต์ สอง Entity เหมือนกันถ้ามี identity เดียวกัน แม้แอตทริบิวต์อื่นทั้งหมดจะต่างกัน Entity เป็น mutable — สถานะสามารถเปลี่ยนได้" },
+          "relatedTerms": ["aggregate", "value-object"],
+          "sourceRef": "Eric Evans, Domain-Driven Design (2003)"
         },
         {
           "id": "value-object",
           "term": { "en": "Value Object", "th": "วัตถุค่า" },
-          "definition": { "en": "A domain object that describes some characteristic or attribute but carries no concept of identity.", "th": "" },
+          "definition": { "en": "An immutable domain object defined entirely by its attributes, with no identity.", "th": "Value Object คือวัตถุโดเมนที่อธิบายลักษณะหรือแอตทริบิวต์ แต่ไม่มีแนวคิดเรื่องเอกลักษณ์ สอง Value Object ที่มีแอตทริบิวต์เหมือนกันถือว่าเท่ากันและแทนกันได้ Value Object เป็น immutable เสมอ" },
           "relatedTerms": ["entity"],
-          "sourceRef": "Evans 2003"
+          "sourceRef": "Eric Evans, Domain-Driven Design (2003)"
+        },
+        {
+          "id": "aggregate",
+          "term": { "en": "Aggregate", "th": "กลุ่มวัตถุโดเมน" },
+          "definition": { "en": "A cluster of domain objects treated as a single unit, with an Aggregate Root controlling access.", "th": "Aggregate คือกลุ่มวัตถุโดเมน (Entity และ Value Object) ที่ถือว่าเป็นหน่วยเดียวสำหรับการเปลี่ยนแปลงข้อมูล แต่ละ Aggregate มี Aggregate Root — Entity ที่เป็นจุดเข้าถึงสำหรับการเข้าถึงจากภายนอกทั้งหมด" },
+          "relatedTerms": ["entity", "value-object", "repository"],
+          "sourceRef": "Eric Evans, Domain-Driven Design (2003)"
+        },
+        {
+          "id": "repository",
+          "term": { "en": "Repository", "th": "ที่เก็บ" },
+          "definition": { "en": "An abstraction over the data store providing collection-like access to Aggregates.", "th": "Repository ให้การแยกส่วนเหนือที่เก็บข้อมูล ช่วยให้ domain layer ทำงานกับวัตถุโดเมนโดยไม่สนใจรายละเอียดการจัดเก็บ จำลองอินเทอร์เฟซ collection (add, remove, findById) แต่ภายในใช้ฐานข้อมูล" },
+          "relatedTerms": ["aggregate"],
+          "sourceRef": "Eric Evans, Domain-Driven Design (2003)"
+        },
+        {
+          "id": "domain-service",
+          "term": { "en": "Domain Service", "th": "บริการโดเมน" },
+          "definition": { "en": "A stateless service encapsulating domain logic that doesn't fit on an Entity or Value Object.", "th": "Domain Service คือ service แบบ stateless ใน domain layer ที่ห่อหุ้ม domain logic ที่ไม่เหมาะจะอยู่ใน Entity หรือ Value Object ควรตั้งชื่อด้วยคำกริยาจาก Ubiquitous Language แตกต่างจาก Application Service ที่ประสานงาน use case" },
+          "relatedTerms": ["application-service"],
+          "sourceRef": "Eric Evans, Domain-Driven Design (2003)"
+        },
+        {
+          "id": "application-service",
+          "term": { "en": "Application Service", "th": "บริการแอปพลิเคชัน" },
+          "definition": { "en": "An orchestration layer between the presentation and domain layers, coordinating use cases.", "th": "Application Service อยู่ระหว่างชั้น presentation และ domain layer รับผิดชอบการประสานงาน use case: โหลด Aggregate จาก Repository เรียก domain logic commit transaction และเผยแพร่เหตุการณ์ ไม่ควรมี business logic เอง" },
+          "relatedTerms": ["domain-service"],
+          "sourceRef": "Vaughn Vernon, Implementing Domain-Driven Design (2013)"
+        },
+        {
+          "id": "domain-event",
+          "term": { "en": "Domain Event", "th": "เหตุการณ์โดเมน" },
+          "definition": { "en": "Something significant that happened in the domain, always named in past tense.", "th": "Domain Event แสดงถึงสิ่งที่เกิดขึ้นภายใน Bounded Context ที่ธุรกิจสนใจ ตั้งชื่อในรูปอดีตกาลเสมอ (OrderPlaced, PaymentReceived) เป็นข้อเท็จจริงที่เปลี่ยนแปลงไม่ได้ ใช้แยกส่วน Aggregate และผสานรวมระหว่าง Bounded Context" },
+          "relatedTerms": ["integration-event", "aggregate"],
+          "sourceRef": "Eric Evans, Domain-Driven Design (2003)"
+        },
+        {
+          "id": "integration-event",
+          "term": { "en": "Integration Event", "th": "เหตุการณ์การผสานรวม" },
+          "definition": { "en": "A Domain Event translated into a cross-context message published via a message broker.", "th": "Integration Event คือ Domain Event ที่แปลเป็นข้อความเหมาะสมสำหรับเผยแพร่ไปยัง Bounded Context อื่นหรือระบบภายนอกผ่าน message broker ต้องกำหนด version อย่างระมัดระวัง ประกอบด้วยเฉพาะข้อมูลขั้นต่ำที่ consumer ต้องการ" },
+          "relatedTerms": ["domain-event", "message-broker"],
+          "sourceRef": "Vaughn Vernon, Implementing Domain-Driven Design (2013)"
+        },
+        {
+          "id": "command",
+          "term": { "en": "Command", "th": "คำสั่ง" },
+          "definition": { "en": "A message expressing intent to change system state, named imperatively.", "th": "Command คือข้อความที่แสดงเจตนาจะเปลี่ยนสถานะระบบ ตั้งชื่อในรูปคำสั่ง (RegisterCustomer, PlaceOrder) จัดการโดย handler เดียวและสำเร็จหรือล้มเหลว แตกต่างจาก Query ซึ่งอ่านสถานะเท่านั้น" },
+          "relatedTerms": ["query", "domain-event"],
+          "sourceRef": "Greg Young, CQRS Documents (2010)"
+        },
+        {
+          "id": "query",
+          "term": { "en": "Query", "th": "การสอบถาม" },
+          "definition": { "en": "A read-only message that retrieves data without changing system state.", "th": "Query คือข้อความที่ดึงข้อมูลจากระบบโดยไม่ก่อให้เกิด side effect หรือการเปลี่ยนแปลงสถานะ ใน CQRS จัดการแยกจาก Command และสามารถใช้ read model ที่เพิ่มประสิทธิภาพ ผลลัพธ์คือ DTO หรือ read model ไม่ใช่ Aggregate" },
+          "relatedTerms": ["command", "read-model"],
+          "sourceRef": "Greg Young, CQRS Documents (2010)"
         }
       ]
     },
@@ -58,10 +136,39 @@
       "name": { "en": "Event Storming", "th": "Event Storming" },
       "terms": [
         {
-          "id": "domain-event",
-          "term": { "en": "Domain Event", "th": "เหตุการณ์โดเมน" },
-          "definition": { "en": "Something that happened in the domain that domain experts care about.", "th": "" },
-          "sourceRef": "Brandolini 2013"
+          "id": "event-storming",
+          "term": { "en": "Event Storming", "th": "Event Storming" },
+          "definition": { "en": "A collaborative workshop technique for exploring complex business domains.", "th": "Event Storming คือเทคนิคการประชุมเชิงปฏิบัติการร่วมกันที่คิดค้นโดย Alberto Brandolini เพื่อสำรวจโดเมนธุรกิจที่ซับซ้อน ผู้เข้าร่วมใช้โน้ตสีต่างๆ วาด Domain Event (สีส้ม) Command (สีน้ำเงิน) Actor (สีเหลือง) Policy (สีม่วง) และระบบ (สีชมพู)" },
+          "relatedTerms": ["policy", "actor", "domain-event"],
+          "sourceRef": "Alberto Brandolini, Event Storming (2013)"
+        },
+        {
+          "id": "policy",
+          "term": { "en": "Policy", "th": "นโยบาย" },
+          "definition": { "en": "A business rule that reacts to an event and triggers a command.", "th": "Policy (แสดงด้วยโน้ตสีม่วงใน Event Storming) คือกฎธุรกิจหรือระบบอัตโนมัติที่กล่าวว่า 'ทุกครั้งที่ [เหตุการณ์] เกิดขึ้น [คำสั่ง] จะถูกเรียก' Policy บันทึก logic การตอบสนองของระบบ เชื่อม Domain Event กับ Command ที่เกิดขึ้น" },
+          "relatedTerms": ["domain-event", "command"],
+          "sourceRef": "Alberto Brandolini, Event Storming (2013)"
+        },
+        {
+          "id": "actor",
+          "term": { "en": "Actor", "th": "ผู้กระทำ" },
+          "definition": { "en": "A person or role that initiates Commands in the system.", "th": "Actor (แสดงด้วยโน้ตสีเหลืองใน Event Storming) คือบุคคล บทบาท หรือระบบภายนอกที่เริ่มต้น Command การระบุ actor ทำให้ชัดเจนว่าใครรับผิดชอบแต่ละการกระทำในขั้นตอนธุรกิจ" },
+          "relatedTerms": ["command", "external-system"],
+          "sourceRef": "Alberto Brandolini, Event Storming (2013)"
+        },
+        {
+          "id": "external-system",
+          "term": { "en": "External System", "th": "ระบบภายนอก" },
+          "definition": { "en": "A third-party system outside the domain that interacts with your Bounded Context.", "th": "External System (แสดงด้วยโน้ตสีชมพูใน Event Storming) คือระบบนอกการควบคุมของทีมที่โดเมนผสานรวมด้วย สามารถสร้างเหตุการณ์หรือบริโภค command การระบุเร็วช่วยกำหนดขอบเขตการผสานรวม" },
+          "relatedTerms": ["actor", "integration-event"],
+          "sourceRef": "Alberto Brandolini, Event Storming (2013)"
+        },
+        {
+          "id": "read-model",
+          "term": { "en": "Read Model", "th": "โมเดลอ่านข้อมูล" },
+          "definition": { "en": "A denormalised projection of domain data optimised for a specific query.", "th": "Read Model คือโครงสร้างข้อมูลที่ได้จาก Domain Event และเพิ่มประสิทธิภาพสำหรับการสืบค้นเฉพาะ ใน CQRS โมเดลการเขียนและการอ่านแยกจากกัน Read Model สร้างโดยการบริโภคเหตุการณ์และสามารถ denormalize อย่างสมบูรณ์เพื่อการค้นหาที่รวดเร็ว" },
+          "relatedTerms": ["domain-event", "query"],
+          "sourceRef": "Greg Young, CQRS Documents (2010)"
         }
       ]
     },
@@ -70,9 +177,81 @@
       "name": { "en": "Event-Driven Architecture", "th": "สถาปัตยกรรมที่ขับเคลื่อนด้วยเหตุการณ์" },
       "terms": [
         {
-          "id": "event-broker",
-          "term": { "en": "Event Broker", "th": "ตัวกลางรับส่งเหตุการณ์" },
-          "definition": { "en": "A middleware component that receives events from producers and routes them to interested consumers.", "th": "" }
+          "id": "eda",
+          "term": { "en": "Event-Driven Architecture (EDA)", "th": "สถาปัตยกรรมที่ขับเคลื่อนด้วยเหตุการณ์" },
+          "definition": { "en": "An architectural style where services communicate by producing and consuming events asynchronously.", "th": "Event-Driven Architecture (EDA) คือรูปแบบการออกแบบซอฟต์แวร์ที่ service สื่อสารผ่านเหตุการณ์ EDA แยก producer ออกจาก consumer: producer ไม่รู้ว่าใครจะบริโภคเหตุการณ์ของตน ช่วยให้มีการเชื่อมต่อแบบหลวมๆ ความสามารถขยายตัว และความยืดหยุ่น" },
+          "relatedTerms": ["producer", "consumer", "message-broker"],
+          "sourceRef": "Martin Fowler, Enterprise Integration Patterns (2003)"
+        },
+        {
+          "id": "producer",
+          "term": { "en": "Producer", "th": "ผู้สร้างเหตุการณ์" },
+          "definition": { "en": "A service that creates and publishes events to a message broker.", "th": "Producer คือ service หรือคอมโพเนนต์ใดๆ ที่สร้างเหตุการณ์และเผยแพร่ไปยัง message broker Producer ไม่จำเป็นต้องรู้ว่าใครจะบริโภคเหตุการณ์ของตน ใน EDA producer แยกจาก consumer และสามารถ deploy, scale, และอัปเดตได้อย่างอิสระ" },
+          "relatedTerms": ["consumer", "message-broker"],
+          "sourceRef": "Apache Kafka Documentation"
+        },
+        {
+          "id": "consumer",
+          "term": { "en": "Consumer", "th": "ผู้บริโภคเหตุการณ์" },
+          "definition": { "en": "A service that subscribes to and processes events from a message broker.", "th": "Consumer คือ service หรือคอมโพเนนต์ที่สมัครรับ event stream และประมวลผลเหตุการณ์ที่เข้ามา Consumer ดำเนินการตามเหตุการณ์เพื่ออัปเดตสถานะ เรียก workflow หรือสร้างเหตุการณ์ใหม่ หลาย consumer สามารถบริโภคเหตุการณ์เดียวกันอย่างอิสระ" },
+          "relatedTerms": ["producer", "message-broker", "idempotency"],
+          "sourceRef": "Apache Kafka Documentation"
+        },
+        {
+          "id": "message-broker",
+          "term": { "en": "Message Broker", "th": "ตัวกลางรับส่งข้อความ" },
+          "definition": { "en": "Infrastructure that receives events from producers and routes them to consumers.", "th": "Message Broker คือคอมโพเนนต์ middleware ที่รับข้อความจาก Producer และส่งต่อไปยัง Consumer ที่เหมาะสม ให้ความทนทาน (ข้อความจัดเก็บจนกว่าจะบริโภค) การแยกส่วน และความน่าเชื่อถือ ตัวอย่าง: Apache Kafka, RabbitMQ, AWS SQS" },
+          "relatedTerms": ["producer", "consumer", "pub-sub"],
+          "sourceRef": "Apache Kafka Documentation"
+        },
+        {
+          "id": "pub-sub",
+          "term": { "en": "Pub/Sub", "th": "รูปแบบผู้เผยแพร่/สมาชิก" },
+          "definition": { "en": "A messaging pattern where publishers send to topics and subscribers receive independently.", "th": "Publish/Subscribe (Pub/Sub) คือรูปแบบการรับส่งข้อความที่ Publisher ส่งข้อความไปยังช่อง (topic) โดยไม่รู้ว่าใครจะรับ Subscriber ลงทะเบียนสนใจ topic และรับข้อความทั้งหมด บรรลุการแยกส่วนเชิงเวลาและเชิงพื้นที่" },
+          "relatedTerms": ["message-broker", "producer", "consumer"],
+          "sourceRef": "Gregor Hohpe, Enterprise Integration Patterns (2003)"
+        },
+        {
+          "id": "eventual-consistency",
+          "term": { "en": "Eventual Consistency", "th": "ความสอดคล้องในที่สุด" },
+          "definition": { "en": "A consistency model where distributed data becomes consistent over time, not immediately.", "th": "Eventual Consistency คือโมเดลความสอดคล้องในระบบกระจายที่รับประกันว่า หากไม่มีการอัปเดตใหม่ สุดท้ายการอ่านทั้งหมดจะคืนค่าที่อัปเดตล่าสุด ใน EDA service ต่างๆ อาจมีมุมมองข้อมูลที่ต่างกันชั่วคราว เป็นการแลกเปลี่ยนโดยตั้งใจ" },
+          "relatedTerms": ["eda", "consumer"],
+          "sourceRef": "Werner Vogels, Amazon CTO (2008)"
+        },
+        {
+          "id": "idempotency",
+          "term": { "en": "Idempotency", "th": "ความต้านทานการซ้ำ" },
+          "definition": { "en": "The property that an operation produces the same result when performed multiple times.", "th": "Idempotency หมายความว่าการดำเนินการหลายครั้งมีผลเหมือนกับการดำเนินการครั้งเดียว ใน event-driven system consumer ต้องเป็น idempotent เพราะเหตุการณ์อาจส่งมากกว่าหนึ่งครั้ง Consumer ที่เป็น idempotent ติดตาม event ID ที่ประมวลผลแล้วและข้ามรายการซ้ำ" },
+          "relatedTerms": ["consumer", "retry"],
+          "sourceRef": "Pat Helland, Idempotence Is Not a Medical Condition (2012)"
+        },
+        {
+          "id": "retry",
+          "term": { "en": "Retry", "th": "การลองใหม่" },
+          "definition": { "en": "Automatically re-sending a failed message after a delay to handle transient failures.", "th": "Retry คือรูปแบบการลองดำเนินการที่ล้มเหลวซ้ำอัตโนมัติหลังจากหน่วงเวลา ใน EDA broker จะส่งข้อความที่ล้มเหลวซ้ำ นโยบาย retry มักใช้ exponential backoff เพื่อหลีกเลี่ยงการกดดัน service ที่ล้มเหลว" },
+          "relatedTerms": ["idempotency", "dead-letter-queue"],
+          "sourceRef": "Michael Nygard, Release It! (2007)"
+        },
+        {
+          "id": "dead-letter-queue",
+          "term": { "en": "Dead Letter Queue (DLQ)", "th": "คิวข้อความที่ล้มเหลว" },
+          "definition": { "en": "A holding area for messages that could not be processed after all retry attempts.", "th": "Dead Letter Queue (DLQ) คือ queue พิเศษที่ข้อความซึ่งล้มเหลวในการประมวลผลหลังจากลองซ้ำทั้งหมดจะถูกส่งไป DLQ ป้องกันการสูญหายของข้อความและช่วยให้ผู้ดำเนินการตรวจสอบข้อความที่ล้มเหลวและประมวลผลซ้ำได้" },
+          "relatedTerms": ["retry", "consumer"],
+          "sourceRef": "AWS SQS Documentation"
+        },
+        {
+          "id": "event-schema",
+          "term": { "en": "Event Schema", "th": "โครงสร้างเหตุการณ์" },
+          "definition": { "en": "The formal structure of an event — its fields, types, and required properties.", "th": "Event Schema กำหนดโครงสร้าง ชื่อฟิลด์ ประเภทข้อมูล และข้อจำกัดของข้อความเหตุการณ์ Schema อธิบายโดยใช้ JSON Schema, Avro, หรือ Protobuf Schema Registry ช่วยให้ producer และ consumer ตกลงกันเรื่อง schema" },
+          "relatedTerms": ["event-versioning", "producer"],
+          "sourceRef": "Confluent Schema Registry Documentation"
+        },
+        {
+          "id": "event-versioning",
+          "term": { "en": "Event Versioning", "th": "การกำหนดเวอร์ชันเหตุการณ์" },
+          "definition": { "en": "Managing changes to event schemas over time without breaking existing consumers.", "th": "Event Versioning คือการจัดการการเปลี่ยนแปลง schema เหตุการณ์เมื่อเวลาผ่านไปแบบ backward และ forward compatible การเพิ่มฟิลด์ optional เข้ากันได้แบบ backward การลบหรือเปลี่ยนชื่อฟิลด์ required เป็น breaking change ที่ต้องการ version ใหม่" },
+          "relatedTerms": ["event-schema", "consumer"],
+          "sourceRef": "Confluent Schema Registry Documentation"
         }
       ]
     }
