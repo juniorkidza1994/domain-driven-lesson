@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>ES Board Fixture</title>
+  <link rel="stylesheet" href="../../../css/tokens.css"/>
+  <link rel="stylesheet" href="../../../css/diagrams.css"/>
+</head>
+<body>
+  <section class="content-section" data-section-id="es-fixture">
+    <h2>E-Commerce Order Flow</h2>
+    <div class="es-board-container">
+      <div class="es-board">
+        <div class="es-board-lane">
+          <div class="es-board-lane__label">Checkout</div>
+          <div class="es-board-lane__items">
+            <span class="sticky-note sticky-command">Place Order</span>
+            <span class="sticky-note sticky-event">OrderPlaced</span>
+            <span class="sticky-note sticky-actor">Customer</span>
+          </div>
+        </div>
+        <div class="es-board-lane">
+          <div class="es-board-lane__label">Fulfilment</div>
+          <div class="es-board-lane__items">
+            <span class="sticky-note sticky-policy">Reserve Stock Policy</span>
+            <span class="sticky-note sticky-hotspot">Out of stock?</span>
+            <span class="sticky-note sticky-readmodel">Order Status</span>
+            <span class="sticky-note sticky-external">Payment Gateway</span>
+            <span class="sticky-note sticky-aggregate">Order</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ul class="es-board-legend">
+      <li><span class="sticky-note sticky-event">&nbsp;</span> Event</li>
+      <li><span class="sticky-note sticky-command">&nbsp;</span> Command</li>
+      <li><span class="sticky-note sticky-actor">&nbsp;</span> Actor</li>
+      <li><span class="sticky-note sticky-policy">&nbsp;</span> Policy</li>
+      <li><span class="sticky-note sticky-hotspot">&nbsp;</span> Hotspot</li>
+      <li><span class="sticky-note sticky-readmodel">&nbsp;</span> Read Model</li>
+      <li><span class="sticky-note sticky-external">&nbsp;</span> External System</li>
+      <li><span class="sticky-note sticky-aggregate">&nbsp;</span> Aggregate</li>
+    </ul>
+  </section>
+</body>
+</html>

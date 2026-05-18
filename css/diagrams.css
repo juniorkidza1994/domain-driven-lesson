@@ -1,2 +1,110 @@
-/* css/diagrams.css — Mermaid diagram styles, ES board colors */
-/* Populated in DRE-9 */
+/* css/diagrams.css — DRE-17: ES board component + Mermaid hooks */
+
+/* ── Container (scrollable on mobile) ───────────────────────────── */
+.es-board-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  background: #fafaf7;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+/* ── Board layout: horizontal lanes ─────────────────────────────── */
+.es-board {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 600px; /* forces horizontal scroll on small screens */
+}
+
+.es-board-lane {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  padding: .75rem;
+  background: #ffffff;
+  border-radius: 6px;
+  border-left: 4px solid #6366f1;
+}
+
+.es-board-lane__label {
+  font-weight: 700;
+  font-size: .9rem;
+  color: #1e1b4b;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.es-board-lane__items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .25rem;
+  align-items: flex-start;
+}
+
+/* ── Sticky notes (shape) ───────────────────────────────────────── */
+.sticky-note {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+  min-height: 60px;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-align: center;
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.15);
+  margin: 4px;
+}
+
+/* ── Sticky notes (colours — exact values asserted by tests) ───── */
+.sticky-event     { background: #f97316; color: white; }
+.sticky-command   { background: #3b82f6; color: white; }
+.sticky-actor     { background: #fde68a; color: #1e1b4b; }
+.sticky-policy    { background: #a78bfa; color: white; }
+.sticky-hotspot   { background: #fb7185; color: white; }
+.sticky-readmodel { background: #34d399; color: white; }
+.sticky-external  { background: #fbbf24; color: #1e1b4b; }
+.sticky-aggregate { background: #f3f4f6; color: #1e1b4b; border: 2px solid #d1d5db; }
+
+/* ── Legend ─────────────────────────────────────────────────────── */
+.es-board-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem 1.25rem;
+  list-style: none;
+  padding: .75rem 0 0;
+  margin: .75rem 0 0;
+  font-size: .8rem;
+  color: #1e1b4b;
+  border-top: 1px dashed #e5e7eb;
+}
+.es-board-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+}
+.es-board-legend .sticky-note,
+.es-board-legend .sticky-swatch {
+  min-width: 18px;
+  min-height: 18px;
+  padding: 0;
+  margin: 0;
+  font-size: 0;
+  box-shadow: none;
+}
+
+/* ── Sticky swatches (legend colour squares, no sticky-note class) ── */
+.sticky-swatch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+/* ── Mermaid hooks (placeholder so renderDiagrams output looks clean) */
+.mermaid-block { display: block; margin: 1rem 0; }
+.mermaid-block svg { max-width: 100%; height: auto; }
