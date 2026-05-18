@@ -144,3 +144,29 @@ test('eda.md defines both Domain Event and Integration Event', () => {
   assert.ok(edaContent.includes('Domain Event'), 'missing text: Domain Event');
   assert.ok(edaContent.includes('Integration Event'), 'missing text: Integration Event');
 });
+
+// --- DRE-13: ecommerce-examples.md structural assertions ---
+
+const ECOM_MD = path.join(__dirname, '../../research/ecommerce-examples.md');
+
+let ecomContent;
+test('research/ecommerce-examples.md exists', () => {
+  assert.ok(fs.existsSync(ECOM_MD), 'research/ecommerce-examples.md not found');
+  ecomContent = fs.readFileSync(ECOM_MD, 'utf8');
+});
+
+test('ecommerce-examples.md word count > 600', () => {
+  const words = ecomContent.split(/\s+/).filter(Boolean);
+  assert.ok(words.length > 600, `found ${words.length} words, need > 600`);
+});
+
+test('ecommerce-examples.md has required headings', () => {
+  for (const h of ['## Bounded Contexts', '## Domain Events', '## Order Fulfillment Saga']) {
+    assert.ok(ecomContent.includes(h), `missing heading: ${h}`);
+  }
+});
+
+test('ecommerce-examples.md has >= 15 PascalCase event names', () => {
+  const matches = ecomContent.match(/[A-Z][a-z]+[A-Z]/g) || [];
+  assert.ok(matches.length >= 15, `found ${matches.length} PascalCase names, need >= 15`);
+});
