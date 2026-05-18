@@ -23,6 +23,11 @@
   --color-primary-light:   #e0e7ff;
   --color-secondary-light: #ccfbf1;
   --color-success:         #10b981;
+  --color-success-light:   #d1fae5;
+  --color-success-dark:    #065f46;
+  --color-danger-light:    #fee2e2;
+  --color-danger-dark:     #991b1b;
+  --color-warning-bg:      #fef3c7;
   --color-text-muted:      #6b7280;
   --text-base: 1rem;
   --text-sm:   0.875rem;
