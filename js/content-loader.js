@@ -46,7 +46,7 @@
   }
 
   function renderDiagram(s, lang) {
-    const src = s.diagram || pick(s.content, lang) || '';
+    const src = (s.diagram && typeof s.diagram === 'object' ? s.diagram.source : s.diagram) || pick(s.content, lang) || '';
     const node = el(`<section class="content-section" data-section-id="${esc(s.id)}">
       ${s.title ? `<h2>${esc(pick(s.title, lang))}</h2>` : ''}
       <div class="mermaid-block"></div>
@@ -71,14 +71,17 @@
   }
 
   function renderComparison(s, lang) {
-    const side = (col) => `
+    const col = (c) => `
       <div class="comparison-col">
-        <h3>${esc(pick(col.heading, lang))}</h3>
-        <ul>${(col.items || []).map(it => `<li>${renderTipMarkup(esc(pick(it, lang)))}</li>`).join('')}</ul>
+        <h3>${esc(pick(c.heading, lang))}</h3>
+        <ul>${(c.items || []).map(it => `<li>${renderTipMarkup(esc(pick(it, lang)))}</li>`).join('')}</ul>
       </div>`;
+    const cols = Array.isArray(s.columns) && s.columns.length
+      ? s.columns.map(col).join('')
+      : col(s.left || {}) + col(s.right || {});
     return `<section class="content-section" data-section-id="${esc(s.id)}">
       ${s.title ? `<h2>${esc(pick(s.title, lang))}</h2>` : ''}
-      <div class="comparison">${side(s.left || {})}${side(s.right || {})}</div>
+      <div class="comparison">${cols}</div>
     </section>`;
   }
 
