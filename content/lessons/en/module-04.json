@@ -2,14 +2,221 @@
   "module": {
     "id": "module-04",
     "number": 4,
-    "title": { "en": "Event Storming", "th": "" },
-    "estimatedMinutes": 35,
+    "title": { "en": "How to Use Event Storming to Design DDD", "th": "" },
+    "estimatedMinutes": 40,
     "sections": [
       {
-        "id": "intro",
+        "id": "why-this-bridge-matters",
+        "type": "callout",
+        "title": { "en": "Why This Bridge Matters", "th": "" },
+        "content": {
+          "en": "Module 2 gave you the DDD vocabulary — domains, subdomains, bounded contexts, aggregates, ubiquitous language. Module 3 gave you Event Storming — a way to put a whole business on a wall in an afternoon. This module is the bridge between them.\n\nMost teams who try to adopt DDD get stuck in the same place: they read Evans, they understand the patterns conceptually, and then they sit down in front of an empty IDE and have no idea how to start. \"Where do bounded contexts come from?\" \"How do I know what's an aggregate?\" \"How do I find the ubiquitous language if the business doesn't have one written down?\" The patterns describe the destination. They don't describe the road.\n\nEvent Storming is that road. The wall of orange events, blue commands, purple policies, and pink hotspots that comes out of a Big Picture session is not just a discovery artefact — it is the raw material from which every DDD strategic decision can be derived, in order, with the business in the room to validate each step. Vocabulary shifts on the wall reveal subdomain seams. Pivotal events mark bounded context boundaries. Command-event pairs point at aggregates. The terms the domain experts actually used become the ubiquitous language.\n\nThis module walks the nine-step transformation from a finished ES wall to a working DDD model. Each step is mechanical enough that a team can do it the day after a workshop, and each step produces an artefact a developer can use the next morning. By the end, you will have a recipe — not a theory — for turning a wall of sticky notes into code structure.",
+          "th": ""
+        }
+      },
+      {
+        "id": "full-transformation-flow",
+        "type": "flow",
+        "title": { "en": "The Full Transformation Flow", "th": "" },
+        "content": {
+          "en": "The nine steps below take a finished Big Picture Event Storming wall and turn it into a documented DDD model: subdomains classified, bounded contexts drawn, aggregates identified, and a ubiquitous language locked in per context. Steps are sequential — each one consumes the output of the previous step — but they are not heavyweight. A team of four can typically run all nine in two to three days following a half-day workshop.",
+          "th": ""
+        },
+        "diagram": {
+          "type": "mermaid",
+          "source": "flowchart LR\n  S1[1. Extract<br/>Domain Events] --> S2[2. Map Commands<br/>and Actors]\n  S2 --> S3[3. Identify<br/>Policies]\n  S3 --> S4[4. Cluster Events<br/>into Capabilities]\n  S4 --> S5[5. Identify<br/>Subdomains]\n  S5 --> S6[6. Define<br/>Bounded Contexts]\n  S6 --> S7[7. Design<br/>Aggregates]\n  S7 --> S8[8. Build Ubiquitous<br/>Language]\n  S8 --> S9[9. Validate with<br/>Business Scenarios]\n  style S1 fill:#f97316,stroke:#c2410c,color:#fff\n  style S3 fill:#a78bfa,stroke:#7c3aed,color:#fff\n  style S5 fill:#6366f1,stroke:#3730a3,color:#fff\n  style S6 fill:#6366f1,stroke:#3730a3,color:#fff\n  style S7 fill:#14b8a6,stroke:#0f766e,color:#fff\n  style S9 fill:#f59e0b,stroke:#b45309,color:#fff"
+        },
+        "steps": [
+          { "label": { "en": "1. Extract Domain Events", "th": "" }, "body": { "en": "Collect every orange sticky from the wall, deduped and time-ordered, as the raw fact stream of the business.", "th": "" } },
+          { "label": { "en": "2. Map Commands and Actors", "th": "" }, "body": { "en": "For each event, identify the blue command that triggered it and the yellow actor who issued the command. Causation becomes explicit.", "th": "" } },
+          { "label": { "en": "3. Identify Policies and Business Rules", "th": "" }, "body": { "en": "Find every purple sticky — automated reactions of the form \"when X happens, do Y\". These are the candidate domain services and process managers.", "th": "" } },
+          { "label": { "en": "4. Cluster Events into Capability Groups", "th": "" }, "body": { "en": "Group neighbouring events that share vocabulary and ownership into business capabilities — Sales, Fulfilment, Billing, Catalog.", "th": "" } },
+          { "label": { "en": "5. Identify Subdomains", "th": "" }, "body": { "en": "Classify each capability as Core, Supporting, or Generic. Strategic investment decisions follow directly from this label.", "th": "" } },
+          { "label": { "en": "6. Define Bounded Contexts", "th": "" }, "body": { "en": "Draw a boundary around each subdomain and mark the pivotal events that cross it. Each boundary becomes a context in code.", "th": "" } },
+          { "label": { "en": "7. Design Aggregates", "th": "" }, "body": { "en": "Inside each context, group command-event pairs into aggregates. The white sticky names become aggregate roots.", "th": "" } },
+          { "label": { "en": "8. Build Ubiquitous Language", "th": "" }, "body": { "en": "List every noun and verb used in each context. The wall itself is the dictionary; the language is its index.", "th": "" } },
+          { "label": { "en": "9. Validate with Business Scenarios", "th": "" }, "body": { "en": "Replay real business scenarios through the model end-to-end. Where the model breaks, the design is wrong — fix it before writing code.", "th": "" } }
+        ]
+      },
+      {
+        "id": "step-1-extract-events",
         "type": "text",
-        "title": { "en": "Introduction", "th": "" },
-        "content": { "en": "TBD — populated in DRE-18..24", "th": "" }
+        "title": { "en": "Step 1 — Extract Domain Events", "th": "" },
+        "content": {
+          "en": "The starting point is the wall itself. A finished Big Picture session leaves you with hundreds of orange stickies, sorted left to right in time order, with pink hotspots scattered through them and (probably) blue commands and purple policies layered on top. Before anything else, you produce a clean canonical list of just the **domain events** — the orange stickies.\n\nThe rule is the same one from Module 3: a domain event is a past-tense fact the business cares about. *Order Placed*, *Payment Authorized*, *Item Added to Cart*, *Refund Issued*, *Subscription Renewed*. Not technical events (*Row Inserted*, *Cache Invalidated*) — those are implementation details. Not states (*Order Pending*) — those are not facts.\n\nThe mechanical process is:\n\n1. Walk the wall left to right and transcribe every orange sticky into a digital list.\n2. Merge duplicates — two stickies that mean the same thing become one entry. Keep the variant phrasings as notes; you will use them to resolve vocabulary disagreements later.\n3. Discard non-events that snuck in. Past-tense check: if the sticky cannot grammatically be read as \"X happened,\" it is not an event. *Customer browses catalog* is not an event; *Catalog Viewed* is.\n4. For each event, record (a) the rough time-order position on the wall, (b) the area of the wall it lives in (used in step 4), and (c) any pink hotspots immediately next to it.\n\nThe output of step 1 is a flat, ordered list of domain events. No structure yet — just facts. A reasonable e-commerce business has 80–200 events at this stage. If you have fewer than 50, you didn't event-storm hard enough; if you have over 500, you mixed multiple zoom levels and need to collapse synonyms. The next eight steps add structure on top of this list.",
+          "th": ""
+        },
+        "tooltipRefs": ["domain-event"]
+      },
+      {
+        "id": "step-2-commands-actors",
+        "type": "text",
+        "title": { "en": "Step 2 — Map Commands and Actors", "th": "" },
+        "content": {
+          "en": "An event by itself answers \"what happened?\" but not \"who caused it?\" or \"why?\" Step 2 adds the two stickies that turn an event into a causation chain: the **command** (blue) that was issued, and the **actor** (yellow) who issued it.\n\nFor every event in your list from step 1, ask two questions:\n\n- **What request, if accepted, produces this event?** That is the command. Commands are named imperatively, in present tense: *Place Order* produces *Order Placed*. *Authorize Payment* produces *Payment Authorized*. *Cancel Subscription* produces *Subscription Cancelled*. A command can be rejected; an event cannot be undone. That distinction matters when you start writing code — commands return a success/failure result; events are simply published.\n\n- **Who or what issues this command?** That is the actor. An actor is a role — *Customer*, *Warehouse Operator*, *Fraud Analyst*, *Billing System* — not an individual. One human can play several actor roles in the same flow. Some commands have no human actor; they are issued by a policy or by a scheduled job. Those will surface in step 3.\n\nNot every event has a command on the wall — some events are reactions to other events (a policy fires a command, which produces an event). That is fine. Mark events with no obvious command as candidates for the next step. Most events will have exactly one command and one actor; the few that don't are usually the most interesting parts of the domain.\n\nThe artefact at the end of step 2 is a three-column table: actor → command → event. Read top to bottom it tells the story of the business. Read it aloud to a domain expert and they will catch missing rows immediately — that is the validation step. The mini ES board below shows what one slice of this looks like for a checkout flow.",
+          "th": ""
+        }
+      },
+      {
+        "id": "step-2-mini-board",
+        "type": "es-board",
+        "title": { "en": "Mini ES Board — Checkout Slice", "th": "" },
+        "content": {
+          "en": "A small two-lane slice of an e-commerce checkout, after step 2. Each row reads actor → command → event. Notice the *Payment Authorized* event has no actor on the Customer lane — it is produced by the Payment lane in response to a command issued from Checkout. That cross-lane causation is exactly what step 3 will formalise as a policy.",
+          "th": ""
+        },
+        "diagram": {
+          "type": "es-board",
+          "source": "lanes-rendered-inline"
+        },
+        "lanes": [
+          {
+            "id": "customer",
+            "label": { "en": "Customer", "th": "" },
+            "items": [
+              { "type": "actor",   "text": { "en": "Customer",         "th": "" } },
+              { "type": "command", "text": { "en": "Add Item to Cart", "th": "" } },
+              { "type": "event",   "text": { "en": "Item Added",       "th": "" } },
+              { "type": "command", "text": { "en": "Start Checkout",   "th": "" } },
+              { "type": "event",   "text": { "en": "Checkout Started", "th": "" } },
+              { "type": "command", "text": { "en": "Submit Payment",   "th": "" } }
+            ]
+          },
+          {
+            "id": "payment",
+            "label": { "en": "Payment", "th": "" },
+            "items": [
+              { "type": "command", "text": { "en": "Authorize Payment",  "th": "" } },
+              { "type": "event",   "text": { "en": "Payment Authorized", "th": "" } }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "step-3-policies-rules",
+        "type": "text",
+        "title": { "en": "Step 3 — Identify Policies and Business Rules", "th": "" },
+        "content": {
+          "en": "Look at your actor → command → event table from step 2. Some events do not have a human actor in front of them — the command that produced the event was issued automatically, in response to a previous event. Those automatic reactions are **policies**, and they are the invisible glue of every real business.\n\nA policy reads: **\"whenever event X happens, issue command Y.\"** On the wall it is a purple sticky placed between the triggering event and the command it triggers. *When Payment Authorized → Place Order.* *When Order Placed → Reserve Inventory.* *When Payment Failed 3 times → Cancel Order.* *When Subscription Renewed → Send Receipt.* Every business runs on policies; most of them are not written down anywhere, which is why Event Storming surfaces them so reliably — the workshop asks \"so what happens next?\" and the policy falls out.\n\nFor each policy, ask three questions to decide where it lives in code:\n\n1. **Is this rule inside one aggregate, or does it span aggregates?** If the rule lives entirely inside one aggregate (e.g. *when 50 items are added, refuse the next one*), it belongs on the aggregate as a method. If it spans aggregates or contexts (e.g. *when an order is placed, reserve inventory in another context*), it becomes a domain service, a process manager, or an event handler.\n\n2. **Is the rule synchronous or asynchronous?** A synchronous rule runs as part of the same transaction (typical for aggregate-internal invariants). An asynchronous rule runs after the triggering event has been committed (typical for cross-aggregate policies — they read the event from a queue and then issue their own command).\n\n3. **Is the rule mechanical or judgemental?** Mechanical rules (*free shipping if total > $100*) become code directly. Judgemental rules (*hold suspicious orders for review*) often involve a domain service or a human in the loop — and they belong on the wall as policies even when they are not fully automated yet.\n\nThe output of step 3 is a list of policies, each annotated with which aggregate or domain service will own it. This is the first artefact that looks like a software design rather than a business diagram. Many policies will turn into **domain services** in the DDD sense — Module 2 introduced them as stateless operations that span aggregates.",
+          "th": ""
+        },
+        "tooltipRefs": ["policy", "domain-service"]
+      },
+      {
+        "id": "step-4-cluster-events",
+        "type": "text",
+        "title": { "en": "Step 4 — Cluster Events into Capability Groups", "th": "" },
+        "content": {
+          "en": "Steps 1–3 produced a flat causation graph: actors issuing commands that produce events, policies reacting to events to issue more commands. Step 4 imposes the first structural layer on top of that graph by grouping events into **business capability clusters**.\n\nA business capability is a coherent chunk of what the business does — a thing it offers as a unit. *Sales*, *Fulfilment*, *Billing*, *Catalog*, *Customer Support*, *Loyalty*, *Accounting*. These are not technical labels; they are how the business describes itself when an executive sketches the org chart.\n\nThe mechanical process is to walk the timeline left to right and look for three signals that mark a cluster boundary:\n\n- **Vocabulary shift.** The words change. The left side of the wall talks about *Cart*, *Item*, *Checkout*. The right side talks about *Order*, *Shipment*, *Parcel*. Same business, different language. That shift is a cluster seam.\n\n- **Actor shift.** The left side is driven by the *Customer*. The middle is driven by *Warehouse Operators*. The right is driven by *Billing Clerks* and *Couriers*. When the dominant actor changes, the cluster usually changes with it.\n\n- **Pivotal event.** A single event sits between two clusters and represents the handoff. *Order Placed* between Sales and Fulfilment is the canonical example. *Shipment Dispatched* between Fulfilment and Delivery is another. Pivotal events are the most stable parts of the wall — they outlast every implementation.\n\nThe output is the same event list with each event tagged with a capability cluster. A finished e-commerce wall usually settles into 5–10 clusters. The diagram below shows a typical clustering for an online shop. **These capability clusters are not bounded contexts yet** — step 5 classifies them, step 6 promotes them. But they are now in the right shape for that promotion.",
+          "th": ""
+        }
+      },
+      {
+        "id": "step-4-cluster-diagram",
+        "type": "diagram",
+        "title": { "en": "Event Clustering — E-Commerce Example", "th": "" },
+        "content": {
+          "en": "A typical clustering of e-commerce domain events into business capabilities. Each cluster groups events that share vocabulary and primary actor. The events on the boundaries between clusters (Order Placed, Shipment Dispatched, Invoice Issued) are pivotal events — they will become integration points between bounded contexts in step 6.",
+          "th": ""
+        },
+        "diagram": {
+          "type": "mermaid",
+          "source": "flowchart LR\n  subgraph CAT[Catalog]\n    E1[Item Viewed]\n    E2[Item Searched]\n  end\n  subgraph SALES[Sales / Checkout]\n    E3[Item Added to Cart]\n    E4[Checkout Started]\n    E5[Order Placed]\n  end\n  subgraph FULL[Fulfilment]\n    E6[Inventory Reserved]\n    E7[Package Packed]\n    E8[Shipment Dispatched]\n  end\n  subgraph BILL[Billing]\n    E9[Payment Authorized]\n    E10[Invoice Issued]\n    E11[Refund Processed]\n  end\n  E2 --> E3\n  E5 --> E6\n  E5 --> E9\n  E8 --> E10\n  style CAT fill:#fef3c7,stroke:#f59e0b\n  style SALES fill:#eef2ff,stroke:#6366f1\n  style FULL fill:#f0fdfa,stroke:#14b8a6\n  style BILL fill:#fce7f3,stroke:#db2777\n  style E5 fill:#f97316,stroke:#c2410c,color:#fff\n  style E8 fill:#f97316,stroke:#c2410c,color:#fff\n  style E10 fill:#f97316,stroke:#c2410c,color:#fff"
+        }
+      },
+      {
+        "id": "step-5-identify-subdomains",
+        "type": "text",
+        "title": { "en": "Step 5 — Identify Subdomains", "th": "" },
+        "content": {
+          "en": "Step 4 gave you a list of business capability clusters. Step 5 promotes each cluster to a **subdomain** by attaching a strategic label: *Core*, *Supporting*, or *Generic*. The label is not a technical decision; it is a business decision about how much engineering investment that capability deserves.\n\n- **Core subdomain** — the capability the business is good at, the thing that differentiates it from competitors. For a luxury fashion retailer, *Curated Catalog* might be core. For a high-volume marketplace, *Search and Recommendations* is core. For a logistics startup, *Routing Optimisation* is core. The same capability name (\"Catalog\") can be core in one company and generic in another — it depends on whether it differentiates that specific business.\n\n- **Supporting subdomain** — necessary plumbing that doesn't differentiate you, but no one sells exactly the thing you need off the shelf. A custom order-state machine. A loyalty programme tuned to your specific tiers. Inventory rules tailored to your warehouse layout. Build supporting subdomains in-house but spend less effort on them than on core — simpler patterns, smaller teams, more pragmatism.\n\n- **Generic subdomain** — a solved problem. Payment processing, email delivery, authentication, address validation, tax calculation, fraud scoring. Don't build these. Stripe, Auth0, SendGrid, Avalara already exist and are better at the job than your team will ever be. The cost of building them is paid in opportunity cost: time not spent on the core.\n\nThe practical exercise: list each cluster from step 4 in one column, write *Core* / *Supporting* / *Generic* next to each one in conversation with the business stakeholders in the room, and challenge every \"Core\" classification. The most common mistake is over-classifying as Core — every team thinks their bit is special. Apply Wardley's rule: if you could plausibly buy it from three different vendors, it is generic, no matter how custom it feels.\n\nThe output is a labelled subdomain list. This list directly drives staffing decisions (best engineers on core), build-vs-buy decisions (buy generic), and the order in which step 6 should draw bounded contexts (start with core, then supporting, then generic last).",
+          "th": ""
+        },
+        "tooltipRefs": ["subdomain", "core-domain"]
+      },
+      {
+        "id": "step-6-define-contexts",
+        "type": "text",
+        "title": { "en": "Step 6 — Define Bounded Contexts", "th": "" },
+        "content": {
+          "en": "A subdomain is a slice of the **problem**. A **bounded context** is a slice of the **solution** — the model you actually build to serve that subdomain. Step 6 draws explicit boundaries around each subdomain and turns them into named contexts that will appear in code.\n\nThe heuristic that decides where a bounded context starts and ends is **linguistic**, not technical. A bounded context is the largest area inside which a domain term has exactly one meaning. The moment the same word means something different, you have crossed a boundary. The canonical e-commerce example is *Product*: in the Catalog context a Product has a title, description, images and SEO metadata; in the Inventory context a Product is a SKU with a stock count and a warehouse location; in the Shipping context a Product is a physical thing with weight and dimensions. All three definitions are correct *inside their own context*. Forcing them to share a single class is the mistake that DDD was invented to prevent.\n\nDrawing the boundaries:\n\n1. **One context per subdomain by default.** A core subdomain almost always gets its own context. A supporting subdomain usually does. Multiple generic subdomains can sometimes share one context (e.g. *Notifications* covering email, SMS, and push) — but be sceptical of cross-context unification.\n\n2. **Pivotal events mark the seams.** The events identified in step 4 as living between clusters are the integration points between contexts. *Order Placed* sits on the boundary between Sales (Order context) and Fulfilment (Shipping context). Each side has its own definition of the event payload it needs.\n\n3. **Each context owns one language.** Inside the context, all terminology is consistent and known to the team. The same real-world concept gets a different name in each context (*Product* in Catalog, *Stockable* in Inventory, *Parcel* in Shipping) — that is correct, not a bug.\n\n4. **Document the relationship between contexts.** For each pair that integrates, label it with a context-map pattern from Module 2 (Open Host Service, Anti-Corruption Layer, Customer-Supplier, Conformist). Most pairs default to event-driven integration: the upstream publishes a domain event, the downstream subscribes and translates it through an ACL.\n\nThe artefact is the **context map** — the diagram below shows one for an e-commerce business. Note that bounded contexts are *not* the same as microservices. One context can be deployed as a monolith, as one service, or as several. The rule is one direction only: avoid putting multiple contexts inside one deployable. The reverse is fine.",
+          "th": ""
+        }
+      },
+      {
+        "id": "step-6-context-map-diagram",
+        "type": "diagram",
+        "title": { "en": "Bounded Context Map", "th": "" },
+        "content": {
+          "en": "An e-commerce context map drawn from the capability clusters of step 4 and the subdomain classifications of step 5. Each context owns its own model and ubiquitous language. Arrows show the direction of dependency and are labelled with the context-mapping pattern from Module 2. The Payment context is generic — it conforms to Stripe's API. Order, Catalog, and Fulfilment are core or supporting and run their own models.",
+          "th": ""
+        },
+        "diagram": {
+          "type": "mermaid",
+          "source": "flowchart TB\n  subgraph CAT[Catalog Context · core]\n    P[Product<br/>title, description, images]\n  end\n  subgraph ORD[Order Context · core]\n    O[Order<br/>lineItems, total, status]\n  end\n  subgraph FUL[Fulfilment Context · supporting]\n    SH[Shipment<br/>parcels, carrier, label]\n  end\n  subgraph PAY[Payment Context · generic]\n    PA[PaymentIntent<br/>conforms to Stripe]\n  end\n  CAT -->|OHS / Published Language<br/>product search API| ORD\n  ORD -->|Customer-Supplier<br/>OrderPlaced event| FUL\n  ORD -->|Conformist<br/>Stripe SDK| PAY\n  FUL -->|ACL<br/>wraps legacy ERP| ORD\n  style CAT fill:#fef3c7,stroke:#f59e0b\n  style ORD fill:#eef2ff,stroke:#6366f1\n  style FUL fill:#f0fdfa,stroke:#14b8a6\n  style PAY fill:#fce7f3,stroke:#db2777"
+        }
+      },
+      {
+        "id": "step-7-design-aggregates",
+        "type": "text",
+        "title": { "en": "Step 7 — Design Aggregates", "th": "" },
+        "content": {
+          "en": "Step 6 drew the boundaries between contexts. Step 7 zooms into one context at a time and identifies the **aggregates** that live inside it. This is the move from strategic design (boundaries between models) to tactical design (the shape of the model itself).\n\nThe mechanical rule from Brandolini's Design-Level Event Storming: **every command-event pair points to an aggregate**. The aggregate is the thing that receives the command, enforces the invariants, and emits the resulting event. Walk the wall inside one context and group the command-event pairs by the noun they share:\n\n- *Place Order → Order Placed*. *Add Item to Order → Item Added to Order*. *Cancel Order → Order Cancelled*. All three pairs share the noun **Order** — that is the Order aggregate.\n\n- *Reserve Stock → Stock Reserved*. *Release Stock → Stock Released*. Both pairs share **Inventory Item** — that is a separate aggregate, even though it lives in the same context.\n\n- *Authorize Payment → Payment Authorized*. *Refund Payment → Payment Refunded*. Both share **Payment** — that is the Payment aggregate.\n\nThree rules govern the design of each aggregate:\n\n1. **The aggregate root is the only entry point.** External code never reaches inside the aggregate to mutate a child entity directly. Every change goes through the root, which enforces the business invariants in one place.\n\n2. **The aggregate is the transactional boundary.** Everything inside the aggregate is consistent at every commit. Everything outside is *eventually* consistent — changes propagate via domain events on a message bus. This is the rule that scales.\n\n3. **Prefer small aggregates.** Vernon's *Effective Aggregate Design* (2011) gives the canonical guidance: an aggregate of one entity is the minimum viable design, and often the right one. When two aggregates need to coordinate, use a domain event, not a shared transaction. The temptation to lump *Order* + *Customer* + *Product* + *Inventory* into one giant aggregate produces a god object that locks half the database on every checkout.\n\nThe artefact at the end of step 7 is, for each bounded context, a list of aggregate names and the commands and events each one accepts and emits. That list is one short step away from class signatures. The Order aggregate diagram below — already familiar from Module 2 — is what step 7 produces for the Order context.",
+          "th": ""
+        }
+      },
+      {
+        "id": "step-7-aggregate-diagram",
+        "type": "diagram",
+        "title": { "en": "Order Aggregate — Inside the Order Context", "th": "" },
+        "content": {
+          "en": "The Order aggregate, derived from the command-event pairs in the Sales cluster. Order is the aggregate root — every command enters here. OrderLineItem entities and the ShippingAddress and PaymentStatus value objects live inside the boundary. The Payment aggregate is a separate aggregate in a separate context — referenced only by id, never by direct object reference. This is the move from a wall of orange and blue stickies to a class diagram you can hand to a developer.",
+          "th": ""
+        },
+        "diagram": {
+          "type": "mermaid",
+          "source": "flowchart TB\n  subgraph AGG[Order Aggregate boundary]\n    direction TB\n    O[Order — ROOT<br/>orderId, status, total]\n    L1[OrderLineItem<br/>productId, qty, price]\n    L2[OrderLineItem<br/>productId, qty, price]\n    SA[ShippingAddress · VO<br/>street, city, postcode]\n    PS[PaymentStatus · VO<br/>state, lastUpdated]\n    O --> L1\n    O --> L2\n    O --> SA\n    O --> PS\n  end\n  CMD[Place Order<br/>command] -->|received by root| O\n  O -->|emits| EV[Order Placed<br/>event]\n  PAY[Payment Aggregate<br/>separate context]\n  O -.references by id only.-> PAY\n  style O fill:#6366f1,stroke:#3730a3,color:#fff\n  style L1 fill:#eef2ff,stroke:#6366f1\n  style L2 fill:#eef2ff,stroke:#6366f1\n  style SA fill:#fef3c7,stroke:#f59e0b\n  style PS fill:#fef3c7,stroke:#f59e0b\n  style AGG fill:#f8fafc,stroke:#64748b\n  style CMD fill:#3b82f6,stroke:#1d4ed8,color:#fff\n  style EV fill:#f97316,stroke:#c2410c,color:#fff\n  style PAY fill:#f0fdfa,stroke:#14b8a6"
+        }
+      },
+      {
+        "id": "step-8-ubiquitous-language",
+        "type": "text",
+        "title": { "en": "Step 8 — Build the Ubiquitous Language", "th": "" },
+        "content": {
+          "en": "By the end of step 7 the model has structure — bounded contexts, aggregates, commands, events. Step 8 attaches **language** to that structure. The deal DDD asks of the team is that the words used to talk about the model in conversations are the same words used in code: in class names, method signatures, API endpoints, database tables, and event payloads. No translation step. No \"the business calls it X, we called it Y in the database.\"\n\nThe wall is already the dictionary. Every sticky note carries a word the domain experts used in the workshop — *Place Order*, *Order Placed*, *Cart Summary*, *Inventory Reserved*. Step 8 is just the act of collecting those words and locking them in.\n\nThe process is mechanical, scoped to **one bounded context at a time**:\n\n1. **List every noun on the wall in this context.** *Order*, *Cart*, *Item*, *Customer*, *Address*, *Payment Status*. These become entity names, value object names, and aggregate names in code.\n\n2. **List every verb on the wall in this context.** *Place*, *Cancel*, *Reserve*, *Authorize*, *Refund*. These become command names and method names on aggregates. *Order.cancel()* not *Order.setStatus(\"CANCELLED\")*.\n\n3. **List every event name in this context.** *Order Placed*, *Inventory Reserved*, *Payment Authorized*. These become the integration contracts between contexts — they are the most expensive words to change later, so name them carefully now.\n\n4. **Record the definitions.** For each term, write one sentence that says what it means *in this context*. The point is not a long glossary; the point is that two team members reading the term six months later will agree on what it means.\n\nThe rule that makes this work is that ubiquitous language is **scoped to one bounded context**. There is no enterprise-wide language. *Product* in Catalog and *Product* in Inventory are different concepts with different definitions — and that is correct, not a bug. The boundary is the place where the meaning changes; that is the whole point of the boundary.\n\nThe artefact at the end of step 8 is, for each context, a one-page glossary of terms with one-sentence definitions. That glossary becomes the source of truth for naming in code, in PR reviews, and in conversation with the business. If a developer ever needs to say \"in the code we call this X but the business calls it Y,\" the ubiquitous language has failed and step 8 needs to be redone.",
+          "th": ""
+        },
+        "tooltipRefs": ["ubiquitous-language"]
+      },
+      {
+        "id": "step-9-validate-scenarios",
+        "type": "flow",
+        "title": { "en": "Step 9 — Validate with Business Scenarios", "th": "" },
+        "content": {
+          "en": "The first eight steps produce a model on paper. Step 9 is where you find out whether the model survives contact with reality. The technique is to take real business scenarios — both the happy path and every unusual case the domain experts can remember — and replay them end-to-end through the model. Where the model bends, refactor it; where the model breaks, redesign it. Either way, do it before writing code.",
+          "th": ""
+        },
+        "diagram": {
+          "type": "mermaid",
+          "source": "flowchart LR\n  S1[1. Collect<br/>real scenarios] --> S2[2. Replay through<br/>the model]\n  S2 --> S3[3. Locate<br/>breakage]\n  S3 --> S4[4. Refactor<br/>aggregates or<br/>boundaries]\n  S4 --> S5[5. Re-validate<br/>with domain<br/>experts]\n  style S1 fill:#f59e0b,stroke:#b45309,color:#fff\n  style S3 fill:#fb7185,stroke:#e11d48,color:#fff\n  style S5 fill:#14b8a6,stroke:#0f766e,color:#fff"
+        },
+        "steps": [
+          { "label": { "en": "1. Collect real scenarios", "th": "" }, "body": { "en": "Ask the domain experts for the last three weird customer cases, the last hotfix in production, and the rules nobody has written down. Each one is a scenario.", "th": "" } },
+          { "label": { "en": "2. Replay through the model", "th": "" }, "body": { "en": "Walk each scenario through the model: actor issues command → aggregate enforces invariants → event is published → policies react. Trace the path step by step.", "th": "" } },
+          { "label": { "en": "3. Locate breakage", "th": "" }, "body": { "en": "A scenario breaks when the model has no way to express it, or when expressing it requires reaching across an aggregate or context boundary. That is the bug — the model, not the scenario.", "th": "" } },
+          { "label": { "en": "4. Refactor aggregates or boundaries", "th": "" }, "body": { "en": "Adjust the model: split an aggregate that is doing too much, move a piece of behaviour to a different context, add a missing domain event, rename a term that confuses the room.", "th": "" } },
+          { "label": { "en": "5. Re-validate with domain experts", "th": "" }, "body": { "en": "Replay the same scenarios after the fix. When the experts agree the model expresses every scenario cleanly, the model is ready for code. Until then, you are not done.", "th": "" } }
+        ]
+      },
+      {
+        "id": "common-mistakes",
+        "type": "callout",
+        "variant": "warning",
+        "title": { "en": "Common Mistakes to Avoid", "th": "" },
+        "content": {
+          "en": "Five recurring failure modes show up when teams try to walk this nine-step path. All five are reversible if caught early — and all five are very expensive if shipped into code.\n\n**Mistake 1 — Treating every orange sticky as a Domain Event.** Not every past-tense sentence on the wall belongs in the model. Technical events (*Row Inserted*, *Cache Invalidated*), UI events (*Button Clicked*), and operator events (*Report Generated*) are not domain events. Filter ruthlessly in step 1; keep only the facts the business itself cares about.\n\n**Mistake 2 — Drawing bounded contexts before understanding the language.** If you jump from step 4 (clustering) straight to drawing context boundaries without listening to the words on the wall, you end up grouping by team org chart or by data ownership — neither of which is the right seam. The boundary is *linguistic*. Wait for step 8's worth of evidence before committing.\n\n**Mistake 3 — Confusing policy with domain service.** A policy is the rule (*\"when X → do Y\"*); a domain service is the code that implements the rule when no single aggregate owns it. Many policies belong as methods on an aggregate, not as standalone services. The default should be \"on the aggregate\" — promote to a domain service only when the rule genuinely spans multiple aggregates.\n\n**Mistake 4 — Building one big aggregate to avoid eventual consistency.** Teams who fear eventual consistency lump *Order* + *Customer* + *Inventory* + *Payment* into one giant aggregate so everything stays transactionally consistent. This produces a god object that locks half the database, scales badly, and is impossible to evolve. Vernon's rule: prefer small aggregates, coordinate via domain events.\n\n**Mistake 5 — Skipping validation with real scenarios.** A model that has not been replayed against real business scenarios is not validated; it is decorated. The nine steps are not done until step 9 has been run with the domain experts in the room. The cost of catching a model bug at step 9 is an afternoon. The cost of catching it after launch is a quarter.",
+          "th": ""
+        }
       }
     ]
   }
