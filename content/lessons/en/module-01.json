@@ -2,14 +2,14 @@
   "module": {
     "id": "module-01",
     "number": 1,
-    "title": { "en": "Introduction to Domain-Driven Design", "th": "" },
+    "title": { "en": "Introduction to Domain-Driven Design", "th": "บทนำสู่ Domain-Driven Design" },
     "estimatedMinutes": 20,
     "sections": [
       {
         "id": "intro",
         "type": "text",
-        "title": { "en": "Introduction", "th": "" },
-        "content": { "en": "TBD — populated in DRE-18..24", "th": "" }
+        "title": { "en": "Introduction", "th": "บทนำ" },
+        "content": { "en": "TBD — populated in DRE-18..24", "th": "TBD — เนื้อหาจะเพิ่มใน DRE-18..24" }
       }
     ]
   }
