@@ -2,14 +2,269 @@
   "module": {
     "id": "module-03",
     "number": 3,
-    "title": { "en": "Tactical Design: Building Blocks", "th": "การออกแบบเชิงยุทธวิธี: Building Blocks" },
-    "estimatedMinutes": 30,
+    "title": { "en": "Event Storming: Discovering the Domain on a Wall", "th": "Event Storming: ค้นพบโดเมนบนผนัง" },
+    "estimatedMinutes": 35,
     "sections": [
       {
-        "id": "intro",
+        "id": "what-is-event-storming",
         "type": "text",
-        "title": { "en": "Introduction", "th": "บทนำ" },
-        "content": { "en": "TBD — populated in DRE-18..24", "th": "" }
+        "title": { "en": "What is Event Storming?", "th": "Event Storming คืออะไร?" },
+        "content": {
+          "en": "**Event Storming** is a workshop technique for rapidly exploring a complex business domain by putting *domain events* — things that happened and matter to the business — at the centre of the conversation. It was invented by Alberto Brandolini around 2012–2013, first published on his blog in 2013, and formalised in the Leanpub book *Introducing EventStorming*. Martin Fowler later summarised it in 2017 as \"a workshop format for quickly exploring complex business domains.\"\n\nThe setup is deliberately low-tech. A long roll of butcher paper — eight metres or more — taped to a wall. A stack of sticky notes in specific colours. Sharpie markers (not ballpoint pens — the text has to be readable from across the room). And a mixed group of people: domain experts who know how the business actually works, developers who will build the system, and a facilitator whose job is to keep the wall moving.\n\nThe central rule is that everything starts with **events written in the past tense**: *Order Placed*, *Payment Authorized*, *Item Added to Cart*. Not *Place Order* (that is a command — a request, not a fact). Not *Order Processing* (that is a state, not a thing that happened). Past tense forces participants to describe what the business actually does, not what they wish it did. Brandolini's insight is that past-tense facts are the easiest thing for a mixed room of business and engineers to agree on. Two domain experts may disagree about *how* something should work, but they rarely disagree about whether *Order Placed* is a real event in their business.\n\nThe name combines \"Event\" (the modelling artefact) and \"Brainstorming\" (the generative, open-ended spirit). Everyone in the room contributes. There is no presenter; there is no audience. The act of placing a sticky on the wall externalises a tacit assumption so the whole room can challenge it. After a couple of hours, a previously invisible business process is on a wall, sorted in time order, and everyone in the room sees it the same way — usually for the first time.",
+          "th": "**Event Storming** คือเทคนิค workshop สำหรับสำรวจโดเมนธุรกิจที่ซับซ้อนอย่างรวดเร็ว โดยวาง *domain event* สิ่งที่เกิดขึ้นและมีความหมายต่อธุรกิจไว้ที่ศูนย์กลางของการสนทนา คิดค้นโดย Alberto Brandolini ราวปี 2012–2013 เผยแพร่ครั้งแรกบน blog ของเขาในปี 2013 และเป็นทางการในหนังสือ Leanpub *Introducing EventStorming* Martin Fowler สรุปมันในปี 2017 ว่าคือ \"รูปแบบ workshop สำหรับสำรวจโดเมนธุรกิจที่ซับซ้อนอย่างรวดเร็ว\"\n\nการตั้งค่าเจตนาให้เรียบง่าย กระดาษ butcher paper roll ยาวอย่างน้อยแปดเมตรติดผนัง sticky note หลายสี ปากกา Sharpie (ไม่ใช่ปากกาลูกลื่น ข้อความต้องอ่านได้จากฝั่งตรงข้ามห้อง) และกลุ่มคนที่หลากหลาย: ผู้เชี่ยวชาญโดเมนที่รู้ว่าธุรกิจทำงานอย่างไรจริงๆ นักพัฒนาที่จะสร้างระบบ และ facilitator ที่หน้าที่ทำให้ผนังเดินหน้า\n\nกฎหลักคือทุกอย่างเริ่มด้วย **event ที่เขียนในอดีตกาล**: *Order Placed*, *Payment Authorized*, *Item Added to Cart* ไม่ใช่ *Place Order* (นั่นคือ command คือการร้องขอ ไม่ใช่ข้อเท็จจริง) ไม่ใช่ *Order Processing* (นั่นคือสถานะ ไม่ใช่สิ่งที่เกิดขึ้น) อดีตกาลบังคับให้ผู้เข้าร่วมอธิบายสิ่งที่ธุรกิจทำจริงๆ ไม่ใช่สิ่งที่พวกเขาอยากให้มันทำ\n\nชื่อรวม \"Event\" (สิ่งที่ใช้สร้างโมเดล) กับ \"Brainstorming\" (จิตวิญญาณการสร้างแบบเปิด) ทุกคนในห้องมีส่วนร่วม ไม่มีผู้นำเสนอ ไม่มีผู้ชม การวาง sticky บนผนังทำให้สมมติฐานที่ซ่อนอยู่ปรากฏออกมาให้ทั้งห้องท้าทาย หลังจากสองสามชั่วโมง กระบวนการธุรกิจที่มองไม่เห็นก่อนหน้านี้ปรากฏบนผนัง เรียงตามลำดับเวลา และทุกคนในห้องเห็นภาพเดียวกัน"
+        },
+        "tooltipRefs": ["event-storming", "domain-event"]
+      },
+      {
+        "id": "why-teams-use-es",
+        "type": "callout",
+        "title": { "en": "Why Teams Use Event Storming", "th": "ทำไมทีมถึงใช้ Event Storming" },
+        "content": {
+          "en": "Most software fails because the team built the wrong thing — not because the code was bad. The wrong thing is usually built because the people writing the code never quite understood the business, and the people who understood the business never quite saw what was being built.\n\nEvent Storming solves this by being the **fastest known way** to surface tacit, tribal knowledge from a mixed group of stakeholders. Critical business rules live in the heads of a handful of senior domain experts — undocumented, contradicted by what the software actually implements, and impossible to extract through interviews because the experts themselves don't know which parts are non-obvious. A workshop, by contrast, forces contradictions into the open: when two domain experts place conflicting events on the wall, the conflict is visible and cannot be dismissed as a misunderstanding.\n\nThe physical sticky-note medium is not nostalgia. Moving a sticky costs nothing, which lowers the barrier to challenging a placement, which lowers the barrier to disagreement. Ten people can place stickies simultaneously — in a meeting, only one person talks at a time. Colour becomes a shared visual grammar that an experienced practitioner can parse at a glance. And the unlimited modelling space — eight metres of paper, no scroll bar — lets the whole flow live in everyone's peripheral vision at once.\n\nThe outputs are concrete: a timeline of domain events, a list of pink **hotspots** (problems, conflicts, open questions) that becomes a prioritised backlog, and — at the deeper levels — a sketch of commands, policies, read models, and aggregates that maps almost directly onto Domain-Driven Design building blocks.",
+          "th": "ซอฟต์แวร์ส่วนใหญ่ล้มเหลวเพราะทีมสร้างสิ่งที่ผิด ไม่ใช่เพราะโค้ดแย่ สิ่งที่ผิดมักถูกสร้างเพราะคนที่เขียนโค้ดไม่เคยเข้าใจธุรกิจอย่างแท้จริง และคนที่เข้าใจธุรกิจไม่เคยเห็นว่ากำลังสร้างอะไร\n\nEvent Storming แก้ปัญหานี้โดยเป็น **วิธีที่เร็วที่สุดที่รู้จัก** ในการดึงความรู้ที่ซ่อนอยู่และความรู้ของกลุ่มออกมาจากผู้มีส่วนได้ส่วนเสียที่หลากหลาย กฎธุรกิจที่สำคัญอาศัยอยู่ในหัวของผู้เชี่ยวชาญโดเมนอาวุโสไม่กี่คน ไม่มีเอกสาร ขัดแย้งกับสิ่งที่ซอฟต์แวร์ implement จริง และไม่สามารถดึงออกมาผ่านการสัมภาษณ์ได้ workshop ในทางตรงข้ามบังคับให้ความขัดแย้งปรากฏออกมา\n\nสื่อ sticky note ทางกายภาพไม่ใช่ความคิดถึงอดีต การย้าย sticky ไม่มีต้นทุน ลดอุปสรรคในการท้าทายการวางตำแหน่ง สิบคนสามารถวาง sticky พร้อมกันได้ ในการประชุมมีคนพูดได้ครั้งละคนเท่านั้น สีกลายเป็น visual grammar ร่วมที่ผู้ฝึกปฏิบัติที่มีประสบการณ์แยกแยะได้ทันที\n\nผลลัพธ์มีความเป็นรูปธรรม: timeline ของ domain event รายการ **hotspot** สีชมพู (ปัญหา ความขัดแย้ง คำถามที่ยังไม่ตอบ) ที่กลายเป็น backlog ที่จัดลำดับความสำคัญ และในระดับที่ลึกกว่า ร่าง command, policy, read model และ aggregate ที่แมปได้เกือบตรงกับ DDD building block"
+        }
+      },
+      {
+        "id": "sticky-note-colors",
+        "type": "infographic",
+        "title": { "en": "Sticky Note Color Guide", "th": "คู่มือสีของ Sticky Note" },
+        "content": {
+          "en": "Brandolini's colour conventions are now a de-facto industry standard. The exact colours matter because they create a visual grammar readable at a glance — an experienced facilitator can scan a wall and immediately identify flow, causation, automation, and risk. Memorise the eight colours below; you will see them in every Event Storming session for the rest of your career.",
+          "th": "ระบบสีของ Brandolini กลายเป็นมาตรฐานอุตสาหกรรมโดยพฤตินัย สีที่แน่นอนมีความสำคัญเพราะสร้าง visual grammar ที่อ่านได้ทันที ผู้ฝึกปฏิบัติที่มีประสบการณ์สามารถสแกนผนังและระบุ flow, causation, automation และความเสี่ยงได้ทันที จำแปดสีด้านล่างไว้ คุณจะเห็นพวกมันในทุก session Event Storming ตลอดอาชีพ"
+        },
+        "items": [
+          {
+            "icon": "🟧",
+            "label": { "en": "Orange — Domain Event", "th": "ส้ม — Domain Event" },
+            "body": { "en": "Something relevant that happened in the past. Always written in past tense. The atomic unit of Event Storming and the only colour used in the first phase. Examples: *Order Placed*, *Payment Authorized*, *Item Added to Cart*.", "th": "สิ่งที่เกิดขึ้นในอดีตและมีความสำคัญ เขียนในอดีตกาลเสมอ หน่วยพื้นฐานของ Event Storming และสีเดียวที่ใช้ในช่วงแรก ตัวอย่าง: *Order Placed*, *Payment Authorized*, *Item Added to Cart*" }
+          },
+          {
+            "icon": "🟦",
+            "label": { "en": "Blue — Command", "th": "น้ำเงิน — Command" },
+            "body": { "en": "An intention or request that, if accepted by an aggregate, produces a Domain Event. Written in imperative form. Commands can be rejected; events cannot be undone. Examples: *Place Order*, *Authorize Payment*, *Add Item to Cart*.", "th": "เจตนาหรือการร้องขอที่ถ้า aggregate ยอมรับจะผลิต Domain Event เขียนในรูป imperative Command ถูกปฏิเสธได้ event ยกเลิกไม่ได้ ตัวอย่าง: *Place Order*, *Authorize Payment*, *Add Item to Cart*" }
+          },
+          {
+            "icon": "🟨",
+            "label": { "en": "Yellow (small) — Actor", "th": "เหลือง (เล็ก) — Actor" },
+            "body": { "en": "The person or role issuing a command. A role, not an individual — one human can play many roles in different flows. Answers \"who decides to issue this command?\" Examples: *Customer*, *Warehouse Operator*, *Fraud Analyst*.", "th": "บุคคลหรือบทบาทที่ออก command เป็นบทบาท ไม่ใช่บุคคล คนคนเดียวสามารถเล่นหลายบทบาทใน flow ที่ต่างกัน ตอบคำถาม \"ใครตัดสินใจออก command นี้?\" ตัวอย่าง: *Customer*, *Warehouse Operator*, *Fraud Analyst*" }
+          },
+          {
+            "icon": "🟪",
+            "label": { "en": "Purple — Policy", "th": "ม่วง — Policy" },
+            "body": { "en": "A reactive rule of the form \"whenever event X happens, issue command Y.\" Policies are the invisible glue of most businesses — they encode rules that are widely known but rarely written down. In code, a policy often becomes a saga or process manager.", "th": "กฎปฏิกิริยาในรูป \"เมื่อ event X เกิดขึ้น ออก command Y\" Policy คือกาวที่มองไม่เห็นของธุรกิจส่วนใหญ่ เข้ารหัสกฎที่รู้กันดีแต่แทบไม่เขียนลง ในโค้ด policy มักกลายเป็น saga หรือ process manager" }
+          },
+          {
+            "icon": "🟥",
+            "label": { "en": "Pink — Hotspot", "th": "ชมพู — Hotspot" },
+            "body": { "en": "A problem, conflict, open question, or pain point. The highest-value stickies in Big Picture sessions. Brandolini's rule: \"If there are no hotspots, you are not doing it right.\" After the session, hotspot density is a prioritisation map.", "th": "ปัญหา ความขัดแย้ง คำถามที่ยังไม่ตอบ หรือจุดเจ็บปวด sticky ที่มีคุณค่าสูงที่สุดใน Big Picture session กฎของ Brandolini: \"ถ้าไม่มี hotspot คุณทำไม่ถูก\" หลัง session ความหนาแน่นของ hotspot คือแผนที่ลำดับความสำคัญ" }
+          },
+          {
+            "icon": "🟩",
+            "label": { "en": "Green — Read Model", "th": "เขียว — Read Model" },
+            "body": { "en": "The information an actor needs in order to decide to issue a command — the data visible on a screen. Maps naturally to the Query side of CQRS. Examples: *Cart Summary*, *Order History*, *Available Inventory*.", "th": "ข้อมูลที่ actor ต้องการเพื่อตัดสินใจออก command ข้อมูลที่มองเห็นบนหน้าจอ แมปได้ตามธรรมชาติกับฝั่ง Query ของ CQRS ตัวอย่าง: *Cart Summary*, *Order History*, *Available Inventory*" }
+          },
+          {
+            "icon": "🟡",
+            "label": { "en": "Yellow (large) — External System", "th": "เหลือง (ใหญ่) — External System" },
+            "body": { "en": "A system outside the modelled domain that emits or consumes events. Identifying these early forces a conversation about integration contracts and is the first step toward Anti-Corruption Layers. Examples: *Stripe*, *Shipping Carrier API*, *Tax Service*.", "th": "ระบบภายนอกโดเมนที่สร้างโมเดลที่ emit หรือบริโภค event การระบุพวกนี้แต่เนิ่นๆ บังคับให้มีการสนทนาเกี่ยวกับ integration contract และเป็นก้าวแรกสู่ Anti-Corruption Layer ตัวอย่าง: *Stripe*, *Shipping Carrier API*, *Tax Service*" }
+          },
+          {
+            "icon": "⬜",
+            "label": { "en": "White — Aggregate", "th": "ขาว — Aggregate" },
+            "body": { "en": "A cluster of objects treated as a single consistency unit. Appears only at Design Level. Receives commands, emits events, enforces invariants. Examples: *Order*, *Cart*, *Inventory Item*, *Payment*.", "th": "กลุ่ม object ที่ถือเป็นหน่วยความสอดคล้องเดียว ปรากฏเฉพาะที่ Design Level รับ command emit event บังคับ invariant ตัวอย่าง: *Order*, *Cart*, *Inventory Item*, *Payment*" }
+          }
+        ]
+      },
+      {
+        "id": "three-levels",
+        "type": "comparison",
+        "title": { "en": "Three Levels of Event Storming", "th": "สามระดับของ Event Storming" },
+        "content": {
+          "en": "Brandolini defines three progressively zoomed-in formats of Event Storming. All three use the same notation (sticky note colours and conventions), but differ in scope, participant set, output artefacts, and duration. Most teams start with Big Picture for a half-day, move to Process Level when one slice needs deeper attention, and reach Design Level only when they are ready to write code.",
+          "th": "Brandolini กำหนดสามรูปแบบของ Event Storming ที่ zoom เข้าไปเรื่อยๆ ทั้งสามใช้สัญลักษณ์เดียวกัน (สีและแบบแผน sticky note) แต่ต่างกันในขอบเขต ผู้เข้าร่วม ผลลัพธ์ และระยะเวลา ทีมส่วนใหญ่เริ่มด้วย Big Picture ครึ่งวัน ย้ายไป Process Level เมื่อส่วนหนึ่งต้องการความสนใจลึกกว่า และถึง Design Level เมื่อพร้อมจะเขียนโค้ด"
+        },
+        "left": {
+          "heading": { "en": "Big Picture", "th": "Big Picture" },
+          "items": [
+            { "en": "**Scope:** the entire business — every domain event across the company on one wall.", "th": "**ขอบเขต:** ธุรกิจทั้งหมด ทุก domain event ของบริษัทบนผนังเดียว" },
+            { "en": "**Duration:** 2–4 hours, half-day format.", "th": "**ระยะเวลา:** 2–4 ชั่วโมง รูปแบบครึ่งวัน" },
+            { "en": "**Audience:** whole organisation — executives, domain experts, all development teams.", "th": "**ผู้เข้าร่วม:** ทั้งองค์กร ผู้บริหาร ผู้เชี่ยวชาญโดเมน ทุกทีมพัฒนา" },
+            { "en": "**Output:** a left-to-right event timeline, pink hotspots, and candidate subdomain boundaries.", "th": "**ผลลัพธ์:** event timeline จากซ้ายไปขวา hotspot สีชมพู และ subdomain boundary ที่เป็นตัวเลือก" },
+            { "en": "**Use it to:** build shared understanding, surface conflicts, find pivotal events that mark context seams.", "th": "**ใช้สำหรับ:** สร้างความเข้าใจร่วมกัน ดึงความขัดแย้งขึ้นมา หาเหตุการณ์สำคัญที่ทำเครื่องหมาย seam ของ context" }
+          ]
+        },
+        "right": {
+          "heading": { "en": "Process Level", "th": "Process Level" },
+          "items": [
+            { "en": "**Scope:** one process or value stream (e.g. checkout, returns, onboarding).", "th": "**ขอบเขต:** กระบวนการเดียวหรือ value stream (เช่น checkout, คืนสินค้า, onboarding)" },
+            { "en": "**Duration:** half-day to a full day.", "th": "**ระยะเวลา:** ครึ่งวันถึงเต็มวัน" },
+            { "en": "**Audience:** cross-functional process team.", "th": "**ผู้เข้าร่วม:** ทีมกระบวนการข้ามสายงาน" },
+            { "en": "**Output:** events + commands + policies + actors + read models + external systems for one process.", "th": "**ผลลัพธ์:** event + command + policy + actor + read model + ระบบภายนอกสำหรับกระบวนการเดียว" },
+            { "en": "**Use it to:** make causation explicit, formalise policies that were tacit, identify automation opportunities and read-model needs.", "th": "**ใช้สำหรับ:** ทำ causation ให้ชัดเจน ทำ policy ที่ซ่อนอยู่ให้เป็นทางการ ระบุโอกาสอัตโนมัติและความต้องการ read model" }
+          ]
+        }
+      },
+      {
+        "id": "running-a-session",
+        "type": "flow",
+        "title": { "en": "Running an Event Storming Session", "th": "การรัน Event Storming Session" },
+        "content": {
+          "en": "A typical Big Picture session takes a half-day and produces immediate value. The ten steps below describe Brandolini's canonical facilitation pattern. Steps are not rigid — a confident facilitator adapts pace and emphasis to the room — but the order matters: events first, structure later.",
+          "th": "Big Picture session ทั่วไปใช้เวลาครึ่งวันและผลิตคุณค่าทันที สิบขั้นตอนด้านล่างอธิบายรูปแบบ facilitation มาตรฐานของ Brandolini ขั้นตอนไม่ตายตัว facilitator ที่มั่นใจปรับความเร็วและความเน้นตามห้อง แต่ลำดับมีความสำคัญ: event ก่อน โครงสร้างทีหลัง"
+        },
+        "diagram": {
+          "type": "mermaid",
+          "source": "flowchart LR\n  A[1. Setup wall] --> B[2. Chaotic exploration]\n  B --> C[3. Enforce timeline]\n  C --> D[4. Add actors and commands]\n  D --> E[5. Mark hotspots]\n  E --> F[6. Add policies and read models]\n  F --> G[7. Identify external systems]\n  G --> H[8. Walk the timeline]\n  H --> I[9. Cluster into contexts]\n  I --> J[10. Capture and photograph]\n  style A fill:#f97316,stroke:#c2410c,color:#fff\n  style E fill:#fb7185,stroke:#e11d48,color:#fff\n  style I fill:#6366f1,stroke:#3730a3,color:#fff\n  style J fill:#14b8a6,stroke:#0f766e,color:#fff"
+        },
+        "steps": [
+          {
+            "label": { "en": "1. Set up the wall", "th": "1. ตั้งค่าผนัง" },
+            "body": { "en": "Tape 8+ metres of butcher paper to a long wall. Stock the canonical sticky-note colours and Sharpies. Brief the room: past-tense events only, no discussion of databases or technical implementation.", "th": "ติด butcher paper อย่างน้อย 8 เมตรบนผนังยาว เตรียม sticky note สีมาตรฐานและปากกา Sharpie brief ห้อง: event อดีตกาลเท่านั้น ไม่มีการพูดถึง database หรือการ implement ทางเทคนิค" }
+          },
+          {
+            "label": { "en": "2. Chaotic exploration", "th": "2. การสำรวจแบบ Chaotic" },
+            "body": { "en": "Set a timer for 10–15 minutes. Every participant writes orange events independently — anything they can think of — and sticks them on the wall in any order. The wall fills up quickly with hundreds of events, deliberately unsorted.", "th": "ตั้งนาฬิกา 10–15 นาที ผู้เข้าร่วมทุกคนเขียน event สีส้มอิสระ อะไรก็ได้ที่นึกได้ และติดบนผนังในลำดับใดก็ได้ ผนังเต็มอย่างรวดเร็วด้วย event หลายร้อยอัน โดยเจตนาไม่เรียง" }
+          },
+          {
+            "label": { "en": "3. Enforce the timeline", "th": "3. บังคับ Timeline" },
+            "body": { "en": "Together, sort the events left-to-right in time order. Earliest events go left, latest go right. Duplicates get merged. This is where the first disagreements surface — let them surface; do not smooth them over.", "th": "ช่วยกันเรียง event จากซ้ายไปขวาตามลำดับเวลา event เก่าสุดอยู่ซ้าย ใหม่สุดอยู่ขวา รวม duplicate นี่คือจุดที่ความขัดแย้งแรกปรากฏ ให้ปรากฏ อย่าเกลี่ยมันออก" }
+          },
+          {
+            "label": { "en": "4. Add actors and commands", "th": "4. เพิ่ม Actor และ Command" },
+            "body": { "en": "For each event, ask \"who or what caused this?\" Place a small yellow Actor sticky next to the trigger and a blue Command sticky just before the event. The causation chain starts to become visible.", "th": "สำหรับแต่ละ event ถามว่า \"ใครหรืออะไรเป็นสาเหตุ?\" วาง Actor sticky เหลืองเล็กข้างสิ่งกระตุ้น และ Command sticky น้ำเงินก่อน event causation chain เริ่มมองเห็นได้" }
+          },
+          {
+            "label": { "en": "5. Mark hotspots", "th": "5. ทำเครื่องหมาย Hotspot" },
+            "body": { "en": "Whenever there is disagreement, an unanswered question, or pain in the current process, stick a pink Hotspot sticky. Encourage these — they are the most valuable output. \"If there are no hotspots, you are not doing it right\" (Brandolini).", "th": "ทุกครั้งที่มีความขัดแย้ง คำถามที่ยังไม่ตอบ หรือความเจ็บปวดในกระบวนการปัจจุบัน ติด Hotspot sticky สีชมพู ส่งเสริมสิ่งเหล่านี้ นั่นคือผลลัพธ์ที่มีคุณค่าที่สุด" }
+          },
+          {
+            "label": { "en": "6. Add policies and read models", "th": "6. เพิ่ม Policy และ Read Model" },
+            "body": { "en": "Look for places where an event automatically triggers a command — those are purple Policies (\"whenever X → do Y\"). For each actor decision, ask what information they need to see; that becomes a green Read Model sticky.", "th": "มองหาจุดที่ event กระตุ้น command โดยอัตโนมัติ นั่นคือ Policy สีม่วง (\"เมื่อ X → ทำ Y\") สำหรับการตัดสินใจของ actor แต่ละครั้ง ถามว่าพวกเขาต้องเห็นข้อมูลอะไร นั่นกลายเป็น Read Model sticky สีเขียว" }
+          },
+          {
+            "label": { "en": "7. Identify external systems", "th": "7. ระบุ External System" },
+            "body": { "en": "Place large-yellow External System stickies wherever the flow crosses into a system the team does not control — payment gateways, shipping carriers, tax services. These mark candidate Anti-Corruption Layers in DDD terms.", "th": "วาง External System sticky เหลืองใหญ่ทุกที่ที่ flow ข้ามเข้าสู่ระบบที่ทีมไม่ควบคุม เช่น payment gateway, shipping carrier, tax service สิ่งเหล่านี้ทำเครื่องหมาย Anti-Corruption Layer ในแง่ DDD" }
+          },
+          {
+            "label": { "en": "8. Walk the timeline", "th": "8. เดินผ่าน Timeline" },
+            "body": { "en": "Have one participant narrate the wall end-to-end as a story. Where the story breaks, refines, or reveals contradictions, capture them as new hotspots. This is the strongest validation step.", "th": "ให้ผู้เข้าร่วมคนหนึ่งเล่าเรื่องผนังจากต้นถึงปลาย จุดที่เรื่องราวขาด ปรับแต่ง หรือเผยให้เห็นความขัดแย้ง จับเป็น hotspot ใหม่ นี่คือขั้นตอน validation ที่แข็งแกร่งที่สุด" }
+          },
+          {
+            "label": { "en": "9. Cluster into bounded contexts", "th": "9. จัดกลุ่มเป็น Bounded Context" },
+            "body": { "en": "Look for vocabulary shifts and natural seams in the event flow. Group neighbouring events that share language into candidate Bounded Contexts. Mark pivotal events — events that sit on the boundary between two contexts.", "th": "มองหาการเปลี่ยนคำศัพท์และ seam ตามธรรมชาติใน event flow จัดกลุ่ม event ที่อยู่ใกล้กันที่ใช้ภาษาร่วมกันเป็น Bounded Context ตัวเลือก ทำเครื่องหมาย pivotal event ที่อยู่บนขอบเขตระหว่างสอง context" }
+          },
+          {
+            "label": { "en": "10. Capture and photograph", "th": "10. บันทึกและถ่ายภาพ" },
+            "body": { "en": "Photograph the wall in sections. Transcribe events, hotspots, and candidate contexts into a digital tool. Schedule follow-up Process-Level sessions for high-hotspot areas. The wall itself is disposable; the shared understanding is the deliverable.", "th": "ถ่ายภาพผนังเป็นส่วนๆ ถอดความ event, hotspot และ context ตัวเลือกลงเครื่องมือดิจิทัล นัด Process-Level session ติดตามสำหรับพื้นที่ hotspot สูง ตัวผนังทิ้งได้ ความเข้าใจร่วมกันคือสิ่งที่ส่งมอบ" }
+          }
+        ]
+      },
+      {
+        "id": "artifacts-explained",
+        "type": "text",
+        "title": { "en": "Event Storming Artifacts Explained", "th": "อธิบาย Artifact ของ Event Storming" },
+        "content": {
+          "en": "Each sticky note element carries specific semantics. Getting the semantics right is what turns a colourful wall into a useful design artefact.\n\n**Domain Event.** A business-meaningful fact recorded in the past tense — *Order Placed*, not *Place Order* or *Order Placing*. The tense is not arbitrary: past tense forces participants to describe things that actually happen. The most common mistake is writing technical events like \"Database Row Inserted\" or \"Cache Invalidated\" — those are implementation details, not domain facts. Domain Events appear at all three levels; at Big Picture they are deliberately vague and numerous, at Design Level they are precise and carry a defined payload.\n\n**Command.** An intention that, if accepted by an aggregate, produces a Domain Event. Commands can be **rejected** — if a customer tries to place an order with an out-of-stock item, the *Place Order* command may be refused. That is the key distinction from events, which cannot be undone: an event is a historical fact, a command is a request.\n\n**Policy.** A reactive rule of the form \"whenever event X happens, do Y.\" Policies are the invisible glue of most businesses — they encode rules that are widely known but rarely written down. Event Storming reliably surfaces them because placing an event on the wall and asking \"so what happens next?\" usually elicits a policy response. In code, a policy often becomes a saga, a process manager, or a scheduled job.\n\n**Actor.** A role — a category of person — not an individual. One human can play multiple roles: the same person might act as a *Customer* in one flow and an *Administrator* in another. At Design Level, actors are sometimes replaced by policies (when the decision is automated) or by external systems (when the trigger is outside the domain).\n\n**External System.** Any system outside the boundary of the domain being modelled. External systems force an important conversation: what is the integration contract? Does the domain own the data format, or does the external system dictate it? Mapping external systems is the first step toward identifying Anti-Corruption Layers and Open Host Services in DDD context-mapping terms.\n\n**Read Model.** The information an actor needs to make a decision before issuing a command. The *Cart Summary* a customer sees before clicking *Place Order* is a Read Model. Read Models map naturally to the Query side of CQRS architectures: they are projections of Domain Events onto a form useful for decision-making.\n\n**Hotspot.** The most operationally valuable sticky in a Big Picture session. Pink stickies mark questions nobody can answer, conflicts between two domain experts, pain points in the current process, and risks. A hotspot does **not** mean something is broken — it means it deserves a conversation. Brandolini: \"If there are no hotspots, you are not doing it right.\"\n\n**Aggregate.** Appears only at Design Level. A cluster of Domain Objects treated as a consistency unit. Identified by grouping commands and events: a command received by an aggregate produces an event emitted by that aggregate. The aggregate's name is often the most stable part of the Ubiquitous Language.",
+          "th": "แต่ละ sticky note element มี semantic เฉพาะ การทำให้ semantic ถูกต้องคือสิ่งที่เปลี่ยนผนังสีสันเป็น design artefact ที่มีประโยชน์\n\n**Domain Event** ข้อเท็จจริงที่มีความหมายทางธุรกิจที่บันทึกในอดีตกาล *Order Placed* ไม่ใช่ *Place Order* กาลไม่ใช่ความบังเอิญ ความผิดพลาดที่พบบ่อยที่สุดคือการเขียน technical event เช่น \"Database Row Inserted\" หรือ \"Cache Invalidated\" นั่นคือรายละเอียดการ implement ไม่ใช่ข้อเท็จจริงของโดเมน\n\n**Command** เจตนาที่ถ้า aggregate ยอมรับจะผลิต Domain Event Command สามารถ **ถูกปฏิเสธ** ได้ ถ้าลูกค้าพยายามสั่งซื้อสินค้าที่หมดสต็อก command *Place Order* อาจถูกปฏิเสธ\n\n**Policy** กฎปฏิกิริยาในรูป \"เมื่อ event X เกิดขึ้น ทำ Y\" Policy คือกาวที่มองไม่เห็นของธุรกิจส่วนใหญ่ Event Storming ดึงพวกมันออกมาอย่างน่าเชื่อถือ\n\n**Actor** บทบาท ไม่ใช่บุคคล คนคนเดียวสามารถเล่นหลายบทบาท คนเดียวกันอาจทำหน้าที่เป็น *Customer* ใน flow หนึ่งและ *Administrator* ในอีก flow หนึ่ง\n\n**External System** ระบบใดก็ตามนอกขอบเขตของโดเมนที่สร้างโมเดล\n\n**Read Model** ข้อมูลที่ actor ต้องการเพื่อตัดสินใจก่อนออก command แมปได้ตามธรรมชาติกับฝั่ง Query ของ CQRS\n\n**Hotspot** sticky ที่มีคุณค่าในการดำเนินงานสูงที่สุดใน Big Picture session ไม่ได้หมายความว่าสิ่งนั้นเสีย แต่หมายความว่าสมควรได้รับการสนทนา\n\n**Aggregate** ปรากฏเฉพาะที่ Design Level กลุ่ม Domain Object ที่ถือเป็นหน่วยความสอดคล้อง ระบุโดยการจัดกลุ่ม command และ event"
+        },
+        "tooltipRefs": ["domain-event", "command", "policy", "actor", "external-system", "read-model", "aggregate"]
+      },
+      {
+        "id": "es-board-example",
+        "type": "es-board",
+        "title": { "en": "E-Commerce ES Board Example", "th": "ตัวอย่าง ES Board E-Commerce" },
+        "content": {
+          "en": "A Design-Level slice of an e-commerce checkout flow. Read left-to-right: the **Customer** lane begins the flow by viewing a cart and starting checkout; **Checkout** validates the address and creates the order; **Inventory** reserves stock; **Payment** authorises the card via Stripe. Pivotal event *Order Placed* (between Checkout and Inventory) marks the seam between the Sales and Fulfilment bounded contexts. The pink hotspot in the Inventory lane captures an unresolved business question.",
+          "th": "ส่วน Design-Level ของ checkout flow ใน e-commerce อ่านจากซ้ายไปขวา: lane **Customer** เริ่ม flow ด้วยการดู cart และเริ่ม checkout; **Checkout** ตรวจสอบที่อยู่และสร้างคำสั่งซื้อ; **Inventory** จองสต็อก; **Payment** อนุมัติบัตรผ่าน Stripe Pivotal event *Order Placed* (ระหว่าง Checkout และ Inventory) ทำเครื่องหมาย seam ระหว่าง Sales และ Fulfilment bounded context hotspot สีชมพูใน lane Inventory บันทึกคำถามธุรกิจที่ยังไม่ได้รับการแก้ไข"
+        },
+        "diagram": {
+          "type": "es-board",
+          "source": "lanes-rendered-inline"
+        },
+        "lanes": [
+          {
+            "id": "customer",
+            "label": { "en": "Customer", "th": "Customer" },
+            "items": [
+              { "type": "actor",     "text": { "en": "Customer",            "th": "Customer" } },
+              { "type": "readmodel", "text": { "en": "Cart Summary",        "th": "Cart Summary" } },
+              { "type": "command",   "text": { "en": "Review Cart",         "th": "Review Cart" } },
+              { "type": "event",     "text": { "en": "Cart Reviewed",       "th": "Cart Reviewed" } },
+              { "type": "command",   "text": { "en": "Start Checkout",      "th": "Start Checkout" } },
+              { "type": "event",     "text": { "en": "Checkout Started",    "th": "Checkout Started" } }
+            ]
+          },
+          {
+            "id": "checkout",
+            "label": { "en": "Checkout", "th": "Checkout" },
+            "items": [
+              { "type": "aggregate", "text": { "en": "Order",                "th": "Order" } },
+              { "type": "command",   "text": { "en": "Validate Address",     "th": "Validate Address" } },
+              { "type": "event",     "text": { "en": "Address Validated",    "th": "Address Validated" } },
+              { "type": "policy",    "text": { "en": "When Payment Authorized → Place Order", "th": "เมื่อ Payment Authorized → Place Order" } },
+              { "type": "command",   "text": { "en": "Place Order",          "th": "Place Order" } },
+              { "type": "event",     "text": { "en": "Order Placed",         "th": "Order Placed" } }
+            ]
+          },
+          {
+            "id": "inventory",
+            "label": { "en": "Inventory", "th": "Inventory" },
+            "items": [
+              { "type": "aggregate", "text": { "en": "Inventory Item",       "th": "Inventory Item" } },
+              { "type": "policy",    "text": { "en": "When Order Placed → Reserve Inventory", "th": "เมื่อ Order Placed → Reserve Inventory" } },
+              { "type": "command",   "text": { "en": "Reserve Inventory",    "th": "Reserve Inventory" } },
+              { "type": "event",     "text": { "en": "Inventory Reserved",   "th": "Inventory Reserved" } },
+              { "type": "hotspot",   "text": { "en": "Partial stock? Split shipment or cancel?", "th": "สต็อกบางส่วน? แยกจัดส่งหรือยกเลิก?" } }
+            ]
+          },
+          {
+            "id": "payment",
+            "label": { "en": "Payment", "th": "Payment" },
+            "items": [
+              { "type": "aggregate", "text": { "en": "Payment",              "th": "Payment" } },
+              { "type": "command",   "text": { "en": "Authorize Payment",    "th": "Authorize Payment" } },
+              { "type": "external",  "text": { "en": "Stripe",               "th": "Stripe" } },
+              { "type": "event",     "text": { "en": "Payment Authorized",   "th": "Payment Authorized" } },
+              { "type": "readmodel", "text": { "en": "Order Confirmation",   "th": "Order Confirmation" } }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "es-to-bounded-contexts",
+        "type": "flow",
+        "title": { "en": "How Event Storming Leads to Bounded Contexts", "th": "Event Storming นำไปสู่ Bounded Context อย่างไร" },
+        "content": {
+          "en": "Event Storming is not just a discovery activity — its outputs feed directly into Domain-Driven Design. The wall of events, commands, and policies becomes the raw material from which Bounded Contexts are drawn, ubiquitous languages are extracted, and aggregates are identified. The five steps below trace the path from a finished Big Picture wall to a DDD context map.",
+          "th": "Event Storming ไม่ใช่แค่กิจกรรมค้นพบ ผลลัพธ์ของมันป้อน input โดยตรงเข้าสู่ Domain-Driven Design ผนังของ event, command และ policy กลายเป็นวัตถุดิบที่ Bounded Context ถูกวาด ubiquitous language ถูกดึงออก และ aggregate ถูกระบุ ห้าขั้นตอนด้านล่างติดตามเส้นทางจาก Big Picture wall ที่สำเร็จไปยัง DDD context map"
+        },
+        "diagram": {
+          "type": "mermaid",
+          "source": "flowchart LR\n  ES[Event Storming wall<br/>events, commands, policies] --> V[Listen for<br/>vocabulary shifts]\n  V --> P[Mark pivotal events<br/>between clusters]\n  P --> BC[Draw bounded<br/>context boundaries]\n  BC --> UL[Lock in ubiquitous<br/>language per context]\n  UL --> AGG[Identify aggregates<br/>from command-event pairs]\n  style ES fill:#f97316,stroke:#c2410c,color:#fff\n  style BC fill:#6366f1,stroke:#3730a3,color:#fff\n  style AGG fill:#14b8a6,stroke:#0f766e,color:#fff"
+        },
+        "steps": [
+          {
+            "label": { "en": "1. Listen for vocabulary shifts", "th": "1. ฟังการเปลี่ยนคำศัพท์" },
+            "body": { "en": "Walk along the timeline and pay attention to the words. If participants notice that *Order* means a cart being built in one part of the wall and a packing list in another, that vocabulary shift is the strongest signal of a context boundary. The same word means different things on either side.", "th": "เดินตาม timeline และสังเกตคำ ถ้าผู้เข้าร่วมสังเกตว่า *Order* หมายถึงตะกร้าที่กำลังสร้างในส่วนหนึ่งของผนังและรายการบรรจุหีบห่อในอีกส่วน การเปลี่ยนคำศัพท์นั้นคือสัญญาณที่แข็งแกร่งที่สุดของขอบเขต context คำเดียวกันมีความหมายต่างกันในแต่ละฝั่ง" }
+          },
+          {
+            "label": { "en": "2. Mark pivotal events", "th": "2. ทำเครื่องหมาย Pivotal Event" },
+            "body": { "en": "A pivotal event is a Domain Event that sits on the seam between two contexts. *Order Placed* is the canonical e-commerce example: everything to the left (Cart, Checkout) belongs to the Sales context; everything to the right (Fulfilment, Shipping, Inventory) belongs to Operations. The event name appears on both sides but the teams who care differ.", "th": "Pivotal event คือ Domain Event ที่อยู่บน seam ระหว่างสอง context *Order Placed* คือตัวอย่างคลาสสิก e-commerce: ทุกอย่างทางซ้าย (Cart, Checkout) อยู่ใน Sales context ทุกอย่างทางขวา (Fulfilment, Shipping, Inventory) อยู่ใน Operations ชื่อ event ปรากฏทั้งสองฝั่งแต่ทีมที่สนใจต่างกัน" }
+          },
+          {
+            "label": { "en": "3. Draw bounded context boundaries", "th": "3. วาดขอบเขต Bounded Context" },
+            "body": { "en": "Group neighbouring events that share vocabulary into candidate Bounded Contexts. Each cluster gets a name (Sales, Fulfilment, Billing, Catalog…). Boundaries are not committed yet — they will move as Process-Level sessions reveal more detail.", "th": "จัดกลุ่ม event ที่อยู่ใกล้กันที่ใช้คำศัพท์ร่วมกันเป็น Bounded Context ตัวเลือก แต่ละกลุ่มได้ชื่อ (Sales, Fulfilment, Billing, Catalog) ขอบเขตยังไม่ถูกกำหนดตายตัว จะเคลื่อนตามที่ Process-Level session เผยให้เห็นรายละเอียดมากขึ้น" }
+          },
+          {
+            "label": { "en": "4. Lock in the ubiquitous language", "th": "4. ล็อค Ubiquitous Language" },
+            "body": { "en": "Inside each candidate context, list the terms used: nouns, verbs, event names. This becomes the seed of that context's Ubiquitous Language. The same real-world concept may have different names in different contexts — and that is correct, not a bug.", "th": "ภายใน context ตัวเลือกแต่ละอัน ระบุคำที่ใช้: คำนาม, กริยา, ชื่อ event กลายเป็นเมล็ดพันธุ์ของ Ubiquitous Language ของ context นั้น แนวคิดเดียวกันในโลกจริงอาจมีชื่อต่างกันใน context ต่างกัน และนั่นถูกต้อง ไม่ใช่บั๊ก" }
+          },
+          {
+            "label": { "en": "5. Identify aggregates from command-event pairs", "th": "5. ระบุ Aggregate จากคู่ Command-Event" },
+            "body": { "en": "At Design Level, every command-event pair points to an aggregate: the command is received by the aggregate, the event is emitted by the aggregate. *Place Order → Order Placed* points to an *Order* aggregate. The white sticky notes from the Design-Level session become candidate aggregate names — and from there, classes in code.", "th": "ที่ Design Level ทุกคู่ command-event ชี้ไปที่ aggregate: command ถูก aggregate รับ event ถูก aggregate emit *Place Order → Order Placed* ชี้ไปที่ *Order* aggregate sticky note ขาวจาก Design-Level session กลายเป็นชื่อ aggregate ตัวเลือก และจากนั้นกลายเป็น class ในโค้ด" }
+          }
+        ],
+        "tooltipRefs": ["bounded-context", "ubiquitous-language", "aggregate"]
       }
     ]
   }

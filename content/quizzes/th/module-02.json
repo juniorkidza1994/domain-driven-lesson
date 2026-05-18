@@ -4,13 +4,89 @@
     {
       "id": "q1",
       "type": "mcq",
-      "question": { "en": "What is a Bounded Context?", "th": "Bounded Context คืออะไร?" },
+      "question": { "en": "Which of the following statements best distinguishes an Entity from a Value Object in DDD?", "th": "ข้อใดต่อไปนี้อธิบายความแตกต่างระหว่าง Entity กับ Value Object ใน DDD ได้ดีที่สุด?" },
       "options": [
-        { "id": "a", "text": { "en": "A boundary within which a domain model is defined and applicable", "th": "ขอบเขตที่ domain model ถูกนิยามและใช้งาน" } },
-        { "id": "b", "text": { "en": "A database schema", "th": "โครงสร้างฐานข้อมูล" } }
+        { "id": "a", "text": { "en": "Entities live in the database; Value Objects live only in memory.", "th": "Entity อยู่ใน database; Value Object อยู่ในหน่วยความจำเท่านั้น" } },
+        { "id": "b", "text": { "en": "Entities are defined by an identity that persists over time; Value Objects are defined entirely by their attributes and have no independent identity.", "th": "Entity ถูกกำหนดด้วย identity ที่คงอยู่ตามเวลา; Value Object ถูกกำหนดทั้งหมดโดย attribute และไม่มี identity เป็นของตัวเอง" } },
+        { "id": "c", "text": { "en": "Entities are mutable and Value Objects are mutable too, but Value Objects must inherit from a base class.", "th": "Entity เปลี่ยนแปลงได้และ Value Object ก็เปลี่ยนแปลงได้เช่นกัน แต่ Value Object ต้อง inherit จาก base class" } },
+        { "id": "d", "text": { "en": "Entities can have methods; Value Objects can only have data fields.", "th": "Entity มี method ได้; Value Object มีได้แค่ data field" } }
       ],
-      "correctOption": "a",
-      "explanation": { "en": "A Bounded Context defines the boundary within which a specific domain model applies and is internally consistent.", "th": "" }
+      "correctOption": "b",
+      "explanation": { "en": "An Entity has a thread of identity that runs through time — two entities with identical attributes are still different if they have different IDs (e.g. two Orders, two Customers). A Value Object has no identity; it is equal to any other Value Object with the same attributes (e.g. two Money(100, 'USD') instances are interchangeable). Value Objects are also immutable, while Entities are mutable.", "th": "Entity มี thread ของ identity ที่วิ่งผ่านเวลา Entity สองอันที่มี attribute เหมือนกันยังต่างกันถ้ามี ID ต่างกัน เช่น สอง Order สอง Customer Value Object ไม่มี identity เท่ากับ Value Object อื่นที่มี attribute เดียวกัน เช่น Money(100, 'USD') สองอันแทนกันได้ Value Object ยัง immutable ในขณะที่ Entity เปลี่ยนแปลงได้" }
+    },
+    {
+      "id": "q2",
+      "type": "true-false",
+      "question": { "en": "A Bounded Context must be deployed as exactly one microservice.", "th": "Bounded Context ต้อง deploy เป็น microservice เดียวเท่านั้น" },
+      "options": [
+        { "id": "true", "text": { "en": "True", "th": "จริง" } },
+        { "id": "false", "text": { "en": "False", "th": "เท็จ" } }
+      ],
+      "correctOption": "false",
+      "explanation": { "en": "False. A Bounded Context is a modeling boundary (linguistic and conceptual) — it defines where a particular domain model and ubiquitous language apply. A microservice is a deployment boundary. A single Bounded Context can be deployed as a monolith, as one service, or as several services. Equating one-to-one with microservices is a common mistake that leads to over-fragmentation and tight coupling between tiny services.", "th": "เท็จ Bounded Context คือขอบเขตการสร้างโมเดล (ทางภาษาและแนวคิด) กำหนดว่า domain model และ ubiquitous language ใดนำมาใช้ที่ไหน Microservice คือขอบเขตการ deploy Bounded Context หนึ่งสามารถ deploy เป็น monolith เป็น service เดียว หรือหลาย service ได้ การเปรียบเทียบ 1:1 กับ microservice เป็นความผิดพลาดที่พบบ่อย" }
+    },
+    {
+      "id": "q3",
+      "type": "mcq",
+      "question": { "en": "What is the role of an Aggregate Root?", "th": "บทบาทของ Aggregate Root คืออะไร?" },
+      "options": [
+        { "id": "a", "text": { "en": "It is the database table that stores the aggregate's data.", "th": "มันคือตาราง database ที่เก็บข้อมูลของ aggregate" } },
+        { "id": "b", "text": { "en": "It is the only object inside an aggregate that external code is allowed to access, and it is responsible for enforcing the aggregate's invariants.", "th": "มันคือ object เดียวภายใน aggregate ที่โค้ดภายนอกได้รับอนุญาตให้เข้าถึง และรับผิดชอบบังคับ invariant ของ aggregate" } },
+        { "id": "c", "text": { "en": "It is a parent class that every entity inside the aggregate must extend.", "th": "มันคือ parent class ที่ทุก entity ภายใน aggregate ต้อง extend" } },
+        { "id": "d", "text": { "en": "It is the first event published by the aggregate when it is created.", "th": "มันคือ event แรกที่ aggregate ประกาศเมื่อถูกสร้าง" } }
+      ],
+      "correctOption": "b",
+      "explanation": { "en": "The Aggregate Root is the single entry point to an aggregate. External code can only modify objects inside the aggregate by going through the root, which is responsible for enforcing the aggregate's invariants (e.g. 'an order with more than 50 items cannot be confirmed'). This protects the consistency of the cluster and makes the root the transactional boundary.", "th": "Aggregate Root คือจุดเข้าเดียวของ aggregate โค้ดภายนอกสามารถแก้ไข object ภายใน aggregate ได้เฉพาะผ่าน root ซึ่งรับผิดชอบบังคับ invariant ของ aggregate เช่น 'คำสั่งซื้อที่มีมากกว่า 50 รายการไม่สามารถยืนยันได้' สิ่งนี้ปกป้องความสอดคล้องของกลุ่มและทำให้ root เป็นขอบเขต transaction" }
+    },
+    {
+      "id": "q4",
+      "type": "mcq",
+      "question": { "en": "Which of the following is a classic Value Object?", "th": "ข้อใดต่อไปนี้คือตัวอย่างคลาสสิกของ Value Object?" },
+      "options": [
+        { "id": "a", "text": { "en": "Customer (with a unique CustomerId)", "th": "Customer (ที่มี CustomerId เฉพาะ)" } },
+        { "id": "b", "text": { "en": "Order (tracked by an OrderId across its state transitions)", "th": "Order (ที่ติดตามด้วย OrderId ตลอดการเปลี่ยนสถานะ)" } },
+        { "id": "c", "text": { "en": "Money (an amount combined with a currency code, e.g. 100 USD)", "th": "Money (จำนวนรวมกับรหัสสกุลเงิน เช่น 100 USD)" } },
+        { "id": "d", "text": { "en": "Shopping Cart (which persists for a logged-in user across sessions)", "th": "Shopping Cart (ที่คงอยู่สำหรับผู้ใช้ที่ login ข้ามหลาย session)" } }
+      ],
+      "correctOption": "c",
+      "explanation": { "en": "Money is the canonical Value Object: it is defined entirely by its attributes (amount + currency), two Money(100, 'USD') instances are equal and interchangeable, and it is immutable — to apply a discount you replace the value with a new one, you do not mutate the original. Customer, Order, and Shopping Cart all have identities that persist over time and are therefore Entities, not Value Objects.", "th": "Money คือตัวอย่างคลาสสิกของ Value Object: ถูกกำหนดทั้งหมดโดย attribute (จำนวน + สกุลเงิน) Money(100, 'USD') สองอันเท่ากันและแทนกันได้ และ immutable เพื่อใช้ส่วนลดคุณแทนที่ด้วยค่าใหม่ ไม่แก้ไขอันเดิม Customer, Order และ Shopping Cart ล้วนมี identity ที่คงอยู่ตามเวลา จึงเป็น Entity ไม่ใช่ Value Object" }
+    },
+    {
+      "id": "q5",
+      "type": "true-false",
+      "question": { "en": "Ubiquitous Language is a single company-wide glossary that every team uses for every term.", "th": "Ubiquitous Language คือ glossary เดียวระดับบริษัทที่ทุกทีมใช้สำหรับทุกคำ" },
+      "options": [
+        { "id": "true", "text": { "en": "True", "th": "จริง" } },
+        { "id": "false", "text": { "en": "False", "th": "เท็จ" } }
+      ],
+      "correctOption": "false",
+      "explanation": { "en": "False. Ubiquitous Language is strictly scoped to a single Bounded Context. The same real-world concept can — and often should — have different names and different meanings in different contexts (e.g. Product in Catalog vs. Product in Inventory vs. Product in Shipping). Trying to create one enterprise-wide canonical language is the well-known 'God Ubiquitous Language' anti-pattern: it collapses under contradictory meanings and produces bloated, anemic shared models.", "th": "เท็จ Ubiquitous Language ขอบเขตเฉพาะถึงหนึ่ง Bounded Context แนวคิดเดียวกันในโลกจริงสามารถและมักควรมีชื่อและความหมายต่างกันในแต่ละ context เช่น Product ใน Catalog กับ Inventory กับ Shipping การพยายามสร้างภาษาที่เป็นมาตรฐานระดับองค์กรเดียวคือ 'God Ubiquitous Language' anti-pattern ที่โด่งดัง" }
+    },
+    {
+      "id": "q6",
+      "type": "mcq",
+      "question": { "en": "When is it appropriate to introduce a Domain Service rather than putting the logic on an Entity or Value Object?", "th": "เมื่อไหร่ที่เหมาะสมจะใช้ Domain Service แทนที่จะวาง logic ไว้บน Entity หรือ Value Object?" },
+      "options": [
+        { "id": "a", "text": { "en": "Whenever the logic involves a database query.", "th": "ทุกครั้งที่ logic มี database query" } },
+        { "id": "b", "text": { "en": "Whenever the team wants the code to look more 'DDD' by adding a service layer.", "th": "ทุกครั้งที่ทีมต้องการให้โค้ดดู 'DDD' มากขึ้นโดยเพิ่ม service layer" } },
+        { "id": "c", "text": { "en": "When the logic is significant domain behavior that spans multiple aggregates and cannot naturally belong to any single Entity or Value Object.", "th": "เมื่อ logic เป็น domain behavior ที่สำคัญที่ครอบคลุมหลาย aggregate และไม่ได้เป็นของ Entity หรือ Value Object ใดเดียวตามธรรมชาติ" } },
+        { "id": "d", "text": { "en": "Whenever the logic needs to send an HTTP request to an external system.", "th": "ทุกครั้งที่ logic ต้องส่ง HTTP request ไปยังระบบภายนอก" } }
+      ],
+      "correctOption": "c",
+      "explanation": { "en": "A Domain Service is for stateless domain logic (a real business decision) that does not naturally fit on a single Entity or Value Object — typically because it requires data from two or more aggregates to compute its result. Pricing across cart + customer tier + promotions is a canonical example. Logic that involves databases, HTTP, or other infrastructure orchestration belongs in an Application Service, not a Domain Service.", "th": "Domain Service สำหรับ stateless domain logic (การตัดสินใจทางธุรกิจจริง) ที่ไม่เหมาะกับ Entity หรือ Value Object เดียวตามธรรมชาติ โดยทั่วไปเพราะต้องการข้อมูลจากสองหรือมากกว่า aggregate ในการคำนวณ การกำหนดราคาข้าม cart + ระดับ customer + โปรโมชันคือตัวอย่างคลาสสิก Logic ที่มี database, HTTP หรือ infrastructure orchestration เป็นของ Application Service ไม่ใช่ Domain Service" }
+    },
+    {
+      "id": "q7",
+      "type": "mcq",
+      "question": { "en": "Which of the following is correctly modeled as a Domain Event?", "th": "ข้อใดต่อไปนี้ถูกสร้างโมเดลอย่างถูกต้องในฐานะ Domain Event?" },
+      "options": [
+        { "id": "a", "text": { "en": "PlaceOrder", "th": "PlaceOrder" } },
+        { "id": "b", "text": { "en": "OrderProcessing", "th": "OrderProcessing" } },
+        { "id": "c", "text": { "en": "OrderPlaced", "th": "OrderPlaced" } },
+        { "id": "d", "text": { "en": "OrderRepository", "th": "OrderRepository" } }
+      ],
+      "correctOption": "c",
+      "explanation": { "en": "Domain Events are immutable facts about something that has already happened, named in the past tense — OrderPlaced, PaymentReceived, ShipmentDispatched. 'PlaceOrder' is a command (a request to do something, imperative tense). 'OrderProcessing' is a state, not a fact. 'OrderRepository' is a tactical pattern, not an event.", "th": "Domain Event คือข้อเท็จจริง immutable เกี่ยวกับสิ่งที่เกิดขึ้นแล้ว ตั้งชื่อในอดีตกาล เช่น OrderPlaced, PaymentReceived, ShipmentDispatched 'PlaceOrder' คือ command (การร้องขอให้ทำบางอย่าง กริยา imperative) 'OrderProcessing' คือสถานะ ไม่ใช่ข้อเท็จจริง 'OrderRepository' คือรูปแบบยุทธวิธี ไม่ใช่ event" }
     }
   ]
 }

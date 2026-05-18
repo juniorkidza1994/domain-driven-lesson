@@ -2,15 +2,112 @@
   "moduleId": "module-05",
   "questions": [
     {
-      "id": "q1",
+      "id": "event-vs-command-difference",
       "type": "mcq",
-      "question": { "en": "What is the core principle of Event-Driven Architecture?", "th": "หลักการสำคัญของ Event-Driven Architecture คืออะไร?" },
+      "question": { "en": "What is the key difference between an Event and a Command?", "th": "ความแตกต่างสำคัญระหว่าง Event และ Command คืออะไร?" },
       "options": [
-        { "id": "a", "text": { "en": "Services communicate by producing and consuming events", "th": "Services สื่อสารกันผ่านการสร้างและรับ events" } },
-        { "id": "b", "text": { "en": "Services share a single database", "th": "Services ใช้ฐานข้อมูลร่วมกัน" } }
+        { "id": "a", "text": { "en": "An event records something that happened; a command requests something to be done", "th": "Event บันทึกสิ่งที่เกิดขึ้น ส่วน command ขอให้ทำบางอย่าง" } },
+        { "id": "b", "text": { "en": "An event is synchronous; a command is asynchronous", "th": "Event เป็น synchronous ส่วน command เป็น asynchronous" } },
+        { "id": "c", "text": { "en": "An event is sent to one consumer; a command is broadcast to many", "th": "Event ส่งไปยัง consumer หนึ่ง ส่วน command กระจายไปหลายตัว" } },
+        { "id": "d", "text": { "en": "An event requires a response; a command does not", "th": "Event ต้องการการตอบสนอง ส่วน command ไม่ต้อง" } }
       ],
       "correctOption": "a",
-      "explanation": { "en": "In EDA, services are decoupled and communicate asynchronously through events.", "th": "" }
+      "explanation": {
+        "en": "Events are past-tense facts (OrderPlaced) that cannot be rejected because they already happened. Commands are imperative requests (PlaceOrder) directed at exactly one handler, and they can be rejected if validation fails. Events fan out to zero or many consumers; commands go to exactly one.",
+        "th": "Event คือข้อเท็จจริงอดีตกาล (OrderPlaced) ที่ปฏิเสธไม่ได้เพราะเกิดขึ้นแล้ว Command คือคำขอ imperative (PlaceOrder) ที่ส่งไปยัง handler เดียวพอดี และสามารถถูกปฏิเสธได้ถ้า validation ล้มเหลว Event fan out ไปยัง zero หรือหลาย consumer ส่วน command ไปยังตัวเดียวพอดี"
+      }
+    },
+    {
+      "id": "domain-vs-integration-same",
+      "type": "true-false",
+      "question": { "en": "A Domain Event and an Integration Event are the same thing and can be used interchangeably.", "th": "Domain Event และ Integration Event เป็นสิ่งเดียวกันและสามารถใช้แทนกันได้" },
+      "options": [
+        { "id": "true", "text": { "en": "True", "th": "จริง" } },
+        { "id": "false", "text": { "en": "False", "th": "เท็จ" } }
+      ],
+      "correctOption": "false",
+      "explanation": {
+        "en": "Domain Events are private to a Bounded Context — they use the internal ubiquitous language and may carry rich internal aggregate data. Integration Events are public contracts published across context boundaries. An Anti-Corruption Layer translates between them. Publishing Domain Events directly across the broker turns internal aggregate fields into remote API contracts that break when the internal model is refactored.",
+        "th": "Domain Event เป็น private สำหรับ Bounded Context ใช้ ubiquitous language ภายในและอาจมีข้อมูล aggregate ภายในที่ละเอียด Integration Event คือสัญญาสาธารณะที่ publish ข้ามขอบเขต context Anti-Corruption Layer แปลระหว่างพวกมัน การ publish Domain Event โดยตรงผ่าน broker เปลี่ยน field aggregate ภายในเป็น remote API contract ที่แตกเมื่อ internal model ถูก refactor"
+      }
+    },
+    {
+      "id": "idempotency-purpose",
+      "type": "mcq",
+      "question": { "en": "What is the purpose of idempotency in event-driven systems?", "th": "จุดประสงค์ของ idempotency ในระบบ event-driven คืออะไร?" },
+      "options": [
+        { "id": "a", "text": { "en": "To ensure processing the same event multiple times produces the same result", "th": "เพื่อให้แน่ใจว่าการประมวลผล event เดียวกันหลายครั้งให้ผลลัพธ์เดิม" } },
+        { "id": "b", "text": { "en": "To speed up event processing by caching results", "th": "เพื่อเร่งการประมวลผล event โดย cache ผลลัพธ์" } },
+        { "id": "c", "text": { "en": "To encrypt events before they are published to the broker", "th": "เพื่อเข้ารหัส event ก่อน publish ไปยัง broker" } },
+        { "id": "d", "text": { "en": "To guarantee that events are delivered in strict order", "th": "เพื่อรับประกันว่า event ส่งตามลำดับที่เข้มงวด" } }
+      ],
+      "correctOption": "a",
+      "explanation": {
+        "en": "Message brokers guarantee at-least-once delivery, meaning consumers will receive duplicate events during crashes, network timeouts, or broker restarts. Idempotent consumers track which eventIds they have already processed and skip duplicates. Without idempotency, duplicate events cause double-charges, double-fulfillment, or double-sends.",
+        "th": "Message broker รับประกัน at-least-once delivery หมายความว่า consumer จะได้รับ event ที่ซ้ำกันในระหว่าง crash, network timeout หรือ broker restart Consumer ที่ idempotent ติดตาม eventId ที่ประมวลผลแล้วและข้ามรายการซ้ำ หากไม่มี idempotency event ที่ซ้ำกันทำให้เรียกเก็บเงินสองเท่า, fulfillment สองเท่า หรือส่งสองเท่า"
+      }
+    },
+    {
+      "id": "dlq-fate",
+      "type": "mcq",
+      "question": { "en": "What happens to events that fail processing after the maximum number of retries is exhausted?", "th": "เกิดอะไรขึ้นกับ event ที่ล้มเหลวในการประมวลผลหลังจากจำนวน retry สูงสุดหมด?" },
+      "options": [
+        { "id": "a", "text": { "en": "They are moved to a Dead Letter Queue for operator investigation", "th": "ถูกย้ายไปยัง Dead Letter Queue สำหรับ operator ตรวจสอบ" } },
+        { "id": "b", "text": { "en": "They are automatically deleted to prevent queue build-up", "th": "ถูกลบอัตโนมัติเพื่อป้องกัน queue สะสม" } },
+        { "id": "c", "text": { "en": "They are resent to the original producer for reprocessing", "th": "ถูกส่งกลับไปยัง producer ต้นฉบับเพื่อประมวลผลใหม่" } },
+        { "id": "d", "text": { "en": "They block all subsequent messages in the topic until resolved", "th": "บล็อกข้อความถัดไปทั้งหมดใน topic จนกว่าจะแก้ไข" } }
+      ],
+      "correctOption": "a",
+      "explanation": {
+        "en": "A Dead Letter Queue (DLQ) is a holding area for events that have exhausted their retry budget. Operators inspect the DLQ to diagnose the root cause, fix the consumer code or data issue, and replay the events when ready. Without a DLQ, poison messages spin in an infinite retry loop or are silently dropped — both are worse than a visible queue of failures.",
+        "th": "Dead Letter Queue (DLQ) คือพื้นที่พักสำหรับ event ที่หมด retry budget Operator ตรวจสอบ DLQ เพื่อวินิจฉัยสาเหตุ แก้โค้ด consumer หรือปัญหาข้อมูล และ replay event เมื่อพร้อม หากไม่มี DLQ ข้อความพิษหมุนในลูป retry ไม่มีที่สิ้นสุดหรือถูกทิ้งอย่างเงียบๆ ทั้งสองแย่กว่า queue ของความล้มเหลวที่มองเห็น"
+      }
+    },
+    {
+      "id": "eventual-consistency-meaning",
+      "type": "true-false",
+      "question": { "en": "In Event-Driven Architecture, eventual consistency means the system will never fully synchronise and data will always be out of date.", "th": "ใน Event-Driven Architecture, eventual consistency หมายความว่าระบบจะไม่ synchronize เต็มที่เลยและข้อมูลจะล้าสมัยเสมอ" },
+      "options": [
+        { "id": "true", "text": { "en": "True", "th": "จริง" } },
+        { "id": "false", "text": { "en": "False", "th": "เท็จ" } }
+      ],
+      "correctOption": "false",
+      "explanation": {
+        "en": "Eventual consistency means the system WILL reach a consistent state — just not instantaneously. After all events are processed, every service converges to the same view. The window of inconsistency is typically milliseconds to seconds. It is a deliberate trade-off for availability and decoupling, not a permanent state of incoherence. UI design should accommodate the processing window rather than trying to eliminate it with synchronous calls.",
+        "th": "Eventual consistency หมายความว่าระบบจะถึงสถานะที่สอดคล้องกัน แค่ไม่ใช่ทันที หลังจากประมวลผล event ทั้งหมด ทุก service convergence ไปยังมุมมองเดียวกัน ช่วงเวลาของความไม่สอดคล้องกันมักเป็นมิลลิวินาทีถึงวินาที เป็นการแลกเปลี่ยนโดยเจตนาเพื่อความพร้อมใช้งานและการแยกออกจากกัน ไม่ใช่สถานะถาวรของความไม่สอดคล้อง การออกแบบ UI ควรรองรับช่วงเวลาประมวลผลแทนที่จะพยายามขจัดมันด้วย synchronous call"
+      }
+    },
+    {
+      "id": "event-versioning-breaking-change",
+      "type": "mcq",
+      "question": { "en": "Which of the following is a breaking change in event schema versioning?", "th": "ข้อใดต่อไปนี้คือ breaking change ในการกำหนด version ของ event schema?" },
+      "options": [
+        { "id": "a", "text": { "en": "Removing a field that consumers depend on", "th": "การลบ field ที่ consumer พึ่งพา" } },
+        { "id": "b", "text": { "en": "Adding a new optional field to the event payload", "th": "การเพิ่ม field optional ใหม่ใน event payload" } },
+        { "id": "c", "text": { "en": "Publishing a new event type to a separate topic", "th": "การ publish event type ใหม่ไปยัง topic แยก" } },
+        { "id": "d", "text": { "en": "Adding a new consumer to an existing topic", "th": "การเพิ่ม consumer ใหม่ไปยัง topic ที่มีอยู่" } }
+      ],
+      "correctOption": "a",
+      "explanation": {
+        "en": "Adding optional fields is backward-compatible — old consumers that do not understand new fields simply ignore them. Removing or renaming required fields breaks existing consumers immediately. The safe strategy is additive-only evolution for minor changes, and versioned event type names (sales.order.placed.v2) for breaking changes, allowing consumers to migrate at their own pace.",
+        "th": "การเพิ่ม field optional เป็น backward-compatible consumer เก่าที่ไม่เข้าใจ field ใหม่เพียงแค่ ignore มัน การลบหรือเปลี่ยนชื่อ field ที่จำเป็นทำลาย consumer ที่มีอยู่ทันที กลยุทธ์ที่ปลอดภัยคือ evolution แบบ additive-only สำหรับการเปลี่ยนแปลงเล็กน้อย และชื่อ event type ที่มี version (sales.order.placed.v2) สำหรับ breaking change ช่วยให้ consumer migrate ตามจังหวะของตัวเอง"
+      }
+    },
+    {
+      "id": "fan-out-benefit",
+      "type": "mcq",
+      "question": { "en": "What is the main benefit of the fan-out pattern in EDA?", "th": "ประโยชน์หลักของ fan-out pattern ใน EDA คืออะไร?" },
+      "options": [
+        { "id": "a", "text": { "en": "One event can trigger multiple independent consumers without any changes to the producer", "th": "Event หนึ่งสามารถกระตุ้น consumer อิสระหลายตัวโดยไม่ต้องเปลี่ยนแปลง producer" } },
+        { "id": "b", "text": { "en": "Events are processed faster when split across multiple consumers", "th": "Event ประมวลผลเร็วขึ้นเมื่อแบ่งข้าม consumer หลายตัว" } },
+        { "id": "c", "text": { "en": "The producer receives acknowledgement from each consumer before continuing", "th": "Producer ได้รับ acknowledgement จาก consumer แต่ละตัวก่อนดำเนินการต่อ" } },
+        { "id": "d", "text": { "en": "All consumers must process the event before the next event is published", "th": "Consumer ทั้งหมดต้องประมวลผล event ก่อนที่ event ถัดไปจะถูก publish" } }
+      ],
+      "correctOption": "a",
+      "explanation": {
+        "en": "Fan-out means adding a new consumer (a new analytics service, a new notification channel) requires zero changes to the producer. The producer publishes one event; the broker delivers it to every subscriber independently. This is EDA's most powerful extensibility property — new functionality wires in without modifying existing services.",
+        "th": "Fan-out หมายความว่าการเพิ่ม consumer ใหม่ (analytics service ใหม่, notification channel ใหม่) ไม่ต้องเปลี่ยนแปลง producer เลย Producer publish event หนึ่ง broker ส่งมันไปยัง subscriber ทุกตัวอย่างอิสระ นี่คือคุณสมบัติการขยายที่ทรงพลังที่สุดของ EDA ฟังก์ชันใหม่เชื่อมต่อโดยไม่ต้องแก้ไข service ที่มีอยู่"
+      }
     }
   ]
 }

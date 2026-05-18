@@ -4,13 +4,13 @@
     {
       "id": "q1",
       "type": "mcq",
-      "question": { "en": "In an e-commerce system, which is most likely a separate Bounded Context?", "th": "ในระบบ e-commerce สิ่งใดมีแนวโน้มเป็น Bounded Context แยกต่างหาก?" },
+      "question": { "en": "In an e-commerce system, which is most likely a separate Bounded Context?", "th": "ในระบบ e-commerce สิ่งใดมีแนวโน้มเป็น Bounded Context แยกต่างหากมากที่สุด?" },
       "options": [
         { "id": "a", "text": { "en": "Inventory management", "th": "การจัดการสินค้าคงคลัง" } },
         { "id": "b", "text": { "en": "A database table", "th": "ตารางฐานข้อมูล" } }
       ],
       "correctOption": "a",
-      "explanation": { "en": "Inventory management has its own domain language, rules, and team — making it a natural Bounded Context.", "th": "" }
+      "explanation": { "en": "Inventory management has its own domain language, rules, and team — making it a natural Bounded Context.", "th": "การจัดการสินค้าคงคลังมีภาษาโดเมน กฎ และทีมของตัวเอง ทำให้เป็น Bounded Context ตามธรรมชาติ" }
     }
   ]
 }

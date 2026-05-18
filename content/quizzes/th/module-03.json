@@ -4,13 +4,76 @@
     {
       "id": "q1",
       "type": "mcq",
-      "question": { "en": "Which pattern enforces business rules and maintains consistency?", "th": "Pattern ใดบังคับใช้กฎทางธุรกิจและรักษาความสอดคล้อง?" },
+      "question": { "en": "Which sticky-note colour represents a Domain Event in Event Storming?", "th": "สีใดของ sticky note แทน Domain Event ใน Event Storming?" },
       "options": [
-        { "id": "a", "text": { "en": "Aggregate", "th": "Aggregate" } },
-        { "id": "b", "text": { "en": "Repository", "th": "Repository" } }
+        { "id": "a", "text": { "en": "Blue", "th": "น้ำเงิน" } },
+        { "id": "b", "text": { "en": "Orange", "th": "ส้ม" } },
+        { "id": "c", "text": { "en": "Purple", "th": "ม่วง" } },
+        { "id": "d", "text": { "en": "Pink", "th": "ชมพู" } }
       ],
-      "correctOption": "a",
-      "explanation": { "en": "An Aggregate is a cluster of domain objects treated as a single unit with an Aggregate Root that enforces invariants.", "th": "" }
+      "correctOption": "b",
+      "explanation": { "en": "Orange sticky notes represent Domain Events — things that happened in the past, written in past tense (e.g. *Order Placed*, *Payment Authorized*). Blue is for Commands, Purple is for Policies, and Pink is for Hotspots. The orange-event convention is the foundation of every Event Storming session.", "th": "sticky note สีส้มแทน Domain Event — สิ่งที่เกิดขึ้นในอดีต เขียนในรูปอดีตกาล เช่น Order Placed, Payment Authorized สีน้ำเงินสำหรับ Command สีม่วงสำหรับ Policy และสีชมพูสำหรับ Hotspot แบบแผน event สีส้มเป็นรากฐานของทุก session Event Storming" }
+    },
+    {
+      "id": "q2",
+      "type": "true-false",
+      "question": { "en": "A Command and a Domain Event are the same thing in Event Storming.", "th": "Command กับ Domain Event เป็นสิ่งเดียวกันใน Event Storming" },
+      "options": [
+        { "id": "true",  "text": { "en": "True",  "th": "จริง" } },
+        { "id": "false", "text": { "en": "False", "th": "เท็จ" } }
+      ],
+      "correctOption": "false",
+      "explanation": { "en": "False. A Command is a request (imperative tense, e.g. *Place Order*) that may be accepted or rejected by an aggregate. A Domain Event is a fact (past tense, e.g. *Order Placed*) that has already happened and cannot be undone. Commands are blue stickies; Events are orange. Keeping them distinct is the heart of the Event Storming grammar.", "th": "เท็จ Command คือคำขอ (รูป imperative เช่น Place Order) ที่ aggregate อาจยอมรับหรือปฏิเสธ Domain Event คือข้อเท็จจริง (รูปอดีตกาล เช่น Order Placed) ที่เกิดขึ้นแล้วและเลิกทำไม่ได้ Command ใช้ sticky สีน้ำเงิน Event ใช้สีส้ม การแยกทั้งสองออกจากกันคือหัวใจของ grammar Event Storming" }
+    },
+    {
+      "id": "q3",
+      "type": "mcq",
+      "question": { "en": "Which of the following is the correct definition of a Policy in Event Storming?", "th": "ข้อใดต่อไปนี้คือนิยามที่ถูกต้องของ Policy ใน Event Storming?" },
+      "options": [
+        { "id": "a", "text": { "en": "A database constraint enforced by the schema.", "th": "ข้อจำกัดของฐานข้อมูลที่ schema บังคับใช้" } },
+        { "id": "b", "text": { "en": "A document that describes the company's HR rules.", "th": "เอกสารที่อธิบายกฎ HR ของบริษัท" } },
+        { "id": "c", "text": { "en": "A reactive business rule of the form 'whenever event X happens, issue command Y'.", "th": "กฎธุรกิจเชิงโต้ตอบในรูปแบบ 'เมื่อ event X เกิดขึ้น ให้ออก command Y'" } },
+        { "id": "d", "text": { "en": "A signed legal agreement between two teams.", "th": "ข้อตกลงทางกฎหมายที่ลงนามระหว่างสองทีม" } }
+      ],
+      "correctOption": "c",
+      "explanation": { "en": "A Policy (purple sticky) is a reactive automation rule expressed as \"whenever event X happens, issue command Y.\" For example: 'When Payment Authorized → Place Order.' Policies make tacit business automation explicit on the wall, and in code they typically become sagas or process managers.", "th": "Policy (sticky สีม่วง) คือกฎอัตโนมัติเชิงโต้ตอบที่แสดงในรูป \"เมื่อ event X เกิดขึ้น ให้ออก command Y\" ตัวอย่าง: เมื่อ Payment Authorized → Place Order Policy ทำให้ระบบอัตโนมัติทางธุรกิจที่ซ่อนอยู่ปรากฏชัดบนกำแพง และในโค้ดมักกลายเป็น saga หรือ process manager" }
+    },
+    {
+      "id": "q4",
+      "type": "mcq",
+      "question": { "en": "At which level of Event Storming are Aggregates identified?", "th": "ระดับใดของ Event Storming ที่มีการระบุ Aggregate?" },
+      "options": [
+        { "id": "a", "text": { "en": "Big Picture level", "th": "ระดับ Big Picture" } },
+        { "id": "b", "text": { "en": "Process Level", "th": "ระดับ Process" } },
+        { "id": "c", "text": { "en": "Design Level", "th": "ระดับ Design" } },
+        { "id": "d", "text": { "en": "Aggregates are identified before the session even begins", "th": "Aggregate ถูกระบุก่อนที่ session จะเริ่ม" } }
+      ],
+      "correctOption": "c",
+      "explanation": { "en": "Aggregates appear only at the Design Level — the deepest, most code-focused of the three Event Storming formats. At Design Level, command-event pairs (a command received and an event emitted) are grouped to reveal aggregate boundaries. Big Picture deals with the whole business; Process Level adds commands, actors, and policies but stops short of aggregate identification.", "th": "Aggregate ปรากฏเฉพาะที่ Design Level ซึ่งเป็นระดับที่ลึกที่สุดและมุ่งเน้นโค้ดมากที่สุดในสามรูปแบบ Event Storming ที่ Design Level คู่ command-event จะถูกจัดกลุ่มเพื่อเปิดเผยขอบเขต aggregate Big Picture จัดการกับธุรกิจทั้งหมด ส่วน Process Level เพิ่ม command, actor และ policy แต่ยังไม่ถึงขั้นระบุ aggregate" }
+    },
+    {
+      "id": "q5",
+      "type": "true-false",
+      "question": { "en": "A pink Hotspot sticky always means something in the system is broken and must be fixed immediately.", "th": "sticky สีชมพู Hotspot หมายความว่ามีบางอย่างในระบบเสียหายและต้องแก้ไขทันที" },
+      "options": [
+        { "id": "true",  "text": { "en": "True",  "th": "จริง" } },
+        { "id": "false", "text": { "en": "False", "th": "เท็จ" } }
+      ],
+      "correctOption": "false",
+      "explanation": { "en": "False. A Hotspot marks a place that deserves a conversation — a question nobody can answer, a disagreement between two domain experts, a pain point in the current process, or a risk. It does not imply something is broken. Brandolini's famous facilitator rule is that the *absence* of hotspots is the real warning sign: 'If there are no hotspots, you are not doing it right.' Hotspots become a prioritised backlog for follow-up design work.", "th": "เท็จ Hotspot ทำเครื่องหมายจุดที่ควรได้รับการพูดคุย ไม่ว่าจะเป็นคำถามที่ไม่มีใครตอบได้ ความขัดแย้งระหว่างผู้เชี่ยวชาญโดเมน จุดเจ็บปวดในกระบวนการปัจจุบัน หรือความเสี่ยง ไม่ได้หมายความว่ามีบางอย่างเสียหาย กฎ facilitator ของ Brandolini คือ การไม่มี hotspot เลยต่างหากที่เป็นสัญญาณเตือน: 'ถ้าไม่มี hotspot แสดงว่าคุณทำไม่ถูกต้อง' Hotspot กลายเป็น backlog ที่จัดลำดับความสำคัญสำหรับงานออกแบบต่อไป" }
+    },
+    {
+      "id": "q6",
+      "type": "mcq",
+      "question": { "en": "What is the primary output of a Big Picture Event Storming session?", "th": "ผลลัพธ์หลักของ session Big Picture Event Storming คืออะไร?" },
+      "options": [
+        { "id": "a", "text": { "en": "A finished microservice deployment topology.", "th": "topology การ deploy microservice ที่เสร็จสมบูรณ์" } },
+        { "id": "b", "text": { "en": "A database schema for the entire business.", "th": "database schema สำหรับธุรกิจทั้งหมด" } },
+        { "id": "c", "text": { "en": "A left-to-right timeline of Domain Events spanning the whole business, with hotspots marked.", "th": "เส้นเวลาจากซ้ายไปขวาของ Domain Event ที่ครอบคลุมธุรกิจทั้งหมด พร้อมทำเครื่องหมาย hotspot" } },
+        { "id": "d", "text": { "en": "A complete API specification including request and response payloads.", "th": "ข้อกำหนด API ที่สมบูรณ์รวมถึง payload ของ request และ response" } }
+      ],
+      "correctOption": "c",
+      "explanation": { "en": "A Big Picture session produces a left-to-right timeline of Domain Events that covers the entire business on one wall, together with pink hotspots marking conflicts and open questions, and candidate subdomain boundaries. It deliberately stops short of technical artefacts like schemas, APIs, or deployment topology — those come from later Process-Level and Design-Level sessions and from subsequent DDD work.", "th": "session Big Picture ผลิตเส้นเวลาจากซ้ายไปขวาของ Domain Event ที่ครอบคลุมธุรกิจทั้งหมดบนกำแพงเดียว พร้อมกับ hotspot สีชมพูที่ทำเครื่องหมายความขัดแย้งและคำถามที่เปิดอยู่ และขอบเขต subdomain ที่เป็นผู้สมัคร session นี้จงใจหยุดก่อนถึง artefact ทางเทคนิค เช่น schema, API หรือ deployment topology ซึ่งมาจาก session ระดับ Process และ Design ในภายหลัง" }
     }
   ]
 }
