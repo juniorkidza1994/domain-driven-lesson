@@ -2,15 +2,128 @@
   "moduleId": "module-07",
   "questions": [
     {
-      "id": "q1",
+      "id": "notification-is-generic",
       "type": "mcq",
-      "question": { "en": "Which of the following best describes the relationship between Event Storming and DDD?", "th": "" },
+      "question": { "en": "In ShopSphere, why is the Notification context classified as a Generic subdomain rather than Core or Supporting?", "th": "" },
       "options": [
-        { "id": "a", "text": { "en": "Event Storming is a collaborative technique for discovering the domain model used in DDD", "th": "" } },
-        { "id": "b", "text": { "en": "They are unrelated practices", "th": "" } }
+        { "id": "a", "text": { "en": "Email and SMS dispatch provides no competitive differentiation — any mature company can buy this capability off the shelf (SendGrid, Twilio), so it is a commodity function", "th": "" } },
+        { "id": "b", "text": { "en": "Notification only sends messages in English, so it cannot be Core for a Thai marketplace", "th": "" } },
+        { "id": "c", "text": { "en": "It has the fewest events flowing into it compared to other contexts", "th": "" } },
+        { "id": "d", "text": { "en": "Generic subdomains are always the last context added to a context map", "th": "" } }
       ],
       "correctOption": "a",
-      "explanation": { "en": "Event Storming is a workshop technique that helps teams discover and model their domain, feeding directly into DDD implementation.", "th": "" }
+      "explanation": { "en": "A Generic subdomain is a commodity capability where the business has no reason to differentiate. Email and SMS dispatch are exactly that — every e-commerce company sends transactional messages the same way. ShopSphere consumes SendGrid or Twilio rather than building it in-house, leaving developer effort for the Core domains (Customer, Order, Payment).", "th": "" }
+    },
+    {
+      "id": "who-publishes-orderconfirmed",
+      "type": "true-false",
+      "question": { "en": "In the ShopSphere happy-path saga, the Payment context is the producer of the OrderConfirmed integration event.", "th": "" },
+      "options": [
+        { "id": "true",  "text": { "en": "True", "th": "" } },
+        { "id": "false", "text": { "en": "False", "th": "" } }
+      ],
+      "correctOption": "false",
+      "explanation": { "en": "False. OrderConfirmed is published by the Order context after it consumes PaymentAuthorized. The rule: every integration event has exactly one producer — the context that owns the business fact. The Order aggregate is authoritative for the order's lifecycle state, so it owns the confirmed-state transition and the event that announces it.", "th": "" }
+    },
+    {
+      "id": "payment-idempotency",
+      "type": "mcq",
+      "question": { "en": "Why must the Payment context be idempotent on the eventId of every InventoryReserved event it consumes?", "th": "" },
+      "options": [
+        { "id": "a", "text": { "en": "To prevent double-charging the customer when at-least-once delivery causes the same event to be redelivered after a transient consumer failure", "th": "" } },
+        { "id": "b", "text": { "en": "Because Stripe rejects requests without an idempotency key", "th": "" } },
+        { "id": "c", "text": { "en": "Because Thai banking regulations require it", "th": "" } },
+        { "id": "d", "text": { "en": "To make event payloads compress better in the broker", "th": "" } }
+      ],
+      "correctOption": "a",
+      "explanation": { "en": "Message brokers offer at-least-once delivery — Payment will occasionally see the same InventoryReserved event twice (consumer crash before offset commit, broker rebalance, Outbox relay retry). Without idempotency the gateway would be called twice and the customer would be charged twice. Payment maintains a processed-eventId table and skips duplicates.", "th": "" }
+    },
+    {
+      "id": "inventory-reservation-failed",
+      "type": "mcq",
+      "question": { "en": "When InventoryReservationFailed fires in ShopSphere, what is the next event the Order context publishes, and is any Payment compensation required?", "th": "" },
+      "options": [
+        { "id": "a", "text": { "en": "Order publishes OrderCancelled; no Payment compensation is needed because authorisation was never attempted", "th": "" } },
+        { "id": "b", "text": { "en": "Order publishes OrderRetried and Payment issues a refund", "th": "" } },
+        { "id": "c", "text": { "en": "Order publishes PaymentFailed because the customer cannot pay for unavailable stock", "th": "" } },
+        { "id": "d", "text": { "en": "Nothing — the Order stays Pending and a human Admin must intervene", "th": "" } }
+      ],
+      "correctOption": "a",
+      "explanation": { "en": "Inventory reservation comes before payment authorisation in the ShopSphere saga. If reservation fails, Payment has not been called yet, so there is nothing to refund. Order simply transitions Pending → Cancelled and publishes OrderCancelled. The Notification context sends an out-of-stock email.", "th": "" }
+    },
+    {
+      "id": "customer-same-across-contexts",
+      "type": "true-false",
+      "question": { "en": "Across ShopSphere's eight bounded contexts, the word 'Customer' refers to exactly the same concept and the same data — there is no legitimate reason to model it differently in different contexts.", "th": "" },
+      "options": [
+        { "id": "true",  "text": { "en": "True", "th": "" } },
+        { "id": "false", "text": { "en": "False", "th": "" } }
+      ],
+      "correctOption": "false",
+      "explanation": { "en": "False. 'Customer' is the canonical example of legitimate linguistic divergence. In the Customer context it is a registered person with credentials. In Order it is the buyer (a snapshot of identity at checkout). In Shipping it is the recipient at the destination — possibly a different person entirely if the order is a gift. Forcing one universal definition would collapse the ubiquitous language and re-couple every team.", "th": "" }
+    },
+    {
+      "id": "shipment-creation-trigger",
+      "type": "mcq",
+      "question": { "en": "Which event triggers the Shipping context to create a shipment in ShopSphere's happy path?", "th": "" },
+      "options": [
+        { "id": "a", "text": { "en": "OrderConfirmed — Shipping subscribes to OrderConfirmed and only then generates the pick list and shipment record", "th": "" } },
+        { "id": "b", "text": { "en": "OrderPlaced — to start picking immediately and shorten delivery time", "th": "" } },
+        { "id": "c", "text": { "en": "InventoryReserved — because stock is already held at that point", "th": "" } },
+        { "id": "d", "text": { "en": "PaymentAuthorized — because authorisation guarantees payment", "th": "" } }
+      ],
+      "correctOption": "a",
+      "explanation": { "en": "Shipping waits for OrderConfirmed. Authorisation alone is not sufficient — the Order context must complete its own state transition (consuming PaymentAuthorized) before announcing OrderConfirmed. Triggering shipment on OrderPlaced or InventoryReserved would risk shipping orders that ultimately fail payment.", "th": "" }
+    },
+    {
+      "id": "saga-pattern-name",
+      "type": "mcq",
+      "question": { "en": "What pattern does the ShopSphere order fulfilment saga use, and what would Sam Newman recommend in production?", "th": "" },
+      "options": [
+        { "id": "a", "text": { "en": "Choreography Saga — Newman recommends switching to orchestration (a Process Manager) at four or more steps for monitoring and compensation legibility", "th": "" } },
+        { "id": "b", "text": { "en": "Two-Phase Commit — Newman recommends keeping 2PC across services for strong consistency", "th": "" } },
+        { "id": "c", "text": { "en": "Request-Response — Newman recommends synchronous HTTP for clarity", "th": "" } },
+        { "id": "d", "text": { "en": "Event Sourcing Saga — Newman recommends rebuilding state from the event log on every transition", "th": "" } }
+      ],
+      "correctOption": "a",
+      "explanation": { "en": "ShopSphere uses choreography (each context reacts to the previous context's event with no central coordinator) because the event chain is visible for teaching. Newman warns this becomes hazardous beyond three to four steps; ShopSphere's nine-step saga would in production warrant a Process Manager (orchestrator) that holds the saga state machine explicitly. Netflix built Conductor for exactly this reason.", "th": "" }
+    },
+    {
+      "id": "publish-every-domain-event",
+      "type": "true-false",
+      "question": { "en": "Every domain event raised inside a bounded context aggregate should be published as an integration event onto the message broker.", "th": "" },
+      "options": [
+        { "id": "true",  "text": { "en": "True", "th": "" } },
+        { "id": "false", "text": { "en": "False", "th": "" } }
+      ],
+      "correctOption": "false",
+      "explanation": { "en": "False. Most domain events stay private to their producing context. Only the subset that other bounded contexts legitimately need to react to are translated into integration events. Publishing everything floods the broker, couples internal aggregate fields to remote consumers, and turns every refactor into a breaking change. Order.LineItemAdded stays inside Order; only OrderPlaced, OrderConfirmed, OrderCancelled cross the wire.", "th": "" }
+    },
+    {
+      "id": "notification-fails-permanently",
+      "type": "mcq",
+      "question": { "en": "The Notification Service tries to send a delivery-confirmation email but SendGrid keeps returning permanent failures (the customer's email domain is suppressed). What should ShopSphere's reliability design do?", "th": "" },
+      "options": [
+        { "id": "a", "text": { "en": "Retry a bounded number of times with exponential backoff, then route the message to a Dead Letter Queue and alert the Admin for investigation and replay", "th": "" } },
+        { "id": "b", "text": { "en": "Retry forever — eventually SendGrid will accept it", "th": "" } },
+        { "id": "c", "text": { "en": "Drop the message silently — notifications are not business-critical", "th": "" } },
+        { "id": "d", "text": { "en": "Republish OrderDelivered to make every consumer reprocess the saga from scratch", "th": "" } }
+      ],
+      "correctOption": "a",
+      "explanation": { "en": "Bounded retry with exponential backoff and jitter handles transient failures. A permanently undeliverable message is routed to a DLQ so an Admin can review, fix the contact record, and replay. The DLQ is a repair station, not a graveyard. Retrying forever burns resources; silent drop hides real customer-impacting issues; republishing upstream events corrupts the saga history.", "th": "" }
+    },
+    {
+      "id": "price-snapshot",
+      "type": "mcq",
+      "question": { "en": "Why does ShopSphere include the unit prices of every line item on the OrderPlaced event payload, rather than letting consumers look them up from the Catalog context?", "th": "" },
+      "options": [
+        { "id": "a", "text": { "en": "The price at the moment of order is a historical fact — it must be frozen on the event so a later Catalog price change cannot retroactively alter what the customer agreed to pay", "th": "" } },
+        { "id": "b", "text": { "en": "To avoid making any HTTP calls during event processing", "th": "" } },
+        { "id": "c", "text": { "en": "Because Kafka rejects events smaller than 1 KB", "th": "" } },
+        { "id": "d", "text": { "en": "So that the Notification context can recompute promotional discounts", "th": "" } }
+      ],
+      "correctOption": "a",
+      "explanation": { "en": "The OrderPlaced event captures the immutable business fact: 'at this moment the customer agreed to these items at these prices.' If Catalog raises a price one second later, the order is unaffected — the snapshot is the contract. This is why Order's line items are an immutable snapshot, and why Customer-Supplier relationships are typically implemented via data snapshots, not live queries.", "th": "" }
     }
   ]
 }
