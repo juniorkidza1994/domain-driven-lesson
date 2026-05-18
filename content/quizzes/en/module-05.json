@@ -4,109 +4,236 @@
     {
       "id": "event-vs-command-difference",
       "type": "mcq",
-      "question": { "en": "What is the key difference between an Event and a Command?", "th": "" },
+      "question": {
+        "en": "What is the key difference between an Event and a Command?"
+      },
       "options": [
-        { "id": "a", "text": { "en": "An event records something that happened; a command requests something to be done", "th": "" } },
-        { "id": "b", "text": { "en": "An event is synchronous; a command is asynchronous", "th": "" } },
-        { "id": "c", "text": { "en": "An event is sent to one consumer; a command is broadcast to many", "th": "" } },
-        { "id": "d", "text": { "en": "An event requires a response; a command does not", "th": "" } }
+        {
+          "id": "a",
+          "text": {
+            "en": "An event records something that happened; a command requests something to be done"
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "An event is synchronous; a command is asynchronous"
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "An event is sent to one consumer; a command is broadcast to many"
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "An event requires a response; a command does not"
+          }
+        }
       ],
       "correctOption": "a",
       "explanation": {
-        "en": "Events are past-tense facts (OrderPlaced) that cannot be rejected because they already happened. Commands are imperative requests (PlaceOrder) directed at exactly one handler, and they can be rejected if validation fails. Events fan out to zero or many consumers; commands go to exactly one.",
-        "th": ""
+        "en": "Events are past-tense facts (OrderPlaced) that cannot be rejected because they already happened. Commands are imperative requests (PlaceOrder) directed at exactly one handler, and they can be rejected if validation fails. Events fan out to zero or many consumers; commands go to exactly one."
       }
     },
     {
       "id": "domain-vs-integration-same",
       "type": "true-false",
-      "question": { "en": "A Domain Event and an Integration Event are the same thing and can be used interchangeably.", "th": "" },
+      "question": {
+        "en": "A Domain Event and an Integration Event are the same thing and can be used interchangeably."
+      },
       "options": [
-        { "id": "true", "text": { "en": "True", "th": "" } },
-        { "id": "false", "text": { "en": "False", "th": "" } }
+        {
+          "id": "true",
+          "text": {
+            "en": "True"
+          }
+        },
+        {
+          "id": "false",
+          "text": {
+            "en": "False"
+          }
+        }
       ],
       "correctOption": "false",
       "explanation": {
-        "en": "Domain Events are private to a Bounded Context — they use the internal ubiquitous language and may carry rich internal aggregate data. Integration Events are public contracts published across context boundaries. An Anti-Corruption Layer translates between them. Publishing Domain Events directly across the broker turns internal aggregate fields into remote API contracts that break when the internal model is refactored.",
-        "th": ""
+        "en": "Domain Events are private to a Bounded Context — they use the internal ubiquitous language and may carry rich internal aggregate data. Integration Events are public contracts published across context boundaries. An Anti-Corruption Layer translates between them. Publishing Domain Events directly across the broker turns internal aggregate fields into remote API contracts that break when the internal model is refactored."
       }
     },
     {
       "id": "idempotency-purpose",
       "type": "mcq",
-      "question": { "en": "What is the purpose of idempotency in event-driven systems?", "th": "" },
+      "question": {
+        "en": "What is the purpose of idempotency in event-driven systems?"
+      },
       "options": [
-        { "id": "a", "text": { "en": "To ensure processing the same event multiple times produces the same result", "th": "" } },
-        { "id": "b", "text": { "en": "To speed up event processing by caching results", "th": "" } },
-        { "id": "c", "text": { "en": "To encrypt events before they are published to the broker", "th": "" } },
-        { "id": "d", "text": { "en": "To guarantee that events are delivered in strict order", "th": "" } }
+        {
+          "id": "a",
+          "text": {
+            "en": "To ensure processing the same event multiple times produces the same result"
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "To speed up event processing by caching results"
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "To encrypt events before they are published to the broker"
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "To guarantee that events are delivered in strict order"
+          }
+        }
       ],
       "correctOption": "a",
       "explanation": {
-        "en": "Message brokers guarantee at-least-once delivery, meaning consumers will receive duplicate events during crashes, network timeouts, or broker restarts. Idempotent consumers track which eventIds they have already processed and skip duplicates. Without idempotency, duplicate events cause double-charges, double-fulfillment, or double-sends.",
-        "th": ""
+        "en": "Message brokers guarantee at-least-once delivery, meaning consumers will receive duplicate events during crashes, network timeouts, or broker restarts. Idempotent consumers track which eventIds they have already processed and skip duplicates. Without idempotency, duplicate events cause double-charges, double-fulfillment, or double-sends."
       }
     },
     {
       "id": "dlq-fate",
       "type": "mcq",
-      "question": { "en": "What happens to events that fail processing after the maximum number of retries is exhausted?", "th": "" },
+      "question": {
+        "en": "What happens to events that fail processing after the maximum number of retries is exhausted?"
+      },
       "options": [
-        { "id": "a", "text": { "en": "They are moved to a Dead Letter Queue for operator investigation", "th": "" } },
-        { "id": "b", "text": { "en": "They are automatically deleted to prevent queue build-up", "th": "" } },
-        { "id": "c", "text": { "en": "They are resent to the original producer for reprocessing", "th": "" } },
-        { "id": "d", "text": { "en": "They block all subsequent messages in the topic until resolved", "th": "" } }
+        {
+          "id": "a",
+          "text": {
+            "en": "They are moved to a Dead Letter Queue for operator investigation"
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "They are automatically deleted to prevent queue build-up"
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "They are resent to the original producer for reprocessing"
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "They block all subsequent messages in the topic until resolved"
+          }
+        }
       ],
       "correctOption": "a",
       "explanation": {
-        "en": "A Dead Letter Queue (DLQ) is a holding area for events that have exhausted their retry budget. Operators inspect the DLQ to diagnose the root cause, fix the consumer code or data issue, and replay the events when ready. Without a DLQ, poison messages spin in an infinite retry loop or are silently dropped — both are worse than a visible queue of failures.",
-        "th": ""
+        "en": "A Dead Letter Queue (DLQ) is a holding area for events that have exhausted their retry budget. Operators inspect the DLQ to diagnose the root cause, fix the consumer code or data issue, and replay the events when ready. Without a DLQ, poison messages spin in an infinite retry loop or are silently dropped — both are worse than a visible queue of failures."
       }
     },
     {
       "id": "eventual-consistency-meaning",
       "type": "true-false",
-      "question": { "en": "In Event-Driven Architecture, eventual consistency means the system will never fully synchronise and data will always be out of date.", "th": "" },
+      "question": {
+        "en": "In Event-Driven Architecture, eventual consistency means the system will never fully synchronise and data will always be out of date."
+      },
       "options": [
-        { "id": "true", "text": { "en": "True", "th": "" } },
-        { "id": "false", "text": { "en": "False", "th": "" } }
+        {
+          "id": "true",
+          "text": {
+            "en": "True"
+          }
+        },
+        {
+          "id": "false",
+          "text": {
+            "en": "False"
+          }
+        }
       ],
       "correctOption": "false",
       "explanation": {
-        "en": "Eventual consistency means the system WILL reach a consistent state — just not instantaneously. After all events are processed, every service converges to the same view. The window of inconsistency is typically milliseconds to seconds. It is a deliberate trade-off for availability and decoupling, not a permanent state of incoherence. UI design should accommodate the processing window rather than trying to eliminate it with synchronous calls.",
-        "th": ""
+        "en": "Eventual consistency means the system WILL reach a consistent state — just not instantaneously. After all events are processed, every service converges to the same view. The window of inconsistency is typically milliseconds to seconds. It is a deliberate trade-off for availability and decoupling, not a permanent state of incoherence. UI design should accommodate the processing window rather than trying to eliminate it with synchronous calls."
       }
     },
     {
       "id": "event-versioning-breaking-change",
       "type": "mcq",
-      "question": { "en": "Which of the following is a breaking change in event schema versioning?", "th": "" },
+      "question": {
+        "en": "Which of the following is a breaking change in event schema versioning?"
+      },
       "options": [
-        { "id": "a", "text": { "en": "Removing a field that consumers depend on", "th": "" } },
-        { "id": "b", "text": { "en": "Adding a new optional field to the event payload", "th": "" } },
-        { "id": "c", "text": { "en": "Publishing a new event type to a separate topic", "th": "" } },
-        { "id": "d", "text": { "en": "Adding a new consumer to an existing topic", "th": "" } }
+        {
+          "id": "a",
+          "text": {
+            "en": "Removing a field that consumers depend on"
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Adding a new optional field to the event payload"
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Publishing a new event type to a separate topic"
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Adding a new consumer to an existing topic"
+          }
+        }
       ],
       "correctOption": "a",
       "explanation": {
-        "en": "Adding optional fields is backward-compatible — old consumers that do not understand new fields simply ignore them. Removing or renaming required fields breaks existing consumers immediately. The safe strategy is additive-only evolution for minor changes, and versioned event type names (sales.order.placed.v2) for breaking changes, allowing consumers to migrate at their own pace.",
-        "th": ""
+        "en": "Adding optional fields is backward-compatible — old consumers that do not understand new fields simply ignore them. Removing or renaming required fields breaks existing consumers immediately. The safe strategy is additive-only evolution for minor changes, and versioned event type names (sales.order.placed.v2) for breaking changes, allowing consumers to migrate at their own pace."
       }
     },
     {
       "id": "fan-out-benefit",
       "type": "mcq",
-      "question": { "en": "What is the main benefit of the fan-out pattern in EDA?", "th": "" },
+      "question": {
+        "en": "What is the main benefit of the fan-out pattern in EDA?"
+      },
       "options": [
-        { "id": "a", "text": { "en": "One event can trigger multiple independent consumers without any changes to the producer", "th": "" } },
-        { "id": "b", "text": { "en": "Events are processed faster when split across multiple consumers", "th": "" } },
-        { "id": "c", "text": { "en": "The producer receives acknowledgement from each consumer before continuing", "th": "" } },
-        { "id": "d", "text": { "en": "All consumers must process the event before the next event is published", "th": "" } }
+        {
+          "id": "a",
+          "text": {
+            "en": "One event can trigger multiple independent consumers without any changes to the producer"
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Events are processed faster when split across multiple consumers"
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "The producer receives acknowledgement from each consumer before continuing"
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "All consumers must process the event before the next event is published"
+          }
+        }
       ],
       "correctOption": "a",
       "explanation": {
-        "en": "Fan-out means adding a new consumer (a new analytics service, a new notification channel) requires zero changes to the producer. The producer publishes one event; the broker delivers it to every subscriber independently. This is EDA's most powerful extensibility property — new functionality wires in without modifying existing services.",
-        "th": ""
+        "en": "Fan-out means adding a new consumer (a new analytics service, a new notification channel) requires zero changes to the producer. The producer publishes one event; the broker delivers it to every subscriber independently. This is EDA's most powerful extensibility property — new functionality wires in without modifying existing services."
       }
     }
   ]

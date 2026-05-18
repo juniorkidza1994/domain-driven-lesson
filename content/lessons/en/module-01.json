@@ -2,55 +2,74 @@
   "module": {
     "id": "module-01",
     "number": 1,
-    "title": { "en": "Introduction to Domain-Driven Design", "th": "บทนำสู่ Domain-Driven Design" },
+    "title": {
+      "en": "Introduction to Domain-Driven Design"
+    },
     "estimatedMinutes": 20,
     "sections": [
       {
         "id": "what-problems",
         "type": "callout",
-        "title": { "en": "What Problems Are We Solving?", "th": "" },
+        "title": {
+          "en": "What Problems Are We Solving?"
+        },
         "content": {
-          "en": "Most software fails not because the code is bad, but because the team built the wrong thing. Three recurring problems sit underneath that failure:\n\n1. **The business and the engineers speak different languages.** A \"customer\" to sales is a lead in a CRM; to fulfillment it's a shipping address; to billing it's an invoice contact. When everyone uses the same word for different things, every meeting becomes a translation exercise — and the code reflects that confusion.\n\n2. **Nobody can see how the business actually works end-to-end.** Each team owns a slice. Nobody owns the whole flow. The bugs and bottlenecks always live in the gaps between teams.\n\n3. **Systems are tightly coupled and brittle.** One service calls another, which calls another. When one is slow, everything is slow. When one changes, everything breaks.\n\nDomain-Driven Design (DDD), Event Storming, and Event-Driven Architecture (EDA) are three complementary answers to these three problems. DDD gives you shared language and clear boundaries. Event Storming gives you a way to see the whole business as a flow of events. EDA gives you a way to build systems that don't fall over when one part hiccups.\n\nThis module shows why they exist, what each one does, and how they fit together — so the rest of the course makes sense.",
-          "th": ""
+          "en": "Most software fails not because the code is bad, but because the team built the wrong thing. Three recurring problems sit underneath that failure:\n\n1. **The business and the engineers speak different languages.** A \"customer\" to sales is a lead in a CRM; to fulfillment it's a shipping address; to billing it's an invoice contact. When everyone uses the same word for different things, every meeting becomes a translation exercise — and the code reflects that confusion.\n\n2. **Nobody can see how the business actually works end-to-end.** Each team owns a slice. Nobody owns the whole flow. The bugs and bottlenecks always live in the gaps between teams.\n\n3. **Systems are tightly coupled and brittle.** One service calls another, which calls another. When one is slow, everything is slow. When one changes, everything breaks.\n\nDomain-Driven Design (DDD), Event Storming, and Event-Driven Architecture (EDA) are three complementary answers to these three problems. DDD gives you shared language and clear boundaries. Event Storming gives you a way to see the whole business as a flow of events. EDA gives you a way to build systems that don't fall over when one part hiccups.\n\nThis module shows why they exist, what each one does, and how they fit together — so the rest of the course makes sense."
         }
       },
       {
         "id": "what-is-ddd",
         "type": "text",
-        "title": { "en": "What is Domain-Driven Design?", "th": "" },
-        "content": {
-          "en": "Domain-Driven Design (DDD) is an approach to software design introduced by Eric Evans in 2003. Its core claim is simple: **the design of your software should mirror the design of your business**. If the business has five distinct activities, your software should have five distinct models — not one big model that tries to do everything.\n\nDDD has two halves:\n\n**Strategic design** is about drawing boundaries. It asks: where does one part of the business end and another begin? In DDD these boundaries are called *bounded contexts*. Inside each context, a word means exactly one thing. \"Order\" inside the Checkout context is a shopping cart being finalized. \"Order\" inside the Fulfillment context is a packing list. Same word, two models — and that's fine, because they live in different contexts.\n\n**Tactical design** is about the patterns you use inside a bounded context: entities, value objects, aggregates, repositories, domain services. These are the building blocks for expressing the business rules in code.\n\nThe glue that holds it all together is the *ubiquitous language*: the shared vocabulary used by domain experts and developers alike. If a business person says \"approve the quote,\" there is a method called `approveQuote` in the code — not `setStatus(2)`. The language in conversations, in the code, and in the database is the same language.\n\nDDD is not about a framework or a tool. It's a way of thinking that puts the business model — not the database schema, not the UI — at the center of your design.",
-          "th": ""
+        "title": {
+          "en": "What is Domain-Driven Design?"
         },
-        "tooltipRefs": ["ddd", "domain", "ubiquitous-language"]
+        "content": {
+          "en": "Domain-Driven Design (DDD) is an approach to software design introduced by Eric Evans in 2003. Its core claim is simple: **the design of your software should mirror the design of your business**. If the business has five distinct activities, your software should have five distinct models — not one big model that tries to do everything.\n\nDDD has two halves:\n\n**Strategic design** is about drawing boundaries. It asks: where does one part of the business end and another begin? In DDD these boundaries are called *bounded contexts*. Inside each context, a word means exactly one thing. \"Order\" inside the Checkout context is a shopping cart being finalized. \"Order\" inside the Fulfillment context is a packing list. Same word, two models — and that's fine, because they live in different contexts.\n\n**Tactical design** is about the patterns you use inside a bounded context: entities, value objects, aggregates, repositories, domain services. These are the building blocks for expressing the business rules in code.\n\nThe glue that holds it all together is the *ubiquitous language*: the shared vocabulary used by domain experts and developers alike. If a business person says \"approve the quote,\" there is a method called `approveQuote` in the code — not `setStatus(2)`. The language in conversations, in the code, and in the database is the same language.\n\nDDD is not about a framework or a tool. It's a way of thinking that puts the business model — not the database schema, not the UI — at the center of your design."
+        },
+        "tooltipRefs": [
+          "ddd",
+          "domain",
+          "ubiquitous-language"
+        ]
       },
       {
         "id": "what-is-event-storming",
         "type": "text",
-        "title": { "en": "What is Event Storming?", "th": "" },
-        "content": {
-          "en": "Event Storming is a workshop technique invented by Alberto Brandolini around 2013. It is the fastest way known to get a room full of people — developers, product managers, domain experts, support staff — to agree on how a business actually works.\n\nThe setup is deliberately low-tech: a long roll of paper on a wall and a stack of sticky notes in different colors. The rules are simple:\n\n- **Orange sticky = a domain event.** Something meaningful that has happened in the business, written in past tense: \"Order Placed,\" \"Payment Received,\" \"Shipment Dispatched.\"\n- Participants take five minutes to write every event they can think of, then stick them on the wall.\n- The group then sorts the events left-to-right in time order — earliest on the left, latest on the right.\n- Other colors get added later: blue for commands (what triggers an event), yellow for actors, pink for hotspots (where there's disagreement or pain), purple for policies.\n\nThe magic isn't the colors — it's what emerges. Within an hour or two, a previously invisible business process is on a wall, and everyone in the room sees it the same way for the first time. Gaps in the process become visible. Disagreements about terminology surface immediately (\"wait, you call that 'shipped'? we call that 'dispatched'\"). The pink hotspot stickies mark exactly where the next conversations need to happen.\n\nEvent Storming is not a deliverable. It's a discovery tool. The output is shared understanding, and a model of the business expressed as a flow of events — which, conveniently, is also the perfect input for the next two activities: drawing bounded contexts (DDD) and designing an event-driven system (EDA).",
-          "th": ""
+        "title": {
+          "en": "What is Event Storming?"
         },
-        "tooltipRefs": ["event-storming", "domain-event"]
+        "content": {
+          "en": "Event Storming is a workshop technique invented by Alberto Brandolini around 2013. It is the fastest way known to get a room full of people — developers, product managers, domain experts, support staff — to agree on how a business actually works.\n\nThe setup is deliberately low-tech: a long roll of paper on a wall and a stack of sticky notes in different colors. The rules are simple:\n\n- **Orange sticky = a domain event.** Something meaningful that has happened in the business, written in past tense: \"Order Placed,\" \"Payment Received,\" \"Shipment Dispatched.\"\n- Participants take five minutes to write every event they can think of, then stick them on the wall.\n- The group then sorts the events left-to-right in time order — earliest on the left, latest on the right.\n- Other colors get added later: blue for commands (what triggers an event), yellow for actors, pink for hotspots (where there's disagreement or pain), purple for policies.\n\nThe magic isn't the colors — it's what emerges. Within an hour or two, a previously invisible business process is on a wall, and everyone in the room sees it the same way for the first time. Gaps in the process become visible. Disagreements about terminology surface immediately (\"wait, you call that 'shipped'? we call that 'dispatched'\"). The pink hotspot stickies mark exactly where the next conversations need to happen.\n\nEvent Storming is not a deliverable. It's a discovery tool. The output is shared understanding, and a model of the business expressed as a flow of events — which, conveniently, is also the perfect input for the next two activities: drawing bounded contexts (DDD) and designing an event-driven system (EDA)."
+        },
+        "tooltipRefs": [
+          "event-storming",
+          "domain-event"
+        ]
       },
       {
         "id": "what-is-eda",
         "type": "text",
-        "title": { "en": "What is Event-Driven Architecture?", "th": "" },
-        "content": {
-          "en": "Event-Driven Architecture (EDA) is a way of building systems where components communicate by **announcing facts**, not by **giving orders**.\n\nIn a traditional request/response system, the Checkout service calls the Inventory service directly: \"reserve 1 unit of SKU 1234.\" Checkout waits. If Inventory is down, Checkout fails. If Inventory is slow, Checkout is slow. Checkout has to know Inventory exists, where it lives, what its API looks like, and what to do if it's not available. The two services are tightly coupled.\n\nIn an event-driven system, Checkout doesn't call anyone. It publishes a fact: `OrderPlaced { orderId: 42, items: [...] }` to a message broker. Then it's done. It does not know — and does not care — who is listening.\n\nOn the other side, any number of consumers can subscribe to that event:\n\n- Inventory listens and reserves stock.\n- Billing listens and creates an invoice.\n- Email listens and sends a confirmation.\n- Analytics listens and updates a dashboard.\n\nIf one of them is down, the event waits in the broker until that consumer is back up. If a new team wants to react to orders (say, a loyalty program), they just subscribe — Checkout doesn't change at all.\n\nThe trade-off is real: you give up the simplicity of \"call function, get answer right now.\" In return you get loose coupling, independent scaling, resilience to partial failure, and a clean audit trail of everything that has happened in the business — because every event was published, and brokers can keep them forever.\n\nEDA is not the right choice for every problem. It shines when you have multiple consumers of the same fact, when you need to survive partial outages, or when the business itself is naturally described as a stream of events — which, as Event Storming shows, most businesses are.",
-          "th": ""
+        "title": {
+          "en": "What is Event-Driven Architecture?"
         },
-        "tooltipRefs": ["eda", "producer", "consumer", "message-broker"]
+        "content": {
+          "en": "Event-Driven Architecture (EDA) is a way of building systems where components communicate by **announcing facts**, not by **giving orders**.\n\nIn a traditional request/response system, the Checkout service calls the Inventory service directly: \"reserve 1 unit of SKU 1234.\" Checkout waits. If Inventory is down, Checkout fails. If Inventory is slow, Checkout is slow. Checkout has to know Inventory exists, where it lives, what its API looks like, and what to do if it's not available. The two services are tightly coupled.\n\nIn an event-driven system, Checkout doesn't call anyone. It publishes a fact: `OrderPlaced { orderId: 42, items: [...] }` to a message broker. Then it's done. It does not know — and does not care — who is listening.\n\nOn the other side, any number of consumers can subscribe to that event:\n\n- Inventory listens and reserves stock.\n- Billing listens and creates an invoice.\n- Email listens and sends a confirmation.\n- Analytics listens and updates a dashboard.\n\nIf one of them is down, the event waits in the broker until that consumer is back up. If a new team wants to react to orders (say, a loyalty program), they just subscribe — Checkout doesn't change at all.\n\nThe trade-off is real: you give up the simplicity of \"call function, get answer right now.\" In return you get loose coupling, independent scaling, resilience to partial failure, and a clean audit trail of everything that has happened in the business — because every event was published, and brokers can keep them forever.\n\nEDA is not the right choice for every problem. It shines when you have multiple consumers of the same fact, when you need to survive partial outages, or when the business itself is naturally described as a stream of events — which, as Event Storming shows, most businesses are."
+        },
+        "tooltipRefs": [
+          "eda",
+          "producer",
+          "consumer",
+          "message-broker"
+        ]
       },
       {
         "id": "how-connected",
         "type": "flow",
-        "title": { "en": "How Are They Connected?", "th": "" },
+        "title": {
+          "en": "How Are They Connected?"
+        },
         "content": {
-          "en": "These three are not competing ideas — they are stages of the same journey, each feeding the next.\n\n**Event Storming** is the discovery stage. You stand at a wall with the business and find the events. You learn how the business actually works.\n\n**DDD** is the design stage. You take the events from the wall and group them. Clusters of events that change together belong in the same bounded context. The language inside each cluster becomes the ubiquitous language of that context. You now have a map of your system that mirrors the business.\n\n**EDA** is the implementation stage. The events you discovered on the wall become real events on a message broker. The bounded contexts you drew become independently deployable services. The communication between contexts happens through the events themselves.\n\nThe path is: **discover events → draw boundaries → wire them up with events**. Each stage produces an input for the next. Skipping a stage is possible, but expensive — you'll either build the wrong boundaries (skipped Event Storming) or build a tangled service mesh that doesn't match the business (skipped DDD).",
-          "th": ""
+          "en": "These three are not competing ideas — they are stages of the same journey, each feeding the next.\n\n**Event Storming** is the discovery stage. You stand at a wall with the business and find the events. You learn how the business actually works.\n\n**DDD** is the design stage. You take the events from the wall and group them. Clusters of events that change together belong in the same bounded context. The language inside each cluster becomes the ubiquitous language of that context. You now have a map of your system that mirrors the business.\n\n**EDA** is the implementation stage. The events you discovered on the wall become real events on a message broker. The bounded contexts you drew become independently deployable services. The communication between contexts happens through the events themselves.\n\nThe path is: **discover events → draw boundaries → wire them up with events**. Each stage produces an input for the next. Skipping a stage is possible, but expensive — you'll either build the wrong boundaries (skipped Event Storming) or build a tangled service mesh that doesn't match the business (skipped DDD)."
         },
         "diagram": {
           "type": "mermaid",
@@ -58,66 +77,105 @@
         },
         "steps": [
           {
-            "label": { "en": "1. Event Storming — Discover", "th": "" },
-            "body": { "en": "Get the people who know the business in a room. Cover a wall in orange events. Sort them in time order. You now know how the business actually works — not how someone thinks it works.", "th": "" }
+            "label": {
+              "en": "1. Event Storming — Discover"
+            },
+            "body": {
+              "en": "Get the people who know the business in a room. Cover a wall in orange events. Sort them in time order. You now know how the business actually works — not how someone thinks it works."
+            }
           },
           {
-            "label": { "en": "2. DDD — Design", "th": "" },
-            "body": { "en": "Group the events into clusters. Each cluster is a bounded context. Inside each context, agree on the ubiquitous language. You now have a map of your system that mirrors the business.", "th": "" }
+            "label": {
+              "en": "2. DDD — Design"
+            },
+            "body": {
+              "en": "Group the events into clusters. Each cluster is a bounded context. Inside each context, agree on the ubiquitous language. You now have a map of your system that mirrors the business."
+            }
           },
           {
-            "label": { "en": "3. EDA — Implement", "th": "" },
-            "body": { "en": "Turn the events into real messages on a broker. Turn the bounded contexts into independently deployable services. Communication between services happens through events — the same events you discovered on the wall.", "th": "" }
+            "label": {
+              "en": "3. EDA — Implement"
+            },
+            "body": {
+              "en": "Turn the events into real messages on a broker. Turn the bounded contexts into independently deployable services. Communication between services happens through events — the same events you discovered on the wall."
+            }
           },
           {
-            "label": { "en": "4. Loop back", "th": "" },
-            "body": { "en": "Running the system reveals new events, new edge cases, new disagreements. Back to the wall. The cycle is continuous, not one-shot.", "th": "" }
+            "label": {
+              "en": "4. Loop back"
+            },
+            "body": {
+              "en": "Running the system reveals new events, new edge cases, new disagreements. Back to the wall. The cycle is continuous, not one-shot."
+            }
           }
         ]
       },
       {
         "id": "which-first",
         "type": "comparison",
-        "title": { "en": "Which Should You Learn First?", "th": "" },
+        "title": {
+          "en": "Which Should You Learn First?"
+        },
         "content": {
-          "en": "If you are new to all three, the order matters. We recommend learning them in the order they are used: Event Storming first, then DDD, then EDA. Each one builds on the previous. Learning EDA first without Event Storming or DDD is the classic trap — you end up with a distributed system that doesn't match the business and is harder to change than the monolith it replaced.",
-          "th": ""
+          "en": "If you are new to all three, the order matters. We recommend learning them in the order they are used: Event Storming first, then DDD, then EDA. Each one builds on the previous. Learning EDA first without Event Storming or DDD is the classic trap — you end up with a distributed system that doesn't match the business and is harder to change than the monolith it replaced."
         },
         "left": {
-          "heading": { "en": "Recommended order", "th": "" },
+          "heading": {
+            "en": "Recommended order"
+          },
           "items": [
-            { "en": "**1. Event Storming first.** Cheap, fast, visual. You can do a useful one in an afternoon. Gives you events and ubiquitous language as raw material for everything else.", "th": "" },
-            { "en": "**2. DDD second.** Once you have events on a wall, the bounded contexts almost draw themselves. Tactical patterns (entities, aggregates) make sense once you have a strategic map.", "th": "" },
-            { "en": "**3. EDA last.** With contexts and events defined, EDA becomes a question of plumbing: which broker, what schema, how to handle retries. The hard thinking is already done.", "th": "" },
-            { "en": "Time-to-value: a single Event Storming session pays off the same day. DDD pays off in weeks. EDA pays off over months to years.", "th": "" }
+            {
+              "en": "**1. Event Storming first.** Cheap, fast, visual. You can do a useful one in an afternoon. Gives you events and ubiquitous language as raw material for everything else."
+            },
+            {
+              "en": "**2. DDD second.** Once you have events on a wall, the bounded contexts almost draw themselves. Tactical patterns (entities, aggregates) make sense once you have a strategic map."
+            },
+            {
+              "en": "**3. EDA last.** With contexts and events defined, EDA becomes a question of plumbing: which broker, what schema, how to handle retries. The hard thinking is already done."
+            },
+            {
+              "en": "Time-to-value: a single Event Storming session pays off the same day. DDD pays off in weeks. EDA pays off over months to years."
+            }
           ]
         },
         "right": {
-          "heading": { "en": "Common (worse) alternatives", "th": "" },
+          "heading": {
+            "en": "Common (worse) alternatives"
+          },
           "items": [
-            { "en": "**EDA first.** \"Let's adopt Kafka.\" You get a distributed mess that mirrors your old org chart, not your business.", "th": "" },
-            { "en": "**DDD first, no Event Storming.** You draw bounded contexts in a meeting room with three architects. The boundaries reflect the architects' assumptions, not how the business actually works.", "th": "" },
-            { "en": "**Tactical DDD only** (aggregates, repositories) without strategic DDD. You polish the inside of each service while the seams between services rot.", "th": "" },
-            { "en": "**All three at once on a green-field project.** Too many unknowns moving at the same time. Pick one to anchor on first.", "th": "" }
+            {
+              "en": "**EDA first.** \"Let's adopt Kafka.\" You get a distributed mess that mirrors your old org chart, not your business."
+            },
+            {
+              "en": "**DDD first, no Event Storming.** You draw bounded contexts in a meeting room with three architects. The boundaries reflect the architects' assumptions, not how the business actually works."
+            },
+            {
+              "en": "**Tactical DDD only** (aggregates, repositories) without strategic DDD. You polish the inside of each service while the seams between services rot."
+            },
+            {
+              "en": "**All three at once on a green-field project.** Too many unknowns moving at the same time. Pick one to anchor on first."
+            }
           ]
         }
       },
       {
         "id": "when-to-use",
         "type": "callout",
-        "title": { "en": "When to Use These (and When NOT to)", "th": "" },
+        "title": {
+          "en": "When to Use These (and When NOT to)"
+        },
         "content": {
-          "en": "These techniques are not free. They cost time, conversation, and discipline. Use them where they pay back, and don't use them where they don't.\n\n**Good fit:**\n- The business is complex — many stakeholders, overlapping vocabulary, non-trivial rules.\n- Multiple teams are touching the same system and stepping on each other.\n- The domain is changing fast and the code can't keep up.\n- You have multiple consumers of the same business events (analytics + fulfillment + notifications all care about \"Order Placed\").\n- The cost of getting the model wrong is high — money, regulation, customer trust.\n\n**Bad fit (or massive overkill):**\n- **Simple CRUD applications.** If your app is forms saving rows to tables, DDD adds ceremony without payback. A clean MVC app is fine.\n- **Throwaway prototypes.** You're going to delete this code in two weeks. Don't event-storm it.\n- **Single-developer side projects** where there is no \"business\" to align with — you are the business.\n- **Tiny domains** where the whole model fits in one screen. There is nothing to bound.\n- **Pure technical infrastructure** with no domain logic — a logging library, an image resizer. No business model means no domain to drive.\n\nThe honest rule of thumb: **the more humans are arguing about what something means, the more you need DDD and Event Storming.** The more components need to react independently to the same fact, the more you need EDA.",
-          "th": ""
+          "en": "These techniques are not free. They cost time, conversation, and discipline. Use them where they pay back, and don't use them where they don't.\n\n**Good fit:**\n- The business is complex — many stakeholders, overlapping vocabulary, non-trivial rules.\n- Multiple teams are touching the same system and stepping on each other.\n- The domain is changing fast and the code can't keep up.\n- You have multiple consumers of the same business events (analytics + fulfillment + notifications all care about \"Order Placed\").\n- The cost of getting the model wrong is high — money, regulation, customer trust.\n\n**Bad fit (or massive overkill):**\n- **Simple CRUD applications.** If your app is forms saving rows to tables, DDD adds ceremony without payback. A clean MVC app is fine.\n- **Throwaway prototypes.** You're going to delete this code in two weeks. Don't event-storm it.\n- **Single-developer side projects** where there is no \"business\" to align with — you are the business.\n- **Tiny domains** where the whole model fits in one screen. There is nothing to bound.\n- **Pure technical infrastructure** with no domain logic — a logging library, an image resizer. No business model means no domain to drive.\n\nThe honest rule of thumb: **the more humans are arguing about what something means, the more you need DDD and Event Storming.** The more components need to react independently to the same fact, the more you need EDA."
         }
       },
       {
         "id": "what-you-will-learn",
         "type": "text",
-        "title": { "en": "What This Website Will Teach You", "th": "" },
+        "title": {
+          "en": "What This Website Will Teach You"
+        },
         "content": {
-          "en": "This is a seven-module course designed to take you from \"I have heard of these terms\" to \"I can run a workshop and design a system using them.\"\n\n- **Module 1 (this one).** The big picture. Why these three exist. How they fit together. When to use them and when not to. You are nearly done with it.\n\n- **Module 2: Strategic DDD.** Bounded contexts, ubiquitous language, context maps. How to find the seams in your business and turn them into seams in your code.\n\n- **Module 3: Tactical DDD.** The building blocks inside a bounded context: entities, value objects, aggregates, repositories, domain services. When to use each, and the traps people fall into.\n\n- **Module 4: Event Storming in practice.** Running a workshop. Big Picture, Process Level, and Design Level variants. What to do when the room disagrees. Reading a finished wall.\n\n- **Module 5: EDA fundamentals.** Producers, consumers, brokers, topics, partitions. Pub/sub vs. point-to-point. The basic patterns.\n\n- **Module 6: EDA in production.** Eventual consistency, idempotency, retries, dead-letter queues, schema evolution. The things that bite once it's running.\n\n- **Module 7: Putting it all together.** A worked e-commerce example, from Event Storming wall to bounded contexts to running event-driven services. The full journey on one domain.\n\nEach module is self-contained, but they are ordered for a reason. By the end you'll be able to look at a tangled system, see where the bounded contexts should be, run a workshop to confirm it, and design an event-driven implementation that won't fall over.",
-          "th": ""
+          "en": "This is a seven-module course designed to take you from \"I have heard of these terms\" to \"I can run a workshop and design a system using them.\"\n\n- **Module 1 (this one).** The big picture. Why these three exist. How they fit together. When to use them and when not to. You are nearly done with it.\n\n- **Module 2: Strategic DDD.** Bounded contexts, ubiquitous language, context maps. How to find the seams in your business and turn them into seams in your code.\n\n- **Module 3: Tactical DDD.** The building blocks inside a bounded context: entities, value objects, aggregates, repositories, domain services. When to use each, and the traps people fall into.\n\n- **Module 4: Event Storming in practice.** Running a workshop. Big Picture, Process Level, and Design Level variants. What to do when the room disagrees. Reading a finished wall.\n\n- **Module 5: EDA fundamentals.** Producers, consumers, brokers, topics, partitions. Pub/sub vs. point-to-point. The basic patterns.\n\n- **Module 6: EDA in production.** Eventual consistency, idempotency, retries, dead-letter queues, schema evolution. The things that bite once it's running.\n\n- **Module 7: Putting it all together.** A worked e-commerce example, from Event Storming wall to bounded contexts to running event-driven services. The full journey on one domain.\n\nEach module is self-contained, but they are ordered for a reason. By the end you'll be able to look at a tangled system, see where the bounded contexts should be, run a workshop to confirm it, and design an event-driven implementation that won't fall over."
         }
       }
     ]

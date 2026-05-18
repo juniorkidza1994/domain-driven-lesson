@@ -2,36 +2,47 @@
   "module": {
     "id": "module-02",
     "number": 2,
-    "title": { "en": "DDD Fundamentals: Strategic and Tactical Design", "th": "" },
+    "title": {
+      "en": "DDD Fundamentals: Strategic and Tactical Design"
+    },
     "estimatedMinutes": 30,
     "sections": [
       {
         "id": "what-is-domain",
         "type": "text",
-        "title": { "en": "What is a Domain?", "th": "" },
-        "content": {
-          "en": "Eric Evans, in the 2003 book that started Domain-Driven Design, defined a **domain** as *a sphere of knowledge, influence, or activity*. In plain English: it is the part of the world your software is about. For an online shop, the domain is everything the business does — browsing the catalog, putting things in a cart, checking out, taking payment, shipping, returns, customer support, accounting. The whole thing.\n\nNo real-world domain is small. So DDD says: don't try to model the whole thing at once. Cut the domain into **subdomains** — coherent slices you can reason about and assign to teams. And don't treat the slices as equal. Some of them are why the business exists; some are necessary but boring; some are solved problems you should buy off the shelf.\n\nDDD uses three labels for subdomains:\n\n- **Core subdomain** — what your business is actually good at. The thing competitors can't easily copy. For an online shop, this is usually the recommendation engine, the proprietary fulfillment routing, or the dynamic pricing logic. Put your best engineers here. Build it in-house with full DDD discipline.\n\n- **Supporting subdomain** — necessary plumbing that doesn't differentiate you, but no one sells it as a product. Inventory rules tailored to your warehouses, or a custom order-state machine. Build it in-house, but cheaply. Use simpler patterns. Don't put your best people here.\n\n- **Generic subdomain** — a solved problem. Payment processing, authentication, email delivery, address validation. Don't build these. Use Stripe, Auth0, SendGrid. The cost of building them yourself is paid in opportunity cost: time not spent on the core.\n\nThe practical move when you start a DDD effort is to draw your domain on a whiteboard, list every subdomain you can think of, and label each one core / supporting / generic. The labels are not technical decisions — they are strategic ones, made with the business. Misclassifying a generic subdomain as core means burning engineering budget on a non-differentiator. Misclassifying a core subdomain as generic means outsourcing your competitive advantage.\n\nThis distinction — domain (problem space) vs. subdomain (a slice of the problem) vs. bounded context (the model you build in code to solve it) — is the foundation everything else in this module rests on.",
-          "th": ""
+        "title": {
+          "en": "What is a Domain?"
         },
-        "tooltipRefs": ["domain", "subdomain", "core-domain"]
+        "content": {
+          "en": "Eric Evans, in the 2003 book that started Domain-Driven Design, defined a **domain** as *a sphere of knowledge, influence, or activity*. In plain English: it is the part of the world your software is about. For an online shop, the domain is everything the business does — browsing the catalog, putting things in a cart, checking out, taking payment, shipping, returns, customer support, accounting. The whole thing.\n\nNo real-world domain is small. So DDD says: don't try to model the whole thing at once. Cut the domain into **subdomains** — coherent slices you can reason about and assign to teams. And don't treat the slices as equal. Some of them are why the business exists; some are necessary but boring; some are solved problems you should buy off the shelf.\n\nDDD uses three labels for subdomains:\n\n- **Core subdomain** — what your business is actually good at. The thing competitors can't easily copy. For an online shop, this is usually the recommendation engine, the proprietary fulfillment routing, or the dynamic pricing logic. Put your best engineers here. Build it in-house with full DDD discipline.\n\n- **Supporting subdomain** — necessary plumbing that doesn't differentiate you, but no one sells it as a product. Inventory rules tailored to your warehouses, or a custom order-state machine. Build it in-house, but cheaply. Use simpler patterns. Don't put your best people here.\n\n- **Generic subdomain** — a solved problem. Payment processing, authentication, email delivery, address validation. Don't build these. Use Stripe, Auth0, SendGrid. The cost of building them yourself is paid in opportunity cost: time not spent on the core.\n\nThe practical move when you start a DDD effort is to draw your domain on a whiteboard, list every subdomain you can think of, and label each one core / supporting / generic. The labels are not technical decisions — they are strategic ones, made with the business. Misclassifying a generic subdomain as core means burning engineering budget on a non-differentiator. Misclassifying a core subdomain as generic means outsourcing your competitive advantage.\n\nThis distinction — domain (problem space) vs. subdomain (a slice of the problem) vs. bounded context (the model you build in code to solve it) — is the foundation everything else in this module rests on."
+        },
+        "tooltipRefs": [
+          "domain",
+          "subdomain",
+          "core-domain"
+        ]
       },
       {
         "id": "bounded-context-intro",
         "type": "text",
-        "title": { "en": "Bounded Context", "th": "" },
-        "content": {
-          "en": "A **bounded context** is the most important strategic pattern in DDD. It is a boundary — explicit, named, enforced — inside which a domain model is internally consistent. Inside the boundary, every term has exactly one meaning. Cross the boundary and the same word can mean something completely different, and that is fine, because the boundary makes it explicit.\n\nThe classic e-commerce example is the word **Product**. To the Catalog context, a Product has a title, description, images, SEO metadata, and a marketing price. To the Inventory context, a Product is a SKU with a stock count and a warehouse location — title and description don't exist there. To the Shipping context, a Product is a physical thing with weight and dimensions for packing. To the Payment context, the word Product doesn't appear at all — there are only order lines with monetary amounts.\n\nAll four of these models are correct. They are correct **inside their own context**. The mistake — the one Evans wrote a whole book to prevent — is trying to unify them into a single Product class shared across all four contexts. That class accumulates every field every team needs, becomes huge, breaks every time any team changes anything, and ends up modeling no one well.\n\nA bounded context is *not* the same as a microservice. A bounded context is a **modeling boundary** (linguistic and conceptual); a microservice is a **deployment boundary**. One bounded context can be deployed as a monolith, as one service, or as several services. The other direction — many bounded contexts per service — is also legal but usually a mistake. Vlad Khononov's advice (Learning DDD, 2021) is the safest default: decompose to the level of bounded contexts and not finer, unless there's a clear operational reason.\n\nWhen two bounded contexts need to talk to each other, they do so through an explicit translation — an event schema, an API contract, or an anti-corruption layer (ACL) that prevents one model from leaking into the other. The diagram in the next section shows what that looks like.",
-          "th": ""
+        "title": {
+          "en": "Bounded Context"
         },
-        "tooltipRefs": ["bounded-context"]
+        "content": {
+          "en": "A **bounded context** is the most important strategic pattern in DDD. It is a boundary — explicit, named, enforced — inside which a domain model is internally consistent. Inside the boundary, every term has exactly one meaning. Cross the boundary and the same word can mean something completely different, and that is fine, because the boundary makes it explicit.\n\nThe classic e-commerce example is the word **Product**. To the Catalog context, a Product has a title, description, images, SEO metadata, and a marketing price. To the Inventory context, a Product is a SKU with a stock count and a warehouse location — title and description don't exist there. To the Shipping context, a Product is a physical thing with weight and dimensions for packing. To the Payment context, the word Product doesn't appear at all — there are only order lines with monetary amounts.\n\nAll four of these models are correct. They are correct **inside their own context**. The mistake — the one Evans wrote a whole book to prevent — is trying to unify them into a single Product class shared across all four contexts. That class accumulates every field every team needs, becomes huge, breaks every time any team changes anything, and ends up modeling no one well.\n\nA bounded context is *not* the same as a microservice. A bounded context is a **modeling boundary** (linguistic and conceptual); a microservice is a **deployment boundary**. One bounded context can be deployed as a monolith, as one service, or as several services. The other direction — many bounded contexts per service — is also legal but usually a mistake. Vlad Khononov's advice (Learning DDD, 2021) is the safest default: decompose to the level of bounded contexts and not finer, unless there's a clear operational reason.\n\nWhen two bounded contexts need to talk to each other, they do so through an explicit translation — an event schema, an API contract, or an anti-corruption layer (ACL) that prevents one model from leaking into the other. The diagram in the next section shows what that looks like."
+        },
+        "tooltipRefs": [
+          "bounded-context"
+        ]
       },
       {
         "id": "bounded-context-diagram",
         "type": "diagram",
-        "title": { "en": "Two Bounded Contexts with an Anti-Corruption Layer", "th": "" },
+        "title": {
+          "en": "Two Bounded Contexts with an Anti-Corruption Layer"
+        },
         "content": {
-          "en": "The Order context publishes an OrderPlaced event in its own ubiquitous language. The Shipping context cannot consume it directly without risking model contamination. An Anti-Corruption Layer (ACL) sits at the boundary, translating Order-context terms into Shipping-context terms. Each context keeps its own model clean.",
-          "th": ""
+          "en": "The Order context publishes an OrderPlaced event in its own ubiquitous language. The Shipping context cannot consume it directly without risking model contamination. An Anti-Corruption Layer (ACL) sits at the boundary, translating Order-context terms into Shipping-context terms. Each context keeps its own model clean."
         },
         "diagram": {
           "type": "mermaid",
@@ -41,83 +52,114 @@
       {
         "id": "context-mapping-intro",
         "type": "text",
-        "title": { "en": "Context Mapping", "th": "" },
-        "content": {
-          "en": "Once you have two or more bounded contexts, you have boundaries — and boundaries need rules. **Context mapping** is the DDD vocabulary for naming the relationship between two contexts, both technically (how they integrate) and socially (which team owes what to whom). Evans defined nine canonical context mapping patterns. Four of them cover the vast majority of real-world situations:\n\n1. **Anti-Corruption Layer (ACL).** The downstream context wraps the upstream in a translation layer. The downstream keeps its model clean. Most common when integrating with a legacy system or a third-party API whose vocabulary you don't control.\n\n2. **Open Host Service + Published Language (OHS/PL).** The upstream context publishes a well-documented API or event schema (the \"published language\") that any number of downstream contexts can consume. The published language is owned and versioned. This is how Catalog typically exposes products to Cart, Order, and external affiliates.\n\n3. **Customer-Supplier.** One team is upstream (supplier), the other downstream (customer). The customer has real influence over the supplier's roadmap — they can ask for changes, and the supplier is expected to deliver. Common between Order (supplier) and Shipping (customer).\n\n4. **Conformist.** The downstream team accepts the upstream's model as-is, with no translation, because it has no political leverage to ask for changes. This is what happens when you integrate with Stripe or AWS: you conform to their API, you don't ask them to change.\n\nThe choice between these patterns is rarely purely technical. Conformist is cheaper than ACL but locks you into someone else's model. OHS+PL is more disciplined than Customer-Supplier but requires the upstream team to commit to versioning. A real context map labels every boundary with one of these patterns and makes the trade-offs explicit.",
-          "th": ""
+        "title": {
+          "en": "Context Mapping"
         },
-        "tooltipRefs": ["context-map"]
+        "content": {
+          "en": "Once you have two or more bounded contexts, you have boundaries — and boundaries need rules. **Context mapping** is the DDD vocabulary for naming the relationship between two contexts, both technically (how they integrate) and socially (which team owes what to whom). Evans defined nine canonical context mapping patterns. Four of them cover the vast majority of real-world situations:\n\n1. **Anti-Corruption Layer (ACL).** The downstream context wraps the upstream in a translation layer. The downstream keeps its model clean. Most common when integrating with a legacy system or a third-party API whose vocabulary you don't control.\n\n2. **Open Host Service + Published Language (OHS/PL).** The upstream context publishes a well-documented API or event schema (the \"published language\") that any number of downstream contexts can consume. The published language is owned and versioned. This is how Catalog typically exposes products to Cart, Order, and external affiliates.\n\n3. **Customer-Supplier.** One team is upstream (supplier), the other downstream (customer). The customer has real influence over the supplier's roadmap — they can ask for changes, and the supplier is expected to deliver. Common between Order (supplier) and Shipping (customer).\n\n4. **Conformist.** The downstream team accepts the upstream's model as-is, with no translation, because it has no political leverage to ask for changes. This is what happens when you integrate with Stripe or AWS: you conform to their API, you don't ask them to change.\n\nThe choice between these patterns is rarely purely technical. Conformist is cheaper than ACL but locks you into someone else's model. OHS+PL is more disciplined than Customer-Supplier but requires the upstream team to commit to versioning. A real context map labels every boundary with one of these patterns and makes the trade-offs explicit."
+        },
+        "tooltipRefs": [
+          "context-map"
+        ]
       },
       {
         "id": "context-mapping-patterns",
         "type": "comparison",
-        "title": { "en": "Context Mapping — Four Common Patterns", "th": "" },
+        "title": {
+          "en": "Context Mapping — Four Common Patterns"
+        },
         "content": {
-          "en": "The four most common patterns split naturally into two groups: the upstream-friendly patterns (where the supplier publishes a contract) and the downstream-protective patterns (where the consumer shields itself).",
-          "th": ""
+          "en": "The four most common patterns split naturally into two groups: the upstream-friendly patterns (where the supplier publishes a contract) and the downstream-protective patterns (where the consumer shields itself)."
         },
         "left": {
-          "heading": { "en": "Upstream publishes — downstream consumes", "th": "" },
+          "heading": {
+            "en": "Upstream publishes — downstream consumes"
+          },
           "items": [
-            { "en": "**Open Host Service + Published Language (OHS/PL).** The upstream context publishes a documented, versioned API or event schema. Many downstreams consume it on equal terms. Example: Catalog exposes a product search API consumed by Cart, Order, and affiliate sites.", "th": "" },
-            { "en": "**Customer-Supplier.** A single downstream has real influence over the upstream's roadmap. The supplier commits to evolving the contract to serve the customer's needs. Example: Order (supplier) and Shipping (customer) co-evolve the ShipmentRequest contract sprint by sprint.", "th": "" }
+            {
+              "en": "**Open Host Service + Published Language (OHS/PL).** The upstream context publishes a documented, versioned API or event schema. Many downstreams consume it on equal terms. Example: Catalog exposes a product search API consumed by Cart, Order, and affiliate sites."
+            },
+            {
+              "en": "**Customer-Supplier.** A single downstream has real influence over the upstream's roadmap. The supplier commits to evolving the contract to serve the customer's needs. Example: Order (supplier) and Shipping (customer) co-evolve the ShipmentRequest contract sprint by sprint."
+            }
           ]
         },
         "right": {
-          "heading": { "en": "Downstream protects itself — upstream doesn't change", "th": "" },
+          "heading": {
+            "en": "Downstream protects itself — upstream doesn't change"
+          },
           "items": [
-            { "en": "**Anti-Corruption Layer (ACL).** The downstream wraps the upstream behind a translator that converts foreign terms into the downstream's ubiquitous language. The downstream's model stays clean. Example: Shipping wraps a legacy ERP warehouse API to keep ERP terminology out of its domain.", "th": "" },
-            { "en": "**Conformist.** The downstream gives up — it adopts the upstream's model verbatim because it has no leverage. Cheap to build, but it surrenders model autonomy. Example: a Payment context that uses Stripe's API objects directly throughout its code instead of translating them.", "th": "" }
+            {
+              "en": "**Anti-Corruption Layer (ACL).** The downstream wraps the upstream behind a translator that converts foreign terms into the downstream's ubiquitous language. The downstream's model stays clean. Example: Shipping wraps a legacy ERP warehouse API to keep ERP terminology out of its domain."
+            },
+            {
+              "en": "**Conformist.** The downstream gives up — it adopts the upstream's model verbatim because it has no leverage. Cheap to build, but it surrenders model autonomy. Example: a Payment context that uses Stripe's API objects directly throughout its code instead of translating them."
+            }
           ]
         }
       },
       {
         "id": "ubiquitous-language",
         "type": "text",
-        "title": { "en": "Ubiquitous Language", "th": "" },
-        "content": {
-          "en": "**Ubiquitous Language** is the deal DDD asks the team to make with the business: we will use the same words, with the same meanings, everywhere — in conversations, in tickets, in documentation, in class names, in method names, in API endpoints, in database tables, in event payloads. No translation step between \"how the business talks\" and \"how the code is named.\"\n\nThe constraint that makes this work is that the language is **scoped to one bounded context**. There is no enterprise-wide ubiquitous language. Trying to build one is a famous anti-pattern — the \"God Ubiquitous Language\" or \"Enterprise Canonical Model.\" It always collapses, because the same word legitimately means different things to different parts of the business. \"Order\" in Catalog (a fantasy concept that doesn't really exist there), \"Order\" in Checkout (a cart being finalized), \"Order\" in Fulfillment (a packing list), and \"Order\" in Finance (an invoice line) are four different concepts. Forcing them to share one definition produces a class with twenty optional fields, none of which any team trusts.\n\nThe right approach: each bounded context owns its own language. The same real-world concept can have different names in different contexts. The Catalog context might call it `Product`. The Inventory context calls it `Stockable`. The Shipping context calls it `Parcel`. These names are not synonyms — they describe different aspects of the same thing, from the perspective that matters to that context.\n\nThe test for whether the language is truly ubiquitous: a domain expert who has never seen the code should be able to read a class diagram or an event log and recognize the terms as their own. If the developer has to translate (\"Customer in the code is what you call a 'shopper'\"), the language has already failed.\n\nUbiquitous Language is discovered, not designed. The fastest way to discover it is Event Storming — Module 3 covers this in detail.",
-          "th": ""
+        "title": {
+          "en": "Ubiquitous Language"
         },
-        "tooltipRefs": ["ubiquitous-language"]
+        "content": {
+          "en": "**Ubiquitous Language** is the deal DDD asks the team to make with the business: we will use the same words, with the same meanings, everywhere — in conversations, in tickets, in documentation, in class names, in method names, in API endpoints, in database tables, in event payloads. No translation step between \"how the business talks\" and \"how the code is named.\"\n\nThe constraint that makes this work is that the language is **scoped to one bounded context**. There is no enterprise-wide ubiquitous language. Trying to build one is a famous anti-pattern — the \"God Ubiquitous Language\" or \"Enterprise Canonical Model.\" It always collapses, because the same word legitimately means different things to different parts of the business. \"Order\" in Catalog (a fantasy concept that doesn't really exist there), \"Order\" in Checkout (a cart being finalized), \"Order\" in Fulfillment (a packing list), and \"Order\" in Finance (an invoice line) are four different concepts. Forcing them to share one definition produces a class with twenty optional fields, none of which any team trusts.\n\nThe right approach: each bounded context owns its own language. The same real-world concept can have different names in different contexts. The Catalog context might call it `Product`. The Inventory context calls it `Stockable`. The Shipping context calls it `Parcel`. These names are not synonyms — they describe different aspects of the same thing, from the perspective that matters to that context.\n\nThe test for whether the language is truly ubiquitous: a domain expert who has never seen the code should be able to read a class diagram or an event log and recognize the terms as their own. If the developer has to translate (\"Customer in the code is what you call a 'shopper'\"), the language has already failed.\n\nUbiquitous Language is discovered, not designed. The fastest way to discover it is Event Storming — Module 3 covers this in detail."
+        },
+        "tooltipRefs": [
+          "ubiquitous-language"
+        ]
       },
       {
         "id": "entity",
         "type": "text",
-        "title": { "en": "Entity", "th": "" },
-        "content": {
-          "en": "We now move from strategic design (boundaries between contexts) to **tactical design** — the patterns you use *inside* a single bounded context. The first tactical building block is the **Entity**.\n\nAn Entity is a domain object that has an **identity that persists over time**, independent of its attributes. Two entities with identical attributes are still different entities if they have different identities. An entity is mutable: it changes over its lifetime, but it remains \"the same thing\" across those changes.\n\nThe canonical e-commerce example is `Customer`. A customer has an ID — say `CUST-42`. They might change their name when they get married, change their email three times, move house twice, and add a new payment method. The same `Customer` (same identity) accumulates a history of attribute changes. Two customers with the same name and the same address are still different customers if they have different IDs.\n\n`Order` is also an entity. An order is created with an `OrderId` (e.g. `ORD-2026-00471`) and then transitions through states: Pending → Confirmed → Shipped → Delivered. The attributes change at every transition. The identity does not. Two orders with the exact same line items, same customer, same shipping address are still distinct orders — they are different facts about the world.\n\nThe most common mistake teams make with entities is letting the database primary key *be* the domain identity. The auto-increment integer from the ORM becomes the identity. This couples your domain model to your persistence layer in a way that bites later: you can't generate an identity before saving (which matters when you want to emit a domain event referring to the entity before it touches the database), you can't have identity in a distributed system, and you certainly can't migrate stores without renumbering everything. The fix is mechanical: generate identity in the domain layer at construction time (UUID, ULID, or a business-meaningful identifier like the order number), and treat the database PK as a separate concern.\n\nThe other recurring mistake is the **anemic domain model**: entities are reduced to bags of getters and setters, and all the rules — \"an order can't be cancelled after it's shipped\" — get pushed into a separate service class. The entity exists in name only, owns no behavior, and enforces no invariants. Code that uses the entity has to remember every rule, and the rules get duplicated across every caller. Don't do this. Entities own their rules.",
-          "th": ""
+        "title": {
+          "en": "Entity"
         },
-        "tooltipRefs": ["entity"]
+        "content": {
+          "en": "We now move from strategic design (boundaries between contexts) to **tactical design** — the patterns you use *inside* a single bounded context. The first tactical building block is the **Entity**.\n\nAn Entity is a domain object that has an **identity that persists over time**, independent of its attributes. Two entities with identical attributes are still different entities if they have different identities. An entity is mutable: it changes over its lifetime, but it remains \"the same thing\" across those changes.\n\nThe canonical e-commerce example is `Customer`. A customer has an ID — say `CUST-42`. They might change their name when they get married, change their email three times, move house twice, and add a new payment method. The same `Customer` (same identity) accumulates a history of attribute changes. Two customers with the same name and the same address are still different customers if they have different IDs.\n\n`Order` is also an entity. An order is created with an `OrderId` (e.g. `ORD-2026-00471`) and then transitions through states: Pending → Confirmed → Shipped → Delivered. The attributes change at every transition. The identity does not. Two orders with the exact same line items, same customer, same shipping address are still distinct orders — they are different facts about the world.\n\nThe most common mistake teams make with entities is letting the database primary key *be* the domain identity. The auto-increment integer from the ORM becomes the identity. This couples your domain model to your persistence layer in a way that bites later: you can't generate an identity before saving (which matters when you want to emit a domain event referring to the entity before it touches the database), you can't have identity in a distributed system, and you certainly can't migrate stores without renumbering everything. The fix is mechanical: generate identity in the domain layer at construction time (UUID, ULID, or a business-meaningful identifier like the order number), and treat the database PK as a separate concern.\n\nThe other recurring mistake is the **anemic domain model**: entities are reduced to bags of getters and setters, and all the rules — \"an order can't be cancelled after it's shipped\" — get pushed into a separate service class. The entity exists in name only, owns no behavior, and enforces no invariants. Code that uses the entity has to remember every rule, and the rules get duplicated across every caller. Don't do this. Entities own their rules."
+        },
+        "tooltipRefs": [
+          "entity"
+        ]
       },
       {
         "id": "value-object",
         "type": "text",
-        "title": { "en": "Value Object", "th": "" },
-        "content": {
-          "en": "A **Value Object** is the opposite of an Entity. It has **no identity of its own** — it is defined entirely by its attributes. Two value objects with identical attributes are interchangeable. They are equal. You don't track them across time, because there is no \"them\" to track — just the values.\n\nThe canonical example is `Money`. `Money(100, \"USD\")` and another `Money(100, \"USD\")` are equal. They are the same value. It makes no sense to ask \"are these the same Money?\" — it's like asking \"are these the same 100?\" Either two amounts of money have the same number and the same currency, or they don't. There is nothing else to compare.\n\nValue Objects are **always immutable**. To \"change\" a value object, you don't mutate it — you replace it with a new one. If a customer gets a $10 discount, you don't reach into a `Money` instance and lower its `amount` field. You construct a new `Money(90, \"USD\")` and assign it. This is not pedantry — it's a property that makes value objects safe to share, cheap to pass around, and impossible to corrupt by accident.\n\nThe e-commerce domain is full of value objects. `Money` (amount + currency). `Address` (street, city, postal code, country). `DateRange` (start, end). `Quantity` (number + unit). `EmailAddress`. `PhoneNumber`. `CardLast4`. `SKU` (when not tracked across time). Each of these encapsulates a small concept that travels as a unit.\n\nThe most common mistake is **primitive obsession**: storing money as a bare `decimal`, addresses as a JSON blob, emails as `string`. The cost is invisible at first and crippling later. Validation logic ends up scattered across every place the primitive is used. Type errors slip in — the compiler happily lets you assign an email string to a customer-name field. Domain rules that should be obvious (\"two prices in different currencies cannot be added\") have to be enforced by convention or, more commonly, by bug reports from production.\n\nThe fix is to write the value object once, give it the behavior it needs (`Money.add()`, `Money.convertTo()`, `Address.format()`), and use it everywhere the concept appears. In modern languages this is cheap — Java records, C# records, Kotlin data classes, TypeScript types all give you immutable value semantics with one line.",
-          "th": ""
+        "title": {
+          "en": "Value Object"
         },
-        "tooltipRefs": ["value-object"]
+        "content": {
+          "en": "A **Value Object** is the opposite of an Entity. It has **no identity of its own** — it is defined entirely by its attributes. Two value objects with identical attributes are interchangeable. They are equal. You don't track them across time, because there is no \"them\" to track — just the values.\n\nThe canonical example is `Money`. `Money(100, \"USD\")` and another `Money(100, \"USD\")` are equal. They are the same value. It makes no sense to ask \"are these the same Money?\" — it's like asking \"are these the same 100?\" Either two amounts of money have the same number and the same currency, or they don't. There is nothing else to compare.\n\nValue Objects are **always immutable**. To \"change\" a value object, you don't mutate it — you replace it with a new one. If a customer gets a $10 discount, you don't reach into a `Money` instance and lower its `amount` field. You construct a new `Money(90, \"USD\")` and assign it. This is not pedantry — it's a property that makes value objects safe to share, cheap to pass around, and impossible to corrupt by accident.\n\nThe e-commerce domain is full of value objects. `Money` (amount + currency). `Address` (street, city, postal code, country). `DateRange` (start, end). `Quantity` (number + unit). `EmailAddress`. `PhoneNumber`. `CardLast4`. `SKU` (when not tracked across time). Each of these encapsulates a small concept that travels as a unit.\n\nThe most common mistake is **primitive obsession**: storing money as a bare `decimal`, addresses as a JSON blob, emails as `string`. The cost is invisible at first and crippling later. Validation logic ends up scattered across every place the primitive is used. Type errors slip in — the compiler happily lets you assign an email string to a customer-name field. Domain rules that should be obvious (\"two prices in different currencies cannot be added\") have to be enforced by convention or, more commonly, by bug reports from production.\n\nThe fix is to write the value object once, give it the behavior it needs (`Money.add()`, `Money.convertTo()`, `Address.format()`), and use it everywhere the concept appears. In modern languages this is cheap — Java records, C# records, Kotlin data classes, TypeScript types all give you immutable value semantics with one line."
+        },
+        "tooltipRefs": [
+          "value-object"
+        ]
       },
       {
         "id": "aggregate",
         "type": "text",
-        "title": { "en": "Aggregate", "th": "" },
-        "content": {
-          "en": "An **Aggregate** is a cluster of domain objects (one or more entities and value objects) that is treated as a single unit for the purpose of data changes. One entity in the cluster is designated the **Aggregate Root** — it is the only object that external code is allowed to talk to. To touch anything inside the aggregate, you go through the root.\n\nWhy the rule? Because the aggregate is where **invariants** live. An invariant is a business rule that must be true across the whole cluster at every moment a transaction commits. \"The total of all order line items must equal the order total.\" \"An order with more than 50 items cannot be confirmed.\" \"An order cannot be cancelled after it has shipped.\" These rules span multiple objects. If external code can reach inside and mutate a line item directly, the rules can be silently violated. By forcing all access through the root, the root becomes the single place where invariants are enforced.\n\nThe Aggregate is also a **transactional consistency boundary**. Everything inside the aggregate is consistent at every transaction. Things outside the aggregate are only **eventually consistent** — they catch up via domain events. This is the rule that scales: small aggregates, fast transactions, low contention, and eventual consistency between aggregates via events.\n\nThe canonical e-commerce example is the `Order` aggregate. The root is `Order`. Inside it: a collection of `OrderLineItem` entities (each with a product reference, quantity, and price), a `ShippingAddress` value object, and a `PaymentStatus` value object. External code never mutates an `OrderLineItem` directly. It calls `order.addItem(product, quantity)` or `order.removeItem(lineItemId)`. The `Order` checks the invariants — \"is the order still in the editable state?\", \"would this push us over 50 items?\", \"is the product still in the catalog?\" — and either accepts the change or throws.\n\nThe most common mistake is making aggregates too big. Teams lump `Order` + `Customer` + `Product` + `Inventory` into a single aggregate to avoid eventual consistency. This produces a god aggregate that locks half the database on every checkout, creates massive contention under load, and is impossible to evolve because every team touches it. Vernon's rule (\"Effective Aggregate Design,\" 2011): **prefer small aggregates**. A single entity is the minimum viable aggregate, and often the right one. When two aggregates need to coordinate, use a domain event, not a shared transaction. The diagram in the next section shows the Order aggregate.",
-          "th": ""
+        "title": {
+          "en": "Aggregate"
         },
-        "tooltipRefs": ["aggregate", "entity", "value-object"]
+        "content": {
+          "en": "An **Aggregate** is a cluster of domain objects (one or more entities and value objects) that is treated as a single unit for the purpose of data changes. One entity in the cluster is designated the **Aggregate Root** — it is the only object that external code is allowed to talk to. To touch anything inside the aggregate, you go through the root.\n\nWhy the rule? Because the aggregate is where **invariants** live. An invariant is a business rule that must be true across the whole cluster at every moment a transaction commits. \"The total of all order line items must equal the order total.\" \"An order with more than 50 items cannot be confirmed.\" \"An order cannot be cancelled after it has shipped.\" These rules span multiple objects. If external code can reach inside and mutate a line item directly, the rules can be silently violated. By forcing all access through the root, the root becomes the single place where invariants are enforced.\n\nThe Aggregate is also a **transactional consistency boundary**. Everything inside the aggregate is consistent at every transaction. Things outside the aggregate are only **eventually consistent** — they catch up via domain events. This is the rule that scales: small aggregates, fast transactions, low contention, and eventual consistency between aggregates via events.\n\nThe canonical e-commerce example is the `Order` aggregate. The root is `Order`. Inside it: a collection of `OrderLineItem` entities (each with a product reference, quantity, and price), a `ShippingAddress` value object, and a `PaymentStatus` value object. External code never mutates an `OrderLineItem` directly. It calls `order.addItem(product, quantity)` or `order.removeItem(lineItemId)`. The `Order` checks the invariants — \"is the order still in the editable state?\", \"would this push us over 50 items?\", \"is the product still in the catalog?\" — and either accepts the change or throws.\n\nThe most common mistake is making aggregates too big. Teams lump `Order` + `Customer` + `Product` + `Inventory` into a single aggregate to avoid eventual consistency. This produces a god aggregate that locks half the database on every checkout, creates massive contention under load, and is impossible to evolve because every team touches it. Vernon's rule (\"Effective Aggregate Design,\" 2011): **prefer small aggregates**. A single entity is the minimum viable aggregate, and often the right one. When two aggregates need to coordinate, use a domain event, not a shared transaction. The diagram in the next section shows the Order aggregate."
+        },
+        "tooltipRefs": [
+          "aggregate",
+          "entity",
+          "value-object"
+        ]
       },
       {
         "id": "aggregate-diagram",
         "type": "diagram",
-        "title": { "en": "Order Aggregate", "th": "" },
+        "title": {
+          "en": "Order Aggregate"
+        },
         "content": {
-          "en": "The Order is the Aggregate Root — the single entry point. OrderLineItem entities and the ShippingAddress and PaymentStatus value objects live inside the aggregate boundary. External code only talks to Order. The Payment aggregate is a separate aggregate; the Order references it by id only (PaymentId), not by direct object reference.",
-          "th": ""
+          "en": "The Order is the Aggregate Root — the single entry point. OrderLineItem entities and the ShippingAddress and PaymentStatus value objects live inside the aggregate boundary. External code only talks to Order. The Payment aggregate is a separate aggregate; the Order references it by id only (PaymentId), not by direct object reference."
         },
         "diagram": {
           "type": "mermaid",
@@ -127,71 +169,107 @@
       {
         "id": "repository",
         "type": "text",
-        "title": { "en": "Repository", "th": "" },
-        "content": {
-          "en": "A **Repository** is the abstraction that lets the domain layer load and save aggregates without knowing anything about the database. It looks like a collection — you can ask it for an aggregate by id, you can hand it an aggregate to save — but behind the scenes it talks to a database, an ORM, an event store, or whatever the persistence stack happens to be.\n\nThe firm rule: **one Repository per Aggregate Root**. Not one per table, not one per entity. The aggregate is the unit of consistency, so the aggregate is the unit of load and save. `OrderRepository` returns `Order` aggregates (fully populated, with their line items and shipping address). There is no `OrderLineItemRepository`, because order line items live inside the Order aggregate and can only be reached through the root.\n\nIn the e-commerce domain, the application service for placing an order looks roughly like this in pseudocode: load the `Cart` aggregate via `cartRepository.findById(cartId)`, load the `Customer` aggregate via `customerRepository.findById(customerId)`, call `Order.createFrom(customer, cart)` which returns a new `Order` aggregate that has enforced all the invariants, save it via `orderRepository.save(order)`, and publish the resulting `OrderPlaced` domain event. The repository hides whether the data lives in PostgreSQL, MongoDB, or an event store. The domain layer doesn't care.\n\nThe most common mistake is the **generic repository** anti-pattern: a single `IRepository<T>` base class with methods like `GetAll()`, `Find(predicate)`, `Add()`, `Delete()`, reused across every aggregate type. It looks elegant in tutorials. In practice, it forces callers to construct query expressions in application code, leaking persistence concerns upward and stripping all domain meaning. The repository should speak the ubiquitous language: `findOrdersAwaitingShipment()`, not `Find(o => o.Status == 3)`. Each repository's method names are part of the domain model.\n\nThe other recurring mistake is using the repository as a read query mechanism. With CQRS (covered in later modules), the write side uses repositories to load and save aggregates; the read side bypasses them entirely and uses purpose-built read models (denormalized views, materialized projections, or direct SQL) tailored to the queries the UI actually needs. Loading a full aggregate just to render a list view is wasteful and forces aggregate design to compromise for query speed.",
-          "th": ""
+        "title": {
+          "en": "Repository"
         },
-        "tooltipRefs": ["repository", "aggregate"]
+        "content": {
+          "en": "A **Repository** is the abstraction that lets the domain layer load and save aggregates without knowing anything about the database. It looks like a collection — you can ask it for an aggregate by id, you can hand it an aggregate to save — but behind the scenes it talks to a database, an ORM, an event store, or whatever the persistence stack happens to be.\n\nThe firm rule: **one Repository per Aggregate Root**. Not one per table, not one per entity. The aggregate is the unit of consistency, so the aggregate is the unit of load and save. `OrderRepository` returns `Order` aggregates (fully populated, with their line items and shipping address). There is no `OrderLineItemRepository`, because order line items live inside the Order aggregate and can only be reached through the root.\n\nIn the e-commerce domain, the application service for placing an order looks roughly like this in pseudocode: load the `Cart` aggregate via `cartRepository.findById(cartId)`, load the `Customer` aggregate via `customerRepository.findById(customerId)`, call `Order.createFrom(customer, cart)` which returns a new `Order` aggregate that has enforced all the invariants, save it via `orderRepository.save(order)`, and publish the resulting `OrderPlaced` domain event. The repository hides whether the data lives in PostgreSQL, MongoDB, or an event store. The domain layer doesn't care.\n\nThe most common mistake is the **generic repository** anti-pattern: a single `IRepository<T>` base class with methods like `GetAll()`, `Find(predicate)`, `Add()`, `Delete()`, reused across every aggregate type. It looks elegant in tutorials. In practice, it forces callers to construct query expressions in application code, leaking persistence concerns upward and stripping all domain meaning. The repository should speak the ubiquitous language: `findOrdersAwaitingShipment()`, not `Find(o => o.Status == 3)`. Each repository's method names are part of the domain model.\n\nThe other recurring mistake is using the repository as a read query mechanism. With CQRS (covered in later modules), the write side uses repositories to load and save aggregates; the read side bypasses them entirely and uses purpose-built read models (denormalized views, materialized projections, or direct SQL) tailored to the queries the UI actually needs. Loading a full aggregate just to render a list view is wasteful and forces aggregate design to compromise for query speed."
+        },
+        "tooltipRefs": [
+          "repository",
+          "aggregate"
+        ]
       },
       {
         "id": "domain-service",
         "type": "text",
-        "title": { "en": "Domain Service", "th": "" },
-        "content": {
-          "en": "Most domain logic belongs on an entity or a value object. \"Can this order be cancelled?\" belongs on `Order`. \"How do I add this to that?\" belongs on `Money`. But occasionally, a piece of domain logic spans **multiple aggregates**, and no single one of them can own the rule without reaching across the boundary. That is what a **Domain Service** is for.\n\nA Domain Service is a stateless operation in the domain layer that expresses business behavior that does not naturally belong to a single Entity or Value Object. It is named with a verb from the ubiquitous language. It contains domain logic (real business decisions). It takes domain objects as inputs, returns domain objects as outputs, and does not touch repositories, databases, or external systems directly.\n\nThe canonical e-commerce example is pricing. Computing the final price for a shopping cart requires the cart's line items (Cart aggregate), the customer's loyalty tier (Customer aggregate), and the current promotion rules (PromotionPolicy aggregate or value object). No single aggregate owns all that data. So there is a `PricingService` (or `OrderPricingCalculator`) that takes the relevant objects as parameters and returns a `Money` value object representing the final amount. It contains the discount logic — \"if loyalty tier is gold, apply 5%; if cart total is over $100, free shipping; if a promotional code is active, apply it; cap total discount at 30%.\" The rules live in one named place and are testable in isolation.\n\nOther canonical Domain Services: `FraudCheckService` (evaluates an Order and a Customer's history together), `InventoryAllocationService` (decides which warehouse should fulfill an order based on multiple aggregates), `TransferFunds` (coordinates two Account entities and enforces business rules that cross both).\n\nThe critical distinction is **Domain Service vs. Application Service**. They sound the same and they are wildly different.\n\n- A **Domain Service** holds *domain logic*. It makes business decisions. It is named in the ubiquitous language: `PricingService.calculateTotal(cart, customer, promotions)`. The domain expert can understand what it does and validate that the rules are right.\n\n- An **Application Service** holds *orchestration*. It loads aggregates from repositories, calls the domain (entities, value objects, domain services) to do the actual work, persists the result, and publishes events. It contains *no* business decisions — every decision is delegated downward. Application services are named after use cases: `PlaceOrderApplicationService.execute(...)`.\n\nThe test: if you can explain what the class does to a business analyst without mentioning databases, HTTP, or messaging, it is a Domain Service. If you have to mention infrastructure, it is an Application Service. Mixing the two is the most common DDD failure mode — the so-called \"Fat Service Layer\" — and the cure is to push business decisions down into entities, value objects, and domain services, leaving application services as thin coordinators.",
-          "th": ""
+        "title": {
+          "en": "Domain Service"
         },
-        "tooltipRefs": ["domain-service", "application-service"]
+        "content": {
+          "en": "Most domain logic belongs on an entity or a value object. \"Can this order be cancelled?\" belongs on `Order`. \"How do I add this to that?\" belongs on `Money`. But occasionally, a piece of domain logic spans **multiple aggregates**, and no single one of them can own the rule without reaching across the boundary. That is what a **Domain Service** is for.\n\nA Domain Service is a stateless operation in the domain layer that expresses business behavior that does not naturally belong to a single Entity or Value Object. It is named with a verb from the ubiquitous language. It contains domain logic (real business decisions). It takes domain objects as inputs, returns domain objects as outputs, and does not touch repositories, databases, or external systems directly.\n\nThe canonical e-commerce example is pricing. Computing the final price for a shopping cart requires the cart's line items (Cart aggregate), the customer's loyalty tier (Customer aggregate), and the current promotion rules (PromotionPolicy aggregate or value object). No single aggregate owns all that data. So there is a `PricingService` (or `OrderPricingCalculator`) that takes the relevant objects as parameters and returns a `Money` value object representing the final amount. It contains the discount logic — \"if loyalty tier is gold, apply 5%; if cart total is over $100, free shipping; if a promotional code is active, apply it; cap total discount at 30%.\" The rules live in one named place and are testable in isolation.\n\nOther canonical Domain Services: `FraudCheckService` (evaluates an Order and a Customer's history together), `InventoryAllocationService` (decides which warehouse should fulfill an order based on multiple aggregates), `TransferFunds` (coordinates two Account entities and enforces business rules that cross both).\n\nThe critical distinction is **Domain Service vs. Application Service**. They sound the same and they are wildly different.\n\n- A **Domain Service** holds *domain logic*. It makes business decisions. It is named in the ubiquitous language: `PricingService.calculateTotal(cart, customer, promotions)`. The domain expert can understand what it does and validate that the rules are right.\n\n- An **Application Service** holds *orchestration*. It loads aggregates from repositories, calls the domain (entities, value objects, domain services) to do the actual work, persists the result, and publishes events. It contains *no* business decisions — every decision is delegated downward. Application services are named after use cases: `PlaceOrderApplicationService.execute(...)`.\n\nThe test: if you can explain what the class does to a business analyst without mentioning databases, HTTP, or messaging, it is a Domain Service. If you have to mention infrastructure, it is an Application Service. Mixing the two is the most common DDD failure mode — the so-called \"Fat Service Layer\" — and the cure is to push business decisions down into entities, value objects, and domain services, leaving application services as thin coordinators."
+        },
+        "tooltipRefs": [
+          "domain-service",
+          "application-service"
+        ]
       },
       {
         "id": "domain-event-callout",
         "type": "callout",
-        "title": { "en": "Domain Event", "th": "" },
-        "content": {
-          "en": "A **Domain Event** is a fact: something significant that happened inside a bounded context that the business cares about. Always named in the **past tense**: `OrderPlaced`, `PaymentReceived`, `ShipmentDispatched`, `CustomerRegistered`. Never `PlaceOrder` (that is a command — a request) and never `OrderProcessing` (that is a state, not a fact).\n\nA Domain Event is **immutable**. Once published, it cannot be changed. It is a record of something that occurred. It carries the minimum data needed to describe the fact: an `OrderPlaced` event typically contains the `orderId`, the `customerId`, the line items, the total amount, and a timestamp. It does not contain instructions, opinions, or requests — only the fact.\n\nDomain Events are how aggregates communicate within a bounded context (without sharing transactions) and how bounded contexts communicate with each other (without sharing data). When the `Order` aggregate is created, it emits `OrderPlaced`. The `Inventory` context subscribes and reserves stock. The `Notifications` context subscribes and sends a confirmation email. The `Analytics` context subscribes and updates a dashboard. None of these consumers know about each other, and the `Order` aggregate does not know any of them exist. That is the loose coupling that makes DDD and EDA work together — Module 5 covers this in depth.",
-          "th": ""
+        "title": {
+          "en": "Domain Event"
         },
-        "tooltipRefs": ["domain-event"]
+        "content": {
+          "en": "A **Domain Event** is a fact: something significant that happened inside a bounded context that the business cares about. Always named in the **past tense**: `OrderPlaced`, `PaymentReceived`, `ShipmentDispatched`, `CustomerRegistered`. Never `PlaceOrder` (that is a command — a request) and never `OrderProcessing` (that is a state, not a fact).\n\nA Domain Event is **immutable**. Once published, it cannot be changed. It is a record of something that occurred. It carries the minimum data needed to describe the fact: an `OrderPlaced` event typically contains the `orderId`, the `customerId`, the line items, the total amount, and a timestamp. It does not contain instructions, opinions, or requests — only the fact.\n\nDomain Events are how aggregates communicate within a bounded context (without sharing transactions) and how bounded contexts communicate with each other (without sharing data). When the `Order` aggregate is created, it emits `OrderPlaced`. The `Inventory` context subscribes and reserves stock. The `Notifications` context subscribes and sends a confirmation email. The `Analytics` context subscribes and updates a dashboard. None of these consumers know about each other, and the `Order` aggregate does not know any of them exist. That is the loose coupling that makes DDD and EDA work together — Module 5 covers this in depth."
+        },
+        "tooltipRefs": [
+          "domain-event"
+        ]
       },
       {
         "id": "building-blocks-summary",
         "type": "infographic",
-        "title": { "en": "DDD Building Blocks — At a Glance", "th": "" },
+        "title": {
+          "en": "DDD Building Blocks — At a Glance"
+        },
         "content": {
-          "en": "Six tactical patterns make up the inside of a bounded context. Memorize the difference between them — you will use these names in every DDD conversation for the rest of your career.",
-          "th": ""
+          "en": "Six tactical patterns make up the inside of a bounded context. Memorize the difference between them — you will use these names in every DDD conversation for the rest of your career."
         },
         "items": [
           {
             "icon": "🆔",
-            "label": { "en": "Entity", "th": "" },
-            "body": { "en": "Has identity that persists over time. Mutable. Two entities with identical attributes are still different if they have different IDs. Example: Customer, Order.", "th": "" }
+            "label": {
+              "en": "Entity"
+            },
+            "body": {
+              "en": "Has identity that persists over time. Mutable. Two entities with identical attributes are still different if they have different IDs. Example: Customer, Order."
+            }
           },
           {
             "icon": "💎",
-            "label": { "en": "Value Object", "th": "" },
-            "body": { "en": "Defined entirely by its attributes. No identity. Always immutable. To change, replace with a new one. Example: Money, Address, DateRange.", "th": "" }
+            "label": {
+              "en": "Value Object"
+            },
+            "body": {
+              "en": "Defined entirely by its attributes. No identity. Always immutable. To change, replace with a new one. Example: Money, Address, DateRange."
+            }
           },
           {
             "icon": "📦",
-            "label": { "en": "Aggregate", "th": "" },
-            "body": { "en": "Cluster of entities and value objects treated as one unit. The Aggregate Root is the only entry point. Enforces invariants. Transactional boundary. Example: Order + OrderLineItems + ShippingAddress.", "th": "" }
+            "label": {
+              "en": "Aggregate"
+            },
+            "body": {
+              "en": "Cluster of entities and value objects treated as one unit. The Aggregate Root is the only entry point. Enforces invariants. Transactional boundary. Example: Order + OrderLineItems + ShippingAddress."
+            }
           },
           {
             "icon": "🗄️",
-            "label": { "en": "Repository", "th": "" },
-            "body": { "en": "Collection-like abstraction over persistence. One per Aggregate Root. Hides ORM/SQL details. Query method names speak the ubiquitous language. Example: OrderRepository.findOrdersAwaitingShipment().", "th": "" }
+            "label": {
+              "en": "Repository"
+            },
+            "body": {
+              "en": "Collection-like abstraction over persistence. One per Aggregate Root. Hides ORM/SQL details. Query method names speak the ubiquitous language. Example: OrderRepository.findOrdersAwaitingShipment()."
+            }
           },
           {
             "icon": "⚙️",
-            "label": { "en": "Domain Service", "th": "" },
-            "body": { "en": "Stateless operation in the domain that spans multiple aggregates. Holds business decisions. Named with a verb from the ubiquitous language. Example: PricingService, FraudCheckService.", "th": "" }
+            "label": {
+              "en": "Domain Service"
+            },
+            "body": {
+              "en": "Stateless operation in the domain that spans multiple aggregates. Holds business decisions. Named with a verb from the ubiquitous language. Example: PricingService, FraudCheckService."
+            }
           },
           {
             "icon": "📣",
-            "label": { "en": "Domain Event", "th": "" },
-            "body": { "en": "Immutable fact about something that happened. Named in past tense. Carries minimum data describing the fact. Decouples aggregates within a context and contexts from each other. Example: OrderPlaced, PaymentReceived.", "th": "" }
+            "label": {
+              "en": "Domain Event"
+            },
+            "body": {
+              "en": "Immutable fact about something that happened. Named in past tense. Carries minimum data describing the fact. Decouples aggregates within a context and contexts from each other. Example: OrderPlaced, PaymentReceived."
+            }
           }
         ]
       }

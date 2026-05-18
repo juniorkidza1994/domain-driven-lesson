@@ -4,63 +4,163 @@
     {
       "id": "first-filter-integration-events",
       "type": "mcq",
-      "question": { "en": "What is the first filter when deciding which Domain Events should become Integration Events?", "th": "" },
+      "question": {
+        "en": "What is the first filter when deciding which Domain Events should become Integration Events?"
+      },
       "options": [
-        { "id": "a", "text": { "en": "Whether at least one other Bounded Context legitimately needs to react to the event", "th": "" } },
-        { "id": "b", "text": { "en": "Whether the event has a unique eventId", "th": "" } },
-        { "id": "c", "text": { "en": "Whether the producing service uses Kafka", "th": "" } },
-        { "id": "d", "text": { "en": "Whether the event payload is smaller than 4 KB", "th": "" } }
+        {
+          "id": "a",
+          "text": {
+            "en": "Whether at least one other Bounded Context legitimately needs to react to the event"
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Whether the event has a unique eventId"
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Whether the producing service uses Kafka"
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Whether the event payload is smaller than 4 KB"
+          }
+        }
       ],
       "correctOption": "a",
-      "explanation": { "en": "A Domain Event only graduates to an Integration Event when another Bounded Context genuinely needs to react to it. Publishing every event indiscriminately floods the broker with noise and couples internal aggregate fields to remote consumers.", "th": "" }
+      "explanation": {
+        "en": "A Domain Event only graduates to an Integration Event when another Bounded Context genuinely needs to react to it. Publishing every event indiscriminately floods the broker with noise and couples internal aggregate fields to remote consumers."
+      }
     },
     {
       "id": "publish-every-event",
       "type": "true-false",
-      "question": { "en": "Every Domain Event identified during an Event Storming workshop should be published as an Integration Event to the message broker.", "th": "" },
+      "question": {
+        "en": "Every Domain Event identified during an Event Storming workshop should be published as an Integration Event to the message broker."
+      },
       "options": [
-        { "id": "true", "text": { "en": "True", "th": "" } },
-        { "id": "false", "text": { "en": "False", "th": "" } }
+        {
+          "id": "true",
+          "text": {
+            "en": "True"
+          }
+        },
+        {
+          "id": "false",
+          "text": {
+            "en": "False"
+          }
+        }
       ],
       "correctOption": "false",
-      "explanation": { "en": "Most Domain Events stay inside their producing context. Only the subset that other Bounded Contexts legitimately need to react to are translated into Integration Events. Start conservative — internal events should stay internal.", "th": "" }
+      "explanation": {
+        "en": "Most Domain Events stay inside their producing context. Only the subset that other Bounded Contexts legitimately need to react to are translated into Integration Events. Start conservative — internal events should stay internal."
+      }
     },
     {
       "id": "compensating-event-definition",
       "type": "mcq",
-      "question": { "en": "What is a compensating event in an Event-Driven Architecture?", "th": "" },
+      "question": {
+        "en": "What is a compensating event in an Event-Driven Architecture?"
+      },
       "options": [
-        { "id": "a", "text": { "en": "A new event that semantically undoes the business effect of a prior event, since distributed rollbacks are not possible across services", "th": "" } },
-        { "id": "b", "text": { "en": "An event that the broker automatically replays when a consumer crashes", "th": "" } },
-        { "id": "c", "text": { "en": "A duplicate event sent to a backup region for disaster recovery", "th": "" } },
-        { "id": "d", "text": { "en": "An event published only when the retry budget is exhausted", "th": "" } }
+        {
+          "id": "a",
+          "text": {
+            "en": "A new event that semantically undoes the business effect of a prior event, since distributed rollbacks are not possible across services"
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "An event that the broker automatically replays when a consumer crashes"
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "A duplicate event sent to a backup region for disaster recovery"
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "An event published only when the retry budget is exhausted"
+          }
+        }
       ],
       "correctOption": "a",
-      "explanation": { "en": "Distributed transactions cannot span independent services. The Saga pattern emits compensating events — forward-moving facts that semantically reverse earlier effects. For example, OrderCancelled compensates for a PaymentFailed scenario.", "th": "" }
+      "explanation": {
+        "en": "Distributed transactions cannot span independent services. The Saga pattern emits compensating events — forward-moving facts that semantically reverse earlier effects. For example, OrderCancelled compensates for a PaymentFailed scenario."
+      }
     },
     {
       "id": "lean-payload-rationale",
       "type": "mcq",
-      "question": { "en": "Why should Integration Event payloads be lean — typically IDs and a small set of stable fields rather than full aggregate snapshots?", "th": "" },
+      "question": {
+        "en": "Why should Integration Event payloads be lean — typically IDs and a small set of stable fields rather than full aggregate snapshots?"
+      },
       "options": [
-        { "id": "a", "text": { "en": "Lean payloads minimise the surface area of the public contract, reducing coupling and the blast radius of internal model changes", "th": "" } },
-        { "id": "b", "text": { "en": "Lean payloads are required by the CloudEvents specification", "th": "" } },
-        { "id": "c", "text": { "en": "Message brokers reject payloads larger than 1 KB", "th": "" } },
-        { "id": "d", "text": { "en": "Lean payloads guarantee exactly-once delivery", "th": "" } }
+        {
+          "id": "a",
+          "text": {
+            "en": "Lean payloads minimise the surface area of the public contract, reducing coupling and the blast radius of internal model changes"
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Lean payloads are required by the CloudEvents specification"
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Message brokers reject payloads larger than 1 KB"
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Lean payloads guarantee exactly-once delivery"
+          }
+        }
       ],
       "correctOption": "a",
-      "explanation": { "en": "Every field in an Integration Event is a contract with every downstream consumer. Including internal aggregate fields turns any internal refactoring into a breaking change for all consumers. Lean payloads keep the contract minimal.", "th": "" }
+      "explanation": {
+        "en": "Every field in an Integration Event is a contract with every downstream consumer. Including internal aggregate fields turns any internal refactoring into a breaking change for all consumers. Lean payloads keep the contract minimal."
+      }
     },
     {
       "id": "event-sourcing-equals-eda",
       "type": "true-false",
-      "question": { "en": "Adopting Event Sourcing automatically gives you an Event-Driven Architecture.", "th": "" },
+      "question": {
+        "en": "Adopting Event Sourcing automatically gives you an Event-Driven Architecture."
+      },
       "options": [
-        { "id": "true", "text": { "en": "True", "th": "" } },
-        { "id": "false", "text": { "en": "False", "th": "" } }
+        {
+          "id": "true",
+          "text": {
+            "en": "True"
+          }
+        },
+        {
+          "id": "false",
+          "text": {
+            "en": "False"
+          }
+        }
       ],
       "correctOption": "false",
-      "explanation": { "en": "Event Sourcing is a persistence pattern (storing state as an append-only event log inside one service). EDA is a communication pattern (services exchanging events via a broker). Each can exist without the other; combining them is a deliberate choice with significant added complexity.", "th": "" }
+      "explanation": {
+        "en": "Event Sourcing is a persistence pattern (storing state as an append-only event log inside one service). EDA is a communication pattern (services exchanging events via a broker). Each can exist without the other; combining them is a deliberate choice with significant added complexity."
+      }
     }
   ]
 }

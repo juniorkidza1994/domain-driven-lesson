@@ -12,12 +12,10 @@ const QUESTION_TYPES = new Set(['mcq', 'true-false']);
 
 // ─── helpers ────────────────────────────────────────────────────────────────
 
-function assertBilingual(obj, fieldPath) {
+function assertBilingual(obj, fieldPath, lang) {
   assert.ok(obj && typeof obj === 'object', `${fieldPath}: must be an object`);
-  assert.equal(typeof obj.en, 'string', `${fieldPath}.en: missing or not string`);
-  assert.equal(typeof obj.th, 'string', `${fieldPath}.th: missing or not string`);
-  assert.ok(obj.en.length > 0, `${fieldPath}.en: must be non-empty`);
-  // th is allowed to be "" (populated in DRE-25)
+  assert.equal(typeof obj[lang], 'string', `${fieldPath}.${lang}: missing or not string`);
+  assert.ok(obj[lang].length > 0, `${fieldPath}.${lang}: must be non-empty`);
 }
 
 function assertKebab(id, fieldPath) {
@@ -26,7 +24,7 @@ function assertKebab(id, fieldPath) {
 
 // ─── lesson ─────────────────────────────────────────────────────────────────
 
-function validateLesson(doc, filename) {
+function validateLesson(doc, filename, lang) {
   const stem = path.basename(filename, '.json');
   assert.ok(doc && typeof doc === 'object', 'lesson: root must be object');
   assert.ok(doc.module && typeof doc.module === 'object', 'lesson: module: required object');
@@ -42,7 +40,7 @@ function validateLesson(doc, filename) {
     'module.number: required integer 1..7');
 
   // module.title
-  assertBilingual(m.title, 'module.title');
+  assertBilingual(m.title, 'module.title', lang);
 
   // module.estimatedMinutes
   assert.ok(typeof m.estimatedMinutes === 'number' && m.estimatedMinutes > 0,
@@ -61,8 +59,8 @@ function validateLesson(doc, filename) {
     assert.ok(!sectionIds.has(s.id), `${sp}.id: "${s.id}" is not unique within module`);
     sectionIds.add(s.id);
     assert.ok(SECTION_TYPES.has(s.type), `${sp}.type: "${s.type}" not in allowed enum`);
-    assertBilingual(s.title, `${sp}.title`);
-    assertBilingual(s.content, `${sp}.content`);
+    assertBilingual(s.title, `${sp}.title`, lang);
+    assertBilingual(s.content, `${sp}.content`, lang);
 
     // diagram field — required when type is diagram, es-board, or flow
     if (['diagram', 'es-board', 'flow'].includes(s.type)) {
@@ -86,7 +84,7 @@ function validateLesson(doc, filename) {
 
 // ─── quiz ────────────────────────────────────────────────────────────────────
 
-function validateQuiz(doc, filename) {
+function validateQuiz(doc, filename, lang) {
   assert.ok(doc && typeof doc === 'object', 'quiz: root must be object');
 
   // moduleId
@@ -114,7 +112,7 @@ function validateQuiz(doc, filename) {
     assert.ok(QUESTION_TYPES.has(q.type), `${qp}.type: must be mcq|true-false`);
 
     // question
-    assertBilingual(q.question, `${qp}.question`);
+    assertBilingual(q.question, `${qp}.question`, lang);
 
     // options
     assert.ok(Array.isArray(q.options), `${qp}.options: required array`);
@@ -135,7 +133,7 @@ function validateQuiz(doc, filename) {
       assertKebab(o.id, `${qp}.options[${oi}].id`);
       assert.ok(!optionIds.has(o.id), `${qp}.options[${oi}].id: "${o.id}" is not unique`);
       optionIds.add(o.id);
-      assertBilingual(o.text, `${qp}.options[${oi}].text`);
+      assertBilingual(o.text, `${qp}.options[${oi}].text`, lang);
     }
 
     // correctOption
@@ -145,13 +143,13 @@ function validateQuiz(doc, filename) {
       `${qp}.correctOption: "${q.correctOption}" must match one option id`);
 
     // explanation
-    assertBilingual(q.explanation, `${qp}.explanation`);
+    assertBilingual(q.explanation, `${qp}.explanation`, lang);
   }
 }
 
 // ─── tooltips ────────────────────────────────────────────────────────────────
 
-function validateTooltips(doc) {
+function validateTooltips(doc, lang) {
   assert.ok(doc && typeof doc === 'object', 'tooltips: root must be object');
   assert.ok(Array.isArray(doc.tooltips), 'tooltips: required array');
   assert.ok(doc.tooltips.length >= 1, 'tooltips: must have at least 1 tooltip');
@@ -164,16 +162,16 @@ function validateTooltips(doc) {
     assertKebab(t.id, `${tp}.id`);
     assert.ok(!tooltipIds.has(t.id), `${tp}.id: "${t.id}" is not unique`);
     tooltipIds.add(t.id);
-    assertBilingual(t.term, `${tp}.term`);
-    assertBilingual(t.short, `${tp}.short`);
-    assertBilingual(t.full, `${tp}.full`);
+    assertBilingual(t.term, `${tp}.term`, lang);
+    assertBilingual(t.short, `${tp}.short`, lang);
+    assertBilingual(t.full, `${tp}.full`, lang);
   }
   return tooltipIds;
 }
 
 // ─── glossary ────────────────────────────────────────────────────────────────
 
-function validateGlossary(doc) {
+function validateGlossary(doc, lang) {
   assert.ok(doc && typeof doc === 'object', 'glossary: root must be object');
   assert.ok(Array.isArray(doc.categories), 'categories: required array');
   assert.ok(doc.categories.length >= 1, 'categories: must have at least 1 category');
@@ -188,7 +186,7 @@ function validateGlossary(doc) {
     assertKebab(cat.id, `${cp}.id`);
     assert.ok(!categoryIds.has(cat.id), `${cp}.id: "${cat.id}" is not unique`);
     categoryIds.add(cat.id);
-    assertBilingual(cat.name, `${cp}.name`);
+    assertBilingual(cat.name, `${cp}.name`, lang);
     assert.ok(Array.isArray(cat.terms), `${cp}.terms: required array`);
     assert.ok(cat.terms.length >= 1, `${cp}.terms: must have at least 1 term`);
 
@@ -199,8 +197,8 @@ function validateGlossary(doc) {
       assertKebab(term.id, `${termP}.id`);
       assert.ok(!allTermIds.has(term.id), `${termP}.id: "${term.id}" is not unique across glossary`);
       allTermIds.add(term.id);
-      assertBilingual(term.term, `${termP}.term`);
-      assertBilingual(term.definition, `${termP}.definition`);
+      assertBilingual(term.term, `${termP}.term`, lang);
+      assertBilingual(term.definition, `${termP}.definition`, lang);
 
       if (term.relatedTerms !== undefined) {
         assert.ok(Array.isArray(term.relatedTerms), `${termP}.relatedTerms: must be array`);
@@ -228,48 +226,48 @@ test('valid lesson fixture passes', () => {
     module: {
       id: 'module-01',
       number: 1,
-      title: { en: 'Intro to DDD', th: '' },
+      title: { en: 'Intro to DDD' },
       estimatedMinutes: 20,
       sections: [
         {
           id: 'intro',
           type: 'text',
-          title: { en: 'Introduction', th: '' },
-          content: { en: 'Some content here.', th: '' }
+          title: { en: 'Introduction' },
+          content: { en: 'Some content here.' }
         }
       ]
     }
   };
-  assert.doesNotThrow(() => validateLesson(doc, 'module-01.json'));
+  assert.doesNotThrow(() => validateLesson(doc, 'module-01.json', 'en'));
 });
 
 test('lesson missing module.id throws', () => {
   const doc = {
     module: {
       number: 1,
-      title: { en: 'Intro', th: '' },
+      title: { en: 'Intro' },
       estimatedMinutes: 20,
-      sections: [{ id: 'intro', type: 'text', title: { en: 'T', th: '' }, content: { en: 'C', th: '' } }]
+      sections: [{ id: 'intro', type: 'text', title: { en: 'T' }, content: { en: 'C' } }]
     }
   };
-  assert.throws(() => validateLesson(doc, 'module-01.json'), /module\.id/);
+  assert.throws(() => validateLesson(doc, 'module-01.json', 'en'), /module\.id/);
 });
 
 test('lesson missing module.sections throws', () => {
   const doc = {
-    module: { id: 'module-01', number: 1, title: { en: 'T', th: '' }, estimatedMinutes: 15 }
+    module: { id: 'module-01', number: 1, title: { en: 'T' }, estimatedMinutes: 15 }
   };
-  assert.throws(() => validateLesson(doc, 'module-01.json'), /module\.sections/);
+  assert.throws(() => validateLesson(doc, 'module-01.json', 'en'), /module\.sections/);
 });
 
 test('lesson with invalid section type throws', () => {
   const doc = {
     module: {
-      id: 'module-01', number: 1, title: { en: 'T', th: '' }, estimatedMinutes: 15,
-      sections: [{ id: 'intro', type: 'video', title: { en: 'T', th: '' }, content: { en: 'C', th: '' } }]
+      id: 'module-01', number: 1, title: { en: 'T' }, estimatedMinutes: 15,
+      sections: [{ id: 'intro', type: 'video', title: { en: 'T' }, content: { en: 'C' } }]
     }
   };
-  assert.throws(() => validateLesson(doc, 'module-01.json'), /type/);
+  assert.throws(() => validateLesson(doc, 'module-01.json', 'en'), /type/);
 });
 
 // Quiz fixtures
@@ -280,17 +278,17 @@ test('valid quiz fixture passes', () => {
       {
         id: 'q1',
         type: 'mcq',
-        question: { en: 'What is DDD?', th: '' },
+        question: { en: 'What is DDD?' },
         options: [
-          { id: 'a', text: { en: 'Domain-Driven Design', th: '' } },
-          { id: 'b', text: { en: 'Data-Driven Design', th: '' } }
+          { id: 'a', text: { en: 'Domain-Driven Design' } },
+          { id: 'b', text: { en: 'Data-Driven Design' } }
         ],
         correctOption: 'a',
-        explanation: { en: 'DDD stands for Domain-Driven Design.', th: '' }
+        explanation: { en: 'DDD stands for Domain-Driven Design.' }
       }
     ]
   };
-  assert.doesNotThrow(() => validateQuiz(doc, 'module-01.json'));
+  assert.doesNotThrow(() => validateQuiz(doc, 'module-01.json', 'en'));
 });
 
 test('quiz question missing correctOption throws', () => {
@@ -300,49 +298,49 @@ test('quiz question missing correctOption throws', () => {
       {
         id: 'q1',
         type: 'mcq',
-        question: { en: 'What?', th: '' },
+        question: { en: 'What?' },
         options: [
-          { id: 'a', text: { en: 'A', th: '' } },
-          { id: 'b', text: { en: 'B', th: '' } }
+          { id: 'a', text: { en: 'A' } },
+          { id: 'b', text: { en: 'B' } }
         ],
-        explanation: { en: 'Because.', th: '' }
+        explanation: { en: 'Because.' }
       }
     ]
   };
-  assert.throws(() => validateQuiz(doc, 'module-01.json'), /correctOption/);
+  assert.throws(() => validateQuiz(doc, 'module-01.json', 'en'), /correctOption/);
 });
 
 test('quiz missing moduleId throws', () => {
-  const doc = { questions: [{ id: 'q1', type: 'mcq', question: { en: 'X', th: '' }, options: [{ id: 'a', text: { en: 'A', th: '' } }, { id: 'b', text: { en: 'B', th: '' } }], correctOption: 'a', explanation: { en: 'E', th: '' } }] };
-  assert.throws(() => validateQuiz(doc, 'module-01.json'), /moduleId/);
+  const doc = { questions: [{ id: 'q1', type: 'mcq', question: { en: 'X' }, options: [{ id: 'a', text: { en: 'A' } }, { id: 'b', text: { en: 'B' } }], correctOption: 'a', explanation: { en: 'E' } }] };
+  assert.throws(() => validateQuiz(doc, 'module-01.json', 'en'), /moduleId/);
 });
 
 // Tooltip fixtures
 test('valid tooltip fixture passes', () => {
   const doc = {
     tooltips: [
-      { id: 'bounded-context', term: { en: 'Bounded Context', th: '' }, short: { en: 'A boundary.', th: '' }, full: { en: 'A full explanation.', th: '' } }
+      { id: 'bounded-context', term: { en: 'Bounded Context' }, short: { en: 'A boundary.' }, full: { en: 'A full explanation.' } }
     ]
   };
-  assert.doesNotThrow(() => validateTooltips(doc));
+  assert.doesNotThrow(() => validateTooltips(doc, 'en'));
 });
 
 test('tooltip missing id throws', () => {
   const doc = {
     tooltips: [
-      { term: { en: 'Bounded Context', th: '' }, short: { en: 'S', th: '' }, full: { en: 'F', th: '' } }
+      { term: { en: 'Bounded Context' }, short: { en: 'S' }, full: { en: 'F' } }
     ]
   };
-  assert.throws(() => validateTooltips(doc), /tooltips\[0\]\.id/);
+  assert.throws(() => validateTooltips(doc, 'en'), /tooltips\[0\]\.id/);
 });
 
 test('tooltip non-kebab id throws', () => {
   const doc = {
     tooltips: [
-      { id: 'Bounded Context', term: { en: 'Bounded Context', th: '' }, short: { en: 'S', th: '' }, full: { en: 'F', th: '' } }
+      { id: 'Bounded Context', term: { en: 'Bounded Context' }, short: { en: 'S' }, full: { en: 'F' } }
     ]
   };
-  assert.throws(() => validateTooltips(doc), /kebab/);
+  assert.throws(() => validateTooltips(doc, 'en'), /kebab/);
 });
 
 // Glossary fixtures
@@ -351,19 +349,19 @@ test('valid glossary fixture passes', () => {
     categories: [
       {
         id: 'ddd-strategic',
-        name: { en: 'DDD Strategic', th: '' },
+        name: { en: 'DDD Strategic' },
         terms: [
-          { id: 'bounded-context', term: { en: 'Bounded Context', th: '' }, definition: { en: 'A boundary.', th: '' } }
+          { id: 'bounded-context', term: { en: 'Bounded Context' }, definition: { en: 'A boundary.' } }
         ]
       }
     ]
   };
-  assert.doesNotThrow(() => validateGlossary(doc));
+  assert.doesNotThrow(() => validateGlossary(doc, 'en'));
 });
 
 test('glossary missing categories throws', () => {
   const doc = {};
-  assert.throws(() => validateGlossary(doc), /categories/);
+  assert.throws(() => validateGlossary(doc, 'en'), /categories/);
 });
 
 test('glossary term missing definition throws', () => {
@@ -371,14 +369,14 @@ test('glossary term missing definition throws', () => {
     categories: [
       {
         id: 'ddd-strategic',
-        name: { en: 'DDD Strategic', th: '' },
+        name: { en: 'DDD Strategic' },
         terms: [
-          { id: 'bounded-context', term: { en: 'Bounded Context', th: '' } }
+          { id: 'bounded-context', term: { en: 'Bounded Context' } }
         ]
       }
     ]
   };
-  assert.throws(() => validateGlossary(doc), /definition/);
+  assert.throws(() => validateGlossary(doc, 'en'), /definition/);
 });
 
 // ─── Integration: walk real files on disk ───────────────────────────────────
@@ -394,6 +392,7 @@ const QUIZ_DIRS = [
 
 for (const dir of LESSON_DIRS) {
   const label = dir.replace(ROOT, '');
+  const lang = path.basename(dir);
   const files = fs.existsSync(dir)
     ? fs.readdirSync(dir).filter(f => f.endsWith('.json'))
     : [];
@@ -406,10 +405,9 @@ for (const dir of LESSON_DIRS) {
       } catch (e) {
         assert.fail(`${filepath}: invalid JSON — ${e.message}`);
       }
-      validateLesson(doc, filename);
+      validateLesson(doc, filename, lang);
     });
   }
-  // Ensure there are exactly 7 lesson files per language dir
   test(`${label}: must have exactly 7 lesson files`, () => {
     assert.equal(files.length, 7, `Expected 7 lesson JSON files in ${dir}, got ${files.length}`);
   });
@@ -417,6 +415,7 @@ for (const dir of LESSON_DIRS) {
 
 for (const dir of QUIZ_DIRS) {
   const label = dir.replace(ROOT, '');
+  const lang = path.basename(dir);
   const files = fs.existsSync(dir)
     ? fs.readdirSync(dir).filter(f => f.endsWith('.json'))
     : [];
@@ -429,10 +428,9 @@ for (const dir of QUIZ_DIRS) {
       } catch (e) {
         assert.fail(`${filepath}: invalid JSON — ${e.message}`);
       }
-      validateQuiz(doc, filename);
+      validateQuiz(doc, filename, lang);
     });
   }
-  // Ensure there are exactly 7 quiz files per language dir
   test(`${label}: must have exactly 7 quiz files`, () => {
     assert.equal(files.length, 7, `Expected 7 quiz JSON files in ${dir}, got ${files.length}`);
   });
@@ -442,14 +440,14 @@ test('tooltips/en.json is valid', () => {
   const filepath = path.join(ROOT, 'content', 'tooltips', 'en.json');
   assert.ok(fs.existsSync(filepath), 'content/tooltips/en.json must exist');
   const doc = JSON.parse(fs.readFileSync(filepath, 'utf8'));
-  validateTooltips(doc);
+  validateTooltips(doc, 'en');
 });
 
 test('tooltips/th.json is valid', () => {
   const filepath = path.join(ROOT, 'content', 'tooltips', 'th.json');
   assert.ok(fs.existsSync(filepath), 'content/tooltips/th.json must exist');
   const doc = JSON.parse(fs.readFileSync(filepath, 'utf8'));
-  validateTooltips(doc);
+  validateTooltips(doc, 'th');
 });
 
 test('tooltips en.json and th.json have same IDs in same order', () => {
@@ -472,12 +470,12 @@ test('glossary/en.json is valid', () => {
   const filepath = path.join(ROOT, 'content', 'glossary', 'en.json');
   assert.ok(fs.existsSync(filepath), 'content/glossary/en.json must exist');
   const doc = JSON.parse(fs.readFileSync(filepath, 'utf8'));
-  validateGlossary(doc);
+  validateGlossary(doc, 'en');
 });
 
 test('glossary/th.json is valid', () => {
   const filepath = path.join(ROOT, 'content', 'glossary', 'th.json');
   assert.ok(fs.existsSync(filepath), 'content/glossary/th.json must exist');
   const doc = JSON.parse(fs.readFileSync(filepath, 'utf8'));
-  validateGlossary(doc);
+  validateGlossary(doc, 'th');
 });

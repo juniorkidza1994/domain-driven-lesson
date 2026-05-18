@@ -2,219 +2,707 @@
   "module": {
     "id": "module-07",
     "number": 7,
-    "title": { "en": "ShopSphere: A Thai E-Commerce Case Study", "th": "" },
-    "description": { "en": "Apply Event Storming, Domain-Driven Design, and Event-Driven Architecture end-to-end on ShopSphere — a fictional Thai online marketplace. See a complete ES board, the eight bounded contexts derived from it, the DDD aggregates inside Order, the ubiquitous-language seams, and the full choreography saga with explicit failure compensations.", "th": "" },
+    "title": {
+      "en": "ShopSphere: A Thai E-Commerce Case Study"
+    },
+    "description": {
+      "en": "Apply Event Storming, Domain-Driven Design, and Event-Driven Architecture end-to-end on ShopSphere — a fictional Thai online marketplace. See a complete ES board, the eight bounded contexts derived from it, the DDD aggregates inside Order, the ubiquitous-language seams, and the full choreography saga with explicit failure compensations."
+    },
     "estimatedMinutes": 50,
     "sections": [
       {
         "id": "business-overview",
         "type": "text",
-        "title": { "en": "Meet ShopSphere", "th": "" },
-        "content": { "en": "ShopSphere (ร้านตลาดออนไลน์) is a fictional Thai online marketplace that we will use to apply everything from the previous six modules in one coherent system. Customers across Thailand browse goods listed by independent sellers, place orders, pay via card or Cash on Delivery, and receive their parcels through partner couriers.\n\nThe goal of this case study is not to design a production marketplace — that would take years. The goal is to walk one realistic ordering flow end-to-end through the techniques you have learned: an Event Storming workshop that surfaces the domain events; a Domain-Driven Design pass that organises those events into bounded contexts and aggregates; and an Event-Driven Architecture that wires the contexts together with integration events, sagas, and explicit failure compensations.\n\nSix human and system actors participate. The Customer browses and pays. The Seller lists products and ships from their own warehouse. The Admin moderates listings and resolves disputes. Warehouse Staff pick and pack physical goods. A Payment Provider (Stripe or a Thai equivalent like Omise) authorises and captures charges. A Shipping Provider (Thailand Post, Kerry, Flash Express) carries parcels to the door. None of these actors trust each other to be fast or available; the architecture must accommodate failures from all of them.", "th": "" },
-        "tooltipRefs": ["bounded-context", "event-storming", "eda"]
+        "title": {
+          "en": "Meet ShopSphere"
+        },
+        "content": {
+          "en": "ShopSphere (ร้านตลาดออนไลน์) is a fictional Thai online marketplace that we will use to apply everything from the previous six modules in one coherent system. Customers across Thailand browse goods listed by independent sellers, place orders, pay via card or Cash on Delivery, and receive their parcels through partner couriers.\n\nThe goal of this case study is not to design a production marketplace — that would take years. The goal is to walk one realistic ordering flow end-to-end through the techniques you have learned: an Event Storming workshop that surfaces the domain events; a Domain-Driven Design pass that organises those events into bounded contexts and aggregates; and an Event-Driven Architecture that wires the contexts together with integration events, sagas, and explicit failure compensations.\n\nSix human and system actors participate. The Customer browses and pays. The Seller lists products and ships from their own warehouse. The Admin moderates listings and resolves disputes. Warehouse Staff pick and pack physical goods. A Payment Provider (Stripe or a Thai equivalent like Omise) authorises and captures charges. A Shipping Provider (Thailand Post, Kerry, Flash Express) carries parcels to the door. None of these actors trust each other to be fast or available; the architecture must accommodate failures from all of them."
+        },
+        "tooltipRefs": [
+          "bounded-context",
+          "event-storming",
+          "eda"
+        ]
       },
       {
         "id": "actors-and-systems",
         "type": "infographic",
-        "title": { "en": "Actors and External Systems", "th": "" },
-        "content": { "en": "Six actors drive ShopSphere. Three are human roles inside the business. Three are external systems we integrate with but do not own.", "th": "" },
+        "title": {
+          "en": "Actors and External Systems"
+        },
+        "content": {
+          "en": "Six actors drive ShopSphere. Three are human roles inside the business. Three are external systems we integrate with but do not own."
+        },
         "items": [
-          { "icon": "🛒", "label": { "en": "Customer", "th": "" }, "body": { "en": "Browses listings, adds to cart, checks out, pays, tracks delivery. Triggers most commands in the system.", "th": "" } },
-          { "icon": "🏪", "label": { "en": "Seller", "th": "" }, "body": { "en": "Lists products, sets prices and stock, fulfils orders from their own warehouse. Lives outside ShopSphere's PCI scope.", "th": "" } },
-          { "icon": "🛡️", "label": { "en": "Admin", "th": "" }, "body": { "en": "Internal staff who moderate listings, review disputes, issue manual refunds, and operate the Dead Letter Queue replay tools.", "th": "" } },
-          { "icon": "📦", "label": { "en": "Warehouse Staff", "th": "" }, "body": { "en": "Pick, pack, and hand parcels to the carrier. Their work is driven by the Shipping context's pick-list read model.", "th": "" } },
-          { "icon": "💳", "label": { "en": "Payment Provider", "th": "" }, "body": { "en": "External system (e.g. Stripe, Omise). Authorises cards, captures funds, processes refunds. Owns the PCI boundary.", "th": "" } },
-          { "icon": "🚚", "label": { "en": "Shipping Provider", "th": "" }, "body": { "en": "External courier (Thailand Post, Kerry, Flash Express). Receives shipment manifests, returns delivery status webhooks.", "th": "" } }
+          {
+            "icon": "🛒",
+            "label": {
+              "en": "Customer"
+            },
+            "body": {
+              "en": "Browses listings, adds to cart, checks out, pays, tracks delivery. Triggers most commands in the system."
+            }
+          },
+          {
+            "icon": "🏪",
+            "label": {
+              "en": "Seller"
+            },
+            "body": {
+              "en": "Lists products, sets prices and stock, fulfils orders from their own warehouse. Lives outside ShopSphere's PCI scope."
+            }
+          },
+          {
+            "icon": "🛡️",
+            "label": {
+              "en": "Admin"
+            },
+            "body": {
+              "en": "Internal staff who moderate listings, review disputes, issue manual refunds, and operate the Dead Letter Queue replay tools."
+            }
+          },
+          {
+            "icon": "📦",
+            "label": {
+              "en": "Warehouse Staff"
+            },
+            "body": {
+              "en": "Pick, pack, and hand parcels to the carrier. Their work is driven by the Shipping context's pick-list read model."
+            }
+          },
+          {
+            "icon": "💳",
+            "label": {
+              "en": "Payment Provider"
+            },
+            "body": {
+              "en": "External system (e.g. Stripe, Omise). Authorises cards, captures funds, processes refunds. Owns the PCI boundary."
+            }
+          },
+          {
+            "icon": "🚚",
+            "label": {
+              "en": "Shipping Provider"
+            },
+            "body": {
+              "en": "External courier (Thailand Post, Kerry, Flash Express). Receives shipment manifests, returns delivery status webhooks."
+            }
+          }
         ],
-        "tooltipRefs": ["actor", "external-system"]
+        "tooltipRefs": [
+          "actor",
+          "external-system"
+        ]
       },
       {
         "id": "full-es-board",
         "type": "es-board",
-        "title": { "en": "The Full Event Storming Board", "th": "" },
-        "content": { "en": "This is the output of a hypothetical 4-hour ShopSphere Big Picture Event Storming session, organised into six swim lanes that match the natural seams of the business. Sixteen domain events, the commands that produced them, the actors that triggered the commands, five reactive policies, three unresolved hotspots, and the external systems that participate. Read it left to right, top to bottom — that is the temporal order of a successful order.", "th": "" },
-        "diagram": { "type": "es-board", "source": "shopsphere-event-storming" },
+        "title": {
+          "en": "The Full Event Storming Board"
+        },
+        "content": {
+          "en": "This is the output of a hypothetical 4-hour ShopSphere Big Picture Event Storming session, organised into six swim lanes that match the natural seams of the business. Sixteen domain events, the commands that produced them, the actors that triggered the commands, five reactive policies, three unresolved hotspots, and the external systems that participate. Read it left to right, top to bottom — that is the temporal order of a successful order."
+        },
+        "diagram": {
+          "type": "es-board",
+          "source": "shopsphere-event-storming"
+        },
         "lanes": [
           {
             "id": "customer-journey",
-            "label": { "en": "Customer Journey", "th": "" },
+            "label": {
+              "en": "Customer Journey"
+            },
             "items": [
-              { "type": "actor",   "text": { "en": "Customer", "th": "" } },
-              { "type": "command", "text": { "en": "Register", "th": "" } },
-              { "type": "event",   "text": { "en": "CustomerRegistered", "th": "" } },
-              { "type": "command", "text": { "en": "Add to Cart", "th": "" } },
-              { "type": "event",   "text": { "en": "ItemAddedToCart", "th": "" } },
-              { "type": "event",   "text": { "en": "CartAbandoned", "th": "" } },
-              { "type": "command", "text": { "en": "Checkout", "th": "" } },
-              { "type": "event",   "text": { "en": "OrderPlaced", "th": "" } }
+              {
+                "type": "actor",
+                "text": {
+                  "en": "Customer"
+                }
+              },
+              {
+                "type": "command",
+                "text": {
+                  "en": "Register"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "CustomerRegistered"
+                }
+              },
+              {
+                "type": "command",
+                "text": {
+                  "en": "Add to Cart"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "ItemAddedToCart"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "CartAbandoned"
+                }
+              },
+              {
+                "type": "command",
+                "text": {
+                  "en": "Checkout"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "OrderPlaced"
+                }
+              }
             ]
           },
           {
             "id": "order-processing",
-            "label": { "en": "Order Processing", "th": "" },
+            "label": {
+              "en": "Order Processing"
+            },
             "items": [
-              { "type": "aggregate", "text": { "en": "Order", "th": "" } },
-              { "type": "event",     "text": { "en": "OrderConfirmed", "th": "" } },
-              { "type": "event",     "text": { "en": "OrderCancelled", "th": "" } },
-              { "type": "policy",    "text": { "en": "On PaymentFailed → Cancel Order", "th": "" } },
-              { "type": "hotspot",   "text": { "en": "What if customer cancels after capture but before dispatch?", "th": "" } }
+              {
+                "type": "aggregate",
+                "text": {
+                  "en": "Order"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "OrderConfirmed"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "OrderCancelled"
+                }
+              },
+              {
+                "type": "policy",
+                "text": {
+                  "en": "On PaymentFailed → Cancel Order"
+                }
+              },
+              {
+                "type": "hotspot",
+                "text": {
+                  "en": "What if customer cancels after capture but before dispatch?"
+                }
+              }
             ]
           },
           {
             "id": "inventory",
-            "label": { "en": "Inventory", "th": "" },
+            "label": {
+              "en": "Inventory"
+            },
             "items": [
-              { "type": "actor",   "text": { "en": "Warehouse Staff", "th": "" } },
-              { "type": "command", "text": { "en": "Reserve Stock", "th": "" } },
-              { "type": "event",   "text": { "en": "InventoryReserved", "th": "" } },
-              { "type": "event",   "text": { "en": "InventoryReservationFailed", "th": "" } },
-              { "type": "policy",  "text": { "en": "On InventoryReservationFailed → Cancel Order", "th": "" } },
-              { "type": "hotspot", "text": { "en": "Concurrent buyers racing for last unit — pessimistic or optimistic?", "th": "" } }
+              {
+                "type": "actor",
+                "text": {
+                  "en": "Warehouse Staff"
+                }
+              },
+              {
+                "type": "command",
+                "text": {
+                  "en": "Reserve Stock"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "InventoryReserved"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "InventoryReservationFailed"
+                }
+              },
+              {
+                "type": "policy",
+                "text": {
+                  "en": "On InventoryReservationFailed → Cancel Order"
+                }
+              },
+              {
+                "type": "hotspot",
+                "text": {
+                  "en": "Concurrent buyers racing for last unit — pessimistic or optimistic?"
+                }
+              }
             ]
           },
           {
             "id": "payment",
-            "label": { "en": "Payment", "th": "" },
+            "label": {
+              "en": "Payment"
+            },
             "items": [
-              { "type": "external", "text": { "en": "Payment Provider", "th": "" } },
-              { "type": "command",  "text": { "en": "Authorize Payment", "th": "" } },
-              { "type": "event",    "text": { "en": "PaymentAuthorized", "th": "" } },
-              { "type": "event",    "text": { "en": "PaymentFailed", "th": "" } },
-              { "type": "command",  "text": { "en": "Request Refund", "th": "" } },
-              { "type": "event",    "text": { "en": "RefundRequested", "th": "" } },
-              { "type": "event",    "text": { "en": "RefundCompleted", "th": "" } },
-              { "type": "policy",   "text": { "en": "On OrderCancelled (post-capture) → Issue Refund", "th": "" } },
-              { "type": "hotspot",  "text": { "en": "COD: capture happens at delivery, not at checkout — two saga variants?", "th": "" } }
+              {
+                "type": "external",
+                "text": {
+                  "en": "Payment Provider"
+                }
+              },
+              {
+                "type": "command",
+                "text": {
+                  "en": "Authorize Payment"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "PaymentAuthorized"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "PaymentFailed"
+                }
+              },
+              {
+                "type": "command",
+                "text": {
+                  "en": "Request Refund"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "RefundRequested"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "RefundCompleted"
+                }
+              },
+              {
+                "type": "policy",
+                "text": {
+                  "en": "On OrderCancelled (post-capture) → Issue Refund"
+                }
+              },
+              {
+                "type": "hotspot",
+                "text": {
+                  "en": "COD: capture happens at delivery, not at checkout — two saga variants?"
+                }
+              }
             ]
           },
           {
             "id": "shipping",
-            "label": { "en": "Shipping", "th": "" },
+            "label": {
+              "en": "Shipping"
+            },
             "items": [
-              { "type": "external",  "text": { "en": "Shipping Provider", "th": "" } },
-              { "type": "command",   "text": { "en": "Create Shipment", "th": "" } },
-              { "type": "event",     "text": { "en": "ShipmentCreated", "th": "" } },
-              { "type": "event",     "text": { "en": "ShipmentDispatched", "th": "" } },
-              { "type": "event",     "text": { "en": "ShipmentDelivered", "th": "" } },
-              { "type": "policy",    "text": { "en": "On OrderConfirmed → Create Shipment", "th": "" } },
-              { "type": "readmodel", "text": { "en": "Pick List", "th": "" } }
+              {
+                "type": "external",
+                "text": {
+                  "en": "Shipping Provider"
+                }
+              },
+              {
+                "type": "command",
+                "text": {
+                  "en": "Create Shipment"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "ShipmentCreated"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "ShipmentDispatched"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "ShipmentDelivered"
+                }
+              },
+              {
+                "type": "policy",
+                "text": {
+                  "en": "On OrderConfirmed → Create Shipment"
+                }
+              },
+              {
+                "type": "readmodel",
+                "text": {
+                  "en": "Pick List"
+                }
+              }
             ]
           },
           {
             "id": "notifications",
-            "label": { "en": "Notifications", "th": "" },
+            "label": {
+              "en": "Notifications"
+            },
             "items": [
-              { "type": "actor",     "text": { "en": "Admin", "th": "" } },
-              { "type": "event",     "text": { "en": "CustomerNotified", "th": "" } },
-              { "type": "policy",    "text": { "en": "On any milestone event → Send notification", "th": "" } },
-              { "type": "readmodel", "text": { "en": "Notification Inbox", "th": "" } },
-              { "type": "external",  "text": { "en": "SendGrid / SMS Gateway", "th": "" } }
+              {
+                "type": "actor",
+                "text": {
+                  "en": "Admin"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "CustomerNotified"
+                }
+              },
+              {
+                "type": "policy",
+                "text": {
+                  "en": "On any milestone event → Send notification"
+                }
+              },
+              {
+                "type": "readmodel",
+                "text": {
+                  "en": "Notification Inbox"
+                }
+              },
+              {
+                "type": "external",
+                "text": {
+                  "en": "SendGrid / SMS Gateway"
+                }
+              }
             ]
           }
         ],
-        "tooltipRefs": ["event-storming", "domain-event", "command", "actor", "policy", "external-system", "read-model"]
+        "tooltipRefs": [
+          "event-storming",
+          "domain-event",
+          "command",
+          "actor",
+          "policy",
+          "external-system",
+          "read-model"
+        ]
       },
       {
         "id": "bounded-contexts",
         "type": "diagram",
-        "title": { "en": "Eight Bounded Contexts", "th": "" },
-        "content": { "en": "The ES board collapses into eight bounded contexts. Each context owns one coherent slice of the ubiquitous language and has a clear team owner.\n\n• Customer (Core) — identity, profile, saved addresses. Owns the customer ID that every other context references but never copies in full.\n• Catalog (Supporting) — SKU descriptions, images, prices, search. Changes on a marketing cadence, not a transactional one.\n• Cart (Supporting) — ephemeral pre-checkout state. Disappears the moment OrderPlaced fires.\n• Order (Core) — the canonical order aggregate and lifecycle state machine. Pivot of the entire fulfilment saga.\n• Inventory (Supporting) — stock counts, reservations, warehouse bin locations. Separate from Catalog because change rates differ.\n• Payment (Core) — authorise, capture, refund. Isolated as its own context because PCI DSS is a hard regulatory boundary; merging payments into Order would drag the whole system into PCI scope.\n• Shipping (Supporting) — pick-pack-ship workflow and carrier integration. Wraps every external courier in an Anti-Corruption Layer.\n• Notification (Generic) — pure consumer of events. Owns no business entities. Treated as Generic because any mature company can buy this capability off the shelf (SendGrid + Twilio) with no competitive differentiation.\n\nThe diagram shows the context map and the integration patterns between contexts.", "th": "" },
+        "title": {
+          "en": "Eight Bounded Contexts"
+        },
+        "content": {
+          "en": "The ES board collapses into eight bounded contexts. Each context owns one coherent slice of the ubiquitous language and has a clear team owner.\n\n• Customer (Core) — identity, profile, saved addresses. Owns the customer ID that every other context references but never copies in full.\n• Catalog (Supporting) — SKU descriptions, images, prices, search. Changes on a marketing cadence, not a transactional one.\n• Cart (Supporting) — ephemeral pre-checkout state. Disappears the moment OrderPlaced fires.\n• Order (Core) — the canonical order aggregate and lifecycle state machine. Pivot of the entire fulfilment saga.\n• Inventory (Supporting) — stock counts, reservations, warehouse bin locations. Separate from Catalog because change rates differ.\n• Payment (Core) — authorise, capture, refund. Isolated as its own context because PCI DSS is a hard regulatory boundary; merging payments into Order would drag the whole system into PCI scope.\n• Shipping (Supporting) — pick-pack-ship workflow and carrier integration. Wraps every external courier in an Anti-Corruption Layer.\n• Notification (Generic) — pure consumer of events. Owns no business entities. Treated as Generic because any mature company can buy this capability off the shelf (SendGrid + Twilio) with no competitive differentiation.\n\nThe diagram shows the context map and the integration patterns between contexts."
+        },
         "diagram": {
           "type": "mermaid",
           "source": "flowchart LR\n  CUS[Customer · Core]\n  CAT[Catalog · Supporting]\n  CART[Cart · Supporting]\n  ORD[Order · Core]\n  INV[Inventory · Supporting]\n  PAY[Payment · Core]\n  SHP[Shipping · Supporting]\n  NOT[Notification · Generic]\n  STR[(Payment Provider)]\n  CRR[(Shipping Provider)]\n  CUS -->|Customer-Supplier| ORD\n  CAT -->|OHS + PL| CART\n  CAT -->|OHS + PL| ORD\n  CAT <-->|Shared Kernel: SKU| INV\n  CART -->|CheckoutStarted| ORD\n  ORD -->|Customer-Supplier| INV\n  ORD <-->|Partnership| PAY\n  ORD -->|Customer-Supplier| SHP\n  PAY -->|Conformist| STR\n  SHP -->|ACL| CRR\n  ORD -.->|events| NOT\n  PAY -.->|events| NOT\n  SHP -.->|events| NOT\n  CART -.->|events| NOT\n  style CUS fill:#6366f1,stroke:#3730a3,color:#fff\n  style ORD fill:#6366f1,stroke:#3730a3,color:#fff\n  style PAY fill:#6366f1,stroke:#3730a3,color:#fff\n  style CAT fill:#14b8a6,stroke:#0f766e,color:#fff\n  style CART fill:#14b8a6,stroke:#0f766e,color:#fff\n  style INV fill:#14b8a6,stroke:#0f766e,color:#fff\n  style SHP fill:#14b8a6,stroke:#0f766e,color:#fff\n  style NOT fill:#a78bfa,stroke:#6d28d9,color:#fff\n  style STR fill:#fbbf24,stroke:#b45309,color:#1e1b4b\n  style CRR fill:#fbbf24,stroke:#b45309,color:#1e1b4b"
         },
-        "tooltipRefs": ["bounded-context", "context-map", "core-domain", "subdomain"]
+        "tooltipRefs": [
+          "bounded-context",
+          "context-map",
+          "core-domain",
+          "subdomain"
+        ]
       },
       {
         "id": "ddd-aggregates",
         "type": "diagram",
-        "title": { "en": "DDD Aggregates Inside the Contexts", "th": "" },
-        "content": { "en": "Inside each bounded context we model the consistency boundaries as aggregates. An aggregate is a cluster of entities and value objects that change together inside a single transaction. ShopSphere has five top-level aggregates worth highlighting:\n\n• Order — the aggregate root. Owns OrderLineItem entities (snapshots of catalog data at checkout time) and ShippingAddress + BillingAddress value objects. Enforces the order lifecycle state machine.\n• Payment — owns PaymentIntent and Charge entities, with Money as a value object. PCI-scoped.\n• Cart — short-lived aggregate. Owns CartLineItem and the promo code applied. Replaced by Order at checkout.\n• InventoryItem — one aggregate per SKU per warehouse. Owns the available quantity and an open list of Reservation entities.\n• Shipment — owns the carrier label, tracking number, and the list of DeliveryAttempts. Created from an OrderConfirmed event.\n\nThe diagram zooms into the Order aggregate to show the entities and value objects inside its consistency boundary.", "th": "" },
+        "title": {
+          "en": "DDD Aggregates Inside the Contexts"
+        },
+        "content": {
+          "en": "Inside each bounded context we model the consistency boundaries as aggregates. An aggregate is a cluster of entities and value objects that change together inside a single transaction. ShopSphere has five top-level aggregates worth highlighting:\n\n• Order — the aggregate root. Owns OrderLineItem entities (snapshots of catalog data at checkout time) and ShippingAddress + BillingAddress value objects. Enforces the order lifecycle state machine.\n• Payment — owns PaymentIntent and Charge entities, with Money as a value object. PCI-scoped.\n• Cart — short-lived aggregate. Owns CartLineItem and the promo code applied. Replaced by Order at checkout.\n• InventoryItem — one aggregate per SKU per warehouse. Owns the available quantity and an open list of Reservation entities.\n• Shipment — owns the carrier label, tracking number, and the list of DeliveryAttempts. Created from an OrderConfirmed event.\n\nThe diagram zooms into the Order aggregate to show the entities and value objects inside its consistency boundary."
+        },
         "diagram": {
           "type": "mermaid",
           "source": "flowchart TB\n  subgraph OA[Order Aggregate]\n    direction TB\n    O((Order · root))\n    LI1[OrderLineItem]\n    LI2[OrderLineItem]\n    SA[/ShippingAddress · VO/]\n    BA[/BillingAddress · VO/]\n    TOT[/Money · VO totalAmount/]\n    ST[/OrderStatus · VO/]\n    O --- LI1\n    O --- LI2\n    O --- SA\n    O --- BA\n    O --- TOT\n    O --- ST\n  end\n  EXT([External code]) -->|via Order only| O\n  EXT -.->|never directly| LI1\n  style O fill:#6366f1,stroke:#3730a3,color:#fff\n  style LI1 fill:#f3f4f6,stroke:#9ca3af,color:#1e1b4b\n  style LI2 fill:#f3f4f6,stroke:#9ca3af,color:#1e1b4b\n  style SA fill:#fde68a,stroke:#b45309,color:#1e1b4b\n  style BA fill:#fde68a,stroke:#b45309,color:#1e1b4b\n  style TOT fill:#fde68a,stroke:#b45309,color:#1e1b4b\n  style ST fill:#fde68a,stroke:#b45309,color:#1e1b4b\n  style EXT fill:#ffffff,stroke:#6b7280,color:#1e1b4b"
         },
-        "tooltipRefs": ["aggregate", "entity", "value-object", "repository"]
+        "tooltipRefs": [
+          "aggregate",
+          "entity",
+          "value-object",
+          "repository"
+        ]
       },
       {
         "id": "ubiquitous-language",
         "type": "infographic",
-        "title": { "en": "Ubiquitous Language Across Contexts", "th": "" },
-        "content": { "en": "The same English word means different things in different bounded contexts. This is not sloppy modelling — it is the whole point of context boundaries. Forcing one universal definition of 'Customer' or 'Item' would collapse the language and re-couple every team. Here are the seams that matter most in ShopSphere.", "th": "" },
+        "title": {
+          "en": "Ubiquitous Language Across Contexts"
+        },
+        "content": {
+          "en": "The same English word means different things in different bounded contexts. This is not sloppy modelling — it is the whole point of context boundaries. Forcing one universal definition of 'Customer' or 'Item' would collapse the language and re-couple every team. Here are the seams that matter most in ShopSphere."
+        },
         "items": [
-          { "icon": "👤", "label": { "en": "Customer", "th": "" }, "body": { "en": "In Customer context: a registered person with login credentials and saved addresses. In Order context: the buyer (a snapshot of identity + billing). In Shipping context: the recipient at the destination address — which may be a completely different person (e.g. a gift).", "th": "" } },
-          { "icon": "📦", "label": { "en": "Item", "th": "" }, "body": { "en": "In Catalog: a product listing with description, image, and price. In Cart: a chosen variant + quantity. In Order: an immutable line-item snapshot frozen at checkout. In Inventory: a physical SKU in a specific warehouse bin.", "th": "" } },
-          { "icon": "💰", "label": { "en": "Amount", "th": "" }, "body": { "en": "In Cart: a live, recalculable total that changes as you add/remove items or apply promo codes. In Order: a locked Money value object that never changes after OrderPlaced. In Payment: the authorised amount, which may differ from the captured amount.", "th": "" } },
-          { "icon": "📑", "label": { "en": "Order", "th": "" }, "body": { "en": "In Order context: the customer's purchase intent and its state machine (Pending → Confirmed → Shipped → Delivered). In Shipping context: a fulfilment job — a pick list with bin locations. Same word, different model. The boundary is the seam.", "th": "" } },
-          { "icon": "🚚", "label": { "en": "Shipment", "th": "" }, "body": { "en": "In Shipping context: the canonical record with carrier, tracking number, and delivery attempts. In Order context: a status update consumed via ShipmentDispatched and ShipmentDelivered events, never written directly.", "th": "" } },
-          { "icon": "💳", "label": { "en": "Payment", "th": "" }, "body": { "en": "In Payment context: an aggregate with PaymentIntent and Charge entities; PCI-scoped. In Order context: just two boolean facts — was it authorised? was it captured? Order never sees raw card data.", "th": "" } }
+          {
+            "icon": "👤",
+            "label": {
+              "en": "Customer"
+            },
+            "body": {
+              "en": "In Customer context: a registered person with login credentials and saved addresses. In Order context: the buyer (a snapshot of identity + billing). In Shipping context: the recipient at the destination address — which may be a completely different person (e.g. a gift)."
+            }
+          },
+          {
+            "icon": "📦",
+            "label": {
+              "en": "Item"
+            },
+            "body": {
+              "en": "In Catalog: a product listing with description, image, and price. In Cart: a chosen variant + quantity. In Order: an immutable line-item snapshot frozen at checkout. In Inventory: a physical SKU in a specific warehouse bin."
+            }
+          },
+          {
+            "icon": "💰",
+            "label": {
+              "en": "Amount"
+            },
+            "body": {
+              "en": "In Cart: a live, recalculable total that changes as you add/remove items or apply promo codes. In Order: a locked Money value object that never changes after OrderPlaced. In Payment: the authorised amount, which may differ from the captured amount."
+            }
+          },
+          {
+            "icon": "📑",
+            "label": {
+              "en": "Order"
+            },
+            "body": {
+              "en": "In Order context: the customer's purchase intent and its state machine (Pending → Confirmed → Shipped → Delivered). In Shipping context: a fulfilment job — a pick list with bin locations. Same word, different model. The boundary is the seam."
+            }
+          },
+          {
+            "icon": "🚚",
+            "label": {
+              "en": "Shipment"
+            },
+            "body": {
+              "en": "In Shipping context: the canonical record with carrier, tracking number, and delivery attempts. In Order context: a status update consumed via ShipmentDispatched and ShipmentDelivered events, never written directly."
+            }
+          },
+          {
+            "icon": "💳",
+            "label": {
+              "en": "Payment"
+            },
+            "body": {
+              "en": "In Payment context: an aggregate with PaymentIntent and Charge entities; PCI-scoped. In Order context: just two boolean facts — was it authorised? was it captured? Order never sees raw card data."
+            }
+          }
         ],
-        "tooltipRefs": ["ubiquitous-language", "bounded-context", "value-object"]
+        "tooltipRefs": [
+          "ubiquitous-language",
+          "bounded-context",
+          "value-object"
+        ]
       },
       {
         "id": "eda-happy-path",
         "type": "flow",
-        "title": { "en": "EDA Happy Path: The Choreography Saga", "th": "" },
-        "content": { "en": "The successful ShopSphere order flow is a choreography saga: no central orchestrator, each context reacts to the previous context's integration event. Newman warns that beyond four steps choreography becomes hazardous; we keep choreography here for teaching clarity, but in production we would switch to an orchestrator (a Process Manager) once monitoring requirements bite.\n\nThe sequence diagram below traces a single happy-path order from checkout to delivery confirmation. Every arrow is an integration event flowing through the message broker. No service calls another service directly.", "th": "" },
+        "title": {
+          "en": "EDA Happy Path: The Choreography Saga"
+        },
+        "content": {
+          "en": "The successful ShopSphere order flow is a choreography saga: no central orchestrator, each context reacts to the previous context's integration event. Newman warns that beyond four steps choreography becomes hazardous; we keep choreography here for teaching clarity, but in production we would switch to an orchestrator (a Process Manager) once monitoring requirements bite.\n\nThe sequence diagram below traces a single happy-path order from checkout to delivery confirmation. Every arrow is an integration event flowing through the message broker. No service calls another service directly."
+        },
         "steps": [
-          { "label": { "en": "1. Checkout", "th": "" }, "body": { "en": "Customer submits checkout. Cart publishes CheckoutStarted with the line items and shipping address.", "th": "" } },
-          { "label": { "en": "2. Order Created", "th": "" }, "body": { "en": "Order context consumes CheckoutStarted, creates the Order aggregate in Pending state with a frozen line-item snapshot, publishes OrderPlaced via Outbox.", "th": "" } },
-          { "label": { "en": "3. Inventory Reserved", "th": "" }, "body": { "en": "Inventory consumes OrderPlaced, decrements available quantity, creates a Reservation record, publishes InventoryReserved.", "th": "" } },
-          { "label": { "en": "4. Payment Authorized", "th": "" }, "body": { "en": "Payment consumes InventoryReserved, calls the Payment Provider, stores the authorisation code, publishes PaymentAuthorized.", "th": "" } },
-          { "label": { "en": "5. Order Confirmed", "th": "" }, "body": { "en": "Order consumes PaymentAuthorized, transitions Pending → Confirmed, publishes OrderConfirmed.", "th": "" } },
-          { "label": { "en": "6. Shipment Created", "th": "" }, "body": { "en": "Shipping consumes OrderConfirmed, generates a pick list for Warehouse Staff, publishes ShipmentCreated.", "th": "" } },
-          { "label": { "en": "7. Shipment Dispatched", "th": "" }, "body": { "en": "After the carrier picks up the parcel, Shipping publishes ShipmentDispatched with the tracking number.", "th": "" } },
-          { "label": { "en": "8. Shipment Delivered", "th": "" }, "body": { "en": "Carrier webhook confirms delivery. Shipping publishes ShipmentDelivered. Order consumes and transitions to Delivered.", "th": "" } },
-          { "label": { "en": "9. Customer Notified", "th": "" }, "body": { "en": "Notification consumes OrderPlaced, OrderConfirmed, ShipmentDispatched, ShipmentDelivered in parallel and dispatches emails/SMS. Publishes CustomerNotified for analytics.", "th": "" } }
+          {
+            "label": {
+              "en": "1. Checkout"
+            },
+            "body": {
+              "en": "Customer submits checkout. Cart publishes CheckoutStarted with the line items and shipping address."
+            }
+          },
+          {
+            "label": {
+              "en": "2. Order Created"
+            },
+            "body": {
+              "en": "Order context consumes CheckoutStarted, creates the Order aggregate in Pending state with a frozen line-item snapshot, publishes OrderPlaced via Outbox."
+            }
+          },
+          {
+            "label": {
+              "en": "3. Inventory Reserved"
+            },
+            "body": {
+              "en": "Inventory consumes OrderPlaced, decrements available quantity, creates a Reservation record, publishes InventoryReserved."
+            }
+          },
+          {
+            "label": {
+              "en": "4. Payment Authorized"
+            },
+            "body": {
+              "en": "Payment consumes InventoryReserved, calls the Payment Provider, stores the authorisation code, publishes PaymentAuthorized."
+            }
+          },
+          {
+            "label": {
+              "en": "5. Order Confirmed"
+            },
+            "body": {
+              "en": "Order consumes PaymentAuthorized, transitions Pending → Confirmed, publishes OrderConfirmed."
+            }
+          },
+          {
+            "label": {
+              "en": "6. Shipment Created"
+            },
+            "body": {
+              "en": "Shipping consumes OrderConfirmed, generates a pick list for Warehouse Staff, publishes ShipmentCreated."
+            }
+          },
+          {
+            "label": {
+              "en": "7. Shipment Dispatched"
+            },
+            "body": {
+              "en": "After the carrier picks up the parcel, Shipping publishes ShipmentDispatched with the tracking number."
+            }
+          },
+          {
+            "label": {
+              "en": "8. Shipment Delivered"
+            },
+            "body": {
+              "en": "Carrier webhook confirms delivery. Shipping publishes ShipmentDelivered. Order consumes and transitions to Delivered."
+            }
+          },
+          {
+            "label": {
+              "en": "9. Customer Notified"
+            },
+            "body": {
+              "en": "Notification consumes OrderPlaced, OrderConfirmed, ShipmentDispatched, ShipmentDelivered in parallel and dispatches emails/SMS. Publishes CustomerNotified for analytics."
+            }
+          }
         ],
         "diagram": {
           "type": "mermaid",
           "source": "sequenceDiagram\n  participant C as Customer\n  participant CART as Cart\n  participant ORD as Order\n  participant INV as Inventory\n  participant PAY as Payment\n  participant SHP as Shipping\n  participant NOT as Notification\n  C->>CART: Checkout\n  CART->>ORD: CheckoutStarted\n  ORD->>INV: OrderPlaced\n  ORD->>NOT: OrderPlaced\n  INV->>PAY: InventoryReserved\n  PAY->>ORD: PaymentAuthorized\n  ORD->>SHP: OrderConfirmed\n  ORD->>NOT: OrderConfirmed\n  SHP->>ORD: ShipmentCreated\n  SHP->>NOT: ShipmentDispatched\n  SHP->>ORD: ShipmentDelivered\n  NOT->>C: Confirmation + Tracking + Delivered emails"
         },
-        "tooltipRefs": ["eda", "integration-event", "producer", "consumer", "pub-sub", "eventual-consistency"]
+        "tooltipRefs": [
+          "eda",
+          "integration-event",
+          "producer",
+          "consumer",
+          "pub-sub",
+          "eventual-consistency"
+        ]
       },
       {
         "id": "failure-inventory",
         "type": "diagram",
-        "title": { "en": "Failure Flow 1: Inventory Reservation Fails", "th": "" },
-        "content": { "en": "Scenario: stock was depleted between the moment the customer added an item to their cart and the moment they checked out. Inventory cannot honour the reservation.\n\nInventory publishes InventoryReservationFailed instead of InventoryReserved. The Order context consumes the failure event and immediately cancels the order, publishing OrderCancelled. Because no payment authorisation was ever attempted, there is nothing to refund. The Notification context sends an out-of-stock email; optionally the Cart context restores the customer's selection so they can edit and retry.\n\nKey point: compensating events move the system forward to a new consistent state — they do NOT delete or rewrite the original OrderPlaced event. The log of business facts remains complete.", "th": "" },
+        "title": {
+          "en": "Failure Flow 1: Inventory Reservation Fails"
+        },
+        "content": {
+          "en": "Scenario: stock was depleted between the moment the customer added an item to their cart and the moment they checked out. Inventory cannot honour the reservation.\n\nInventory publishes InventoryReservationFailed instead of InventoryReserved. The Order context consumes the failure event and immediately cancels the order, publishing OrderCancelled. Because no payment authorisation was ever attempted, there is nothing to refund. The Notification context sends an out-of-stock email; optionally the Cart context restores the customer's selection so they can edit and retry.\n\nKey point: compensating events move the system forward to a new consistent state — they do NOT delete or rewrite the original OrderPlaced event. The log of business facts remains complete."
+        },
         "diagram": {
           "type": "mermaid",
           "source": "sequenceDiagram\n  participant CART as Cart\n  participant ORD as Order\n  participant INV as Inventory\n  participant PAY as Payment\n  participant NOT as Notification\n  CART->>ORD: CheckoutStarted\n  ORD->>INV: OrderPlaced\n  Note over INV: stock depleted\n  INV->>ORD: InventoryReservationFailed\n  ORD->>NOT: OrderCancelled (reason: out of stock)\n  Note over PAY: no compensation needed\n  NOT-->>CART: out-of-stock email"
         },
-        "tooltipRefs": ["domain-event", "integration-event", "eventual-consistency"]
+        "tooltipRefs": [
+          "domain-event",
+          "integration-event",
+          "eventual-consistency"
+        ]
       },
       {
         "id": "failure-payment",
         "type": "diagram",
-        "title": { "en": "Failure Flow 2: Payment Authorisation Fails", "th": "" },
-        "content": { "en": "Scenario: inventory was reserved but the customer's card was declined.\n\nThe compensation is multi-step. Payment publishes PaymentFailed. The Order context consumes it, transitions the Order to Cancelled, and publishes OrderCancelled. Inventory consumes OrderCancelled and releases the reservation by publishing InventoryReleased — the held stock returns to available inventory. Notification consumes PaymentFailed and emails the customer with a link to update their payment method.\n\nThis chain — PaymentFailed → OrderCancelled → InventoryReleased — is the canonical compensating event chain Richardson documents in the FTGO reference application. Each event is a new business fact, not a rollback.", "th": "" },
+        "title": {
+          "en": "Failure Flow 2: Payment Authorisation Fails"
+        },
+        "content": {
+          "en": "Scenario: inventory was reserved but the customer's card was declined.\n\nThe compensation is multi-step. Payment publishes PaymentFailed. The Order context consumes it, transitions the Order to Cancelled, and publishes OrderCancelled. Inventory consumes OrderCancelled and releases the reservation by publishing InventoryReleased — the held stock returns to available inventory. Notification consumes PaymentFailed and emails the customer with a link to update their payment method.\n\nThis chain — PaymentFailed → OrderCancelled → InventoryReleased — is the canonical compensating event chain Richardson documents in the FTGO reference application. Each event is a new business fact, not a rollback."
+        },
         "diagram": {
           "type": "mermaid",
           "source": "sequenceDiagram\n  participant ORD as Order\n  participant INV as Inventory\n  participant PAY as Payment\n  participant NOT as Notification\n  ORD->>INV: OrderPlaced\n  INV->>PAY: InventoryReserved\n  Note over PAY: gateway declines card\n  PAY->>ORD: PaymentFailed\n  PAY->>NOT: PaymentFailed\n  ORD->>INV: OrderCancelled\n  ORD->>NOT: OrderCancelled\n  INV->>ORD: InventoryReleased\n  NOT-->>NOT: 'Update your payment method' email"
         },
-        "tooltipRefs": ["domain-event", "integration-event", "eventual-consistency", "idempotency"]
+        "tooltipRefs": [
+          "domain-event",
+          "integration-event",
+          "eventual-consistency",
+          "idempotency"
+        ]
       },
       {
         "id": "event-contracts",
         "type": "text",
-        "title": { "en": "Event Contracts: OrderPlaced and PaymentAuthorized", "th": "" },
-        "content": { "en": "Every integration event in ShopSphere is a public API. We use a standard envelope on every event and a lean payload that includes only what consumers actually need. Internal aggregate fields stay inside the producing context.\n\nThe OrderPlaced contract — published by the Order context, consumed by Inventory, Payment, and Notification:\n\n```json\n{\n  \"eventId\": \"01HX2V9QKPN3Y8Z7W4C5D6E0\",\n  \"eventType\": \"sales.order.placed\",\n  \"eventVersion\": 1,\n  \"occurredAt\": \"2026-05-18T09:32:11Z\",\n  \"correlationId\": \"web-session-a3f9\",\n  \"causationId\": \"01HX2V9QKEK0XYZ\",\n  \"payload\": {\n    \"orderId\": \"order-88142\",\n    \"customerId\": \"cust-5521\",\n    \"lineItems\": [\n      { \"sku\": \"BK-9912\", \"qty\": 2, \"unitPrice\": 350.00 },\n      { \"sku\": \"BK-7714\", \"qty\": 1, \"unitPrice\": 550.00 }\n    ],\n    \"totalAmount\": 1250.00,\n    \"currency\": \"THB\",\n    \"shippingAddressId\": \"addr-2210\"\n  }\n}\n```\n\nNote the unit prices are included as historical facts: at the moment of OrderPlaced, this is what the customer agreed to pay. If the Catalog context later raises prices, the order is unaffected — the snapshot is the contract.\n\nThe PaymentAuthorized contract — published by Payment, consumed by Order and Notification:\n\n```json\n{\n  \"eventId\": \"01HX2V9R3MN8YQ4WZP7X2C1F0\",\n  \"eventType\": \"payments.payment.authorized\",\n  \"eventVersion\": 1,\n  \"occurredAt\": \"2026-05-18T09:32:14Z\",\n  \"correlationId\": \"web-session-a3f9\",\n  \"causationId\": \"01HX2V9QKPN3Y8Z7W4C5D6E0\",\n  \"payload\": {\n    \"orderId\": \"order-88142\",\n    \"authorizationCode\": \"auth_8f2k...\",\n    \"amount\": 1250.00,\n    \"currency\": \"THB\",\n    \"paymentMethodType\": \"card\"\n  }\n}\n```\n\nThe causationId on PaymentAuthorized points back to OrderPlaced's eventId, threading the causal chain. The correlationId is identical on both events, allowing operators to retrieve every event for one customer transaction with a single log query. Notice the Payment context does NOT publish the raw card number, the CVV, or the billing address — those stay inside PCI scope and never appear on the wire as an integration event.", "th": "" },
-        "tooltipRefs": ["event-schema", "event-versioning", "integration-event"]
+        "title": {
+          "en": "Event Contracts: OrderPlaced and PaymentAuthorized"
+        },
+        "content": {
+          "en": "Every integration event in ShopSphere is a public API. We use a standard envelope on every event and a lean payload that includes only what consumers actually need. Internal aggregate fields stay inside the producing context.\n\nThe OrderPlaced contract — published by the Order context, consumed by Inventory, Payment, and Notification:\n\n```json\n{\n  \"eventId\": \"01HX2V9QKPN3Y8Z7W4C5D6E0\",\n  \"eventType\": \"sales.order.placed\",\n  \"eventVersion\": 1,\n  \"occurredAt\": \"2026-05-18T09:32:11Z\",\n  \"correlationId\": \"web-session-a3f9\",\n  \"causationId\": \"01HX2V9QKEK0XYZ\",\n  \"payload\": {\n    \"orderId\": \"order-88142\",\n    \"customerId\": \"cust-5521\",\n    \"lineItems\": [\n      { \"sku\": \"BK-9912\", \"qty\": 2, \"unitPrice\": 350.00 },\n      { \"sku\": \"BK-7714\", \"qty\": 1, \"unitPrice\": 550.00 }\n    ],\n    \"totalAmount\": 1250.00,\n    \"currency\": \"THB\",\n    \"shippingAddressId\": \"addr-2210\"\n  }\n}\n```\n\nNote the unit prices are included as historical facts: at the moment of OrderPlaced, this is what the customer agreed to pay. If the Catalog context later raises prices, the order is unaffected — the snapshot is the contract.\n\nThe PaymentAuthorized contract — published by Payment, consumed by Order and Notification:\n\n```json\n{\n  \"eventId\": \"01HX2V9R3MN8YQ4WZP7X2C1F0\",\n  \"eventType\": \"payments.payment.authorized\",\n  \"eventVersion\": 1,\n  \"occurredAt\": \"2026-05-18T09:32:14Z\",\n  \"correlationId\": \"web-session-a3f9\",\n  \"causationId\": \"01HX2V9QKPN3Y8Z7W4C5D6E0\",\n  \"payload\": {\n    \"orderId\": \"order-88142\",\n    \"authorizationCode\": \"auth_8f2k...\",\n    \"amount\": 1250.00,\n    \"currency\": \"THB\",\n    \"paymentMethodType\": \"card\"\n  }\n}\n```\n\nThe causationId on PaymentAuthorized points back to OrderPlaced's eventId, threading the causal chain. The correlationId is identical on both events, allowing operators to retrieve every event for one customer transaction with a single log query. Notice the Payment context does NOT publish the raw card number, the CVV, or the billing address — those stay inside PCI scope and never appear on the wire as an integration event."
+        },
+        "tooltipRefs": [
+          "event-schema",
+          "event-versioning",
+          "integration-event"
+        ]
       },
       {
         "id": "reliability-patterns",
         "type": "callout",
-        "title": { "en": "Reliability Patterns Applied to ShopSphere", "th": "" },
-        "content": { "en": "Idempotency. Payment is the canonical example: if the Order service consumes OrderPlaced and accidentally publishes a duplicate (Outbox relay restart, network retry, broker rebalance), the Payment context must deduplicate on eventId. Otherwise the same customer gets charged twice. Every consumer of every event in ShopSphere maintains a processed-eventId table.\n\nRetry with exponential backoff. The Notification service calling SendGrid sometimes hits transient 503s. Retries fire at 100ms, 200ms, 400ms, 800ms with random jitter. After four attempts the message moves to the DLQ rather than retrying forever — alerts page the Admin.\n\nDead Letter Queue. Every consumer has a DLQ. The Notification Service DLQ catches messages SendGrid permanently rejected (bad email address, suppressed domain). Admin reviews, fixes the contact record, and replays. The DLQ is a repair station, not a graveyard.\n\nPrice locking as historical fact. When OrderPlaced fires, the unit prices are frozen on the event payload. If a Catalog price update lands a second later, the order is unaffected. The customer pays what they agreed to pay — the event is the contract.\n\nIntegration events are not domain events. Inside the Order context, the aggregate fires fine-grained domain events like Order.LineItemAdded — those are private and never leave the context. Only OrderPlaced, OrderConfirmed, OrderCancelled cross the broker. Confusing the two would flood every service with internal noise.", "th": "" },
-        "tooltipRefs": ["idempotency", "retry", "dead-letter-queue", "domain-event", "integration-event"]
+        "title": {
+          "en": "Reliability Patterns Applied to ShopSphere"
+        },
+        "content": {
+          "en": "Idempotency. Payment is the canonical example: if the Order service consumes OrderPlaced and accidentally publishes a duplicate (Outbox relay restart, network retry, broker rebalance), the Payment context must deduplicate on eventId. Otherwise the same customer gets charged twice. Every consumer of every event in ShopSphere maintains a processed-eventId table.\n\nRetry with exponential backoff. The Notification service calling SendGrid sometimes hits transient 503s. Retries fire at 100ms, 200ms, 400ms, 800ms with random jitter. After four attempts the message moves to the DLQ rather than retrying forever — alerts page the Admin.\n\nDead Letter Queue. Every consumer has a DLQ. The Notification Service DLQ catches messages SendGrid permanently rejected (bad email address, suppressed domain). Admin reviews, fixes the contact record, and replays. The DLQ is a repair station, not a graveyard.\n\nPrice locking as historical fact. When OrderPlaced fires, the unit prices are frozen on the event payload. If a Catalog price update lands a second later, the order is unaffected. The customer pays what they agreed to pay — the event is the contract.\n\nIntegration events are not domain events. Inside the Order context, the aggregate fires fine-grained domain events like Order.LineItemAdded — those are private and never leave the context. Only OrderPlaced, OrderConfirmed, OrderCancelled cross the broker. Confusing the two would flood every service with internal noise."
+        },
+        "tooltipRefs": [
+          "idempotency",
+          "retry",
+          "dead-letter-queue",
+          "domain-event",
+          "integration-event"
+        ]
       },
       {
         "id": "key-takeaways",
         "type": "callout",
-        "title": { "en": "Key Takeaways", "th": "" },
-        "content": { "en": "ShopSphere ties together every concept from Modules 1 through 6.\n\n• Event Storming surfaces the domain events in business language — orange stickies, past tense, what actually happened.\n• Domain-Driven Design organises those events into bounded contexts (the eight ShopSphere contexts) and aggregates (Order, Payment, Cart, InventoryItem, Shipment). Each context owns its slice of the ubiquitous language; the same word legitimately means different things across context seams.\n• Event-Driven Architecture wires the contexts together with integration events flowing through a broker. Choreography is fine for short flows; longer flows warrant a Process Manager.\n• Failure paths are designed before the happy path. Every step has a compensating event. PaymentFailed → OrderCancelled → InventoryReleased is a forward-moving chain of new facts, not a rollback.\n• Reliability patterns — idempotency, retry, DLQ, Outbox — are non-negotiable in production. They are the difference between a system you can operate and one you fear.\n\nThe Notification context is treated as Generic because no marketplace differentiates itself on email delivery; that work belongs to SendGrid or Twilio. The Payment context is treated as Core not because payments are exotic but because the PCI regulatory boundary is hard and isolating it has architectural value.\n\nYou now have the toolkit. Go apply it to a real domain.", "th": "" },
-        "tooltipRefs": ["ddd", "event-storming", "eda", "bounded-context", "aggregate", "integration-event"]
+        "title": {
+          "en": "Key Takeaways"
+        },
+        "content": {
+          "en": "ShopSphere ties together every concept from Modules 1 through 6.\n\n• Event Storming surfaces the domain events in business language — orange stickies, past tense, what actually happened.\n• Domain-Driven Design organises those events into bounded contexts (the eight ShopSphere contexts) and aggregates (Order, Payment, Cart, InventoryItem, Shipment). Each context owns its slice of the ubiquitous language; the same word legitimately means different things across context seams.\n• Event-Driven Architecture wires the contexts together with integration events flowing through a broker. Choreography is fine for short flows; longer flows warrant a Process Manager.\n• Failure paths are designed before the happy path. Every step has a compensating event. PaymentFailed → OrderCancelled → InventoryReleased is a forward-moving chain of new facts, not a rollback.\n• Reliability patterns — idempotency, retry, DLQ, Outbox — are non-negotiable in production. They are the difference between a system you can operate and one you fear.\n\nThe Notification context is treated as Generic because no marketplace differentiates itself on email delivery; that work belongs to SendGrid or Twilio. The Payment context is treated as Core not because payments are exotic but because the PCI regulatory boundary is hard and isolating it has architectural value.\n\nYou now have the toolkit. Go apply it to a real domain."
+        },
+        "tooltipRefs": [
+          "ddd",
+          "event-storming",
+          "eda",
+          "bounded-context",
+          "aggregate",
+          "integration-event"
+        ]
       }
     ]
   }

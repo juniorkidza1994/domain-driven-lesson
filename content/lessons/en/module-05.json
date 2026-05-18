@@ -2,183 +2,282 @@
   "module": {
     "id": "module-05",
     "number": 5,
-    "title": { "en": "Event-Driven Architecture", "th": "" },
+    "title": {
+      "en": "Event-Driven Architecture"
+    },
     "estimatedMinutes": 35,
     "sections": [
       {
         "id": "what-is-eda",
         "type": "callout",
-        "title": { "en": "What is Event-Driven Architecture?", "th": "" },
-        "content": {
-          "en": "Event-Driven Architecture (EDA) is an architectural style where services communicate by producing and consuming events — messages that represent something that happened — rather than making direct synchronous calls to each other. The key property is temporal decoupling: the producer publishes an event and moves on immediately. It does not wait for a response. Consumers react to events independently, at their own pace, without the producer knowing they exist.\n\nMartin Fowler identifies four patterns that practitioners call \"event-driven\": Event Notification (lightweight fact announcement), Event-Carried State Transfer (full payload so consumers can self-serve), Event Sourcing (state stored as an event log), and CQRS (separate read and write models). This module focuses on the first two — the communication patterns. Event Sourcing is a separate persistence pattern covered at the end of this module.",
-          "th": ""
+        "title": {
+          "en": "What is Event-Driven Architecture?"
         },
-        "tooltipRefs": ["eda"]
+        "content": {
+          "en": "Event-Driven Architecture (EDA) is an architectural style where services communicate by producing and consuming events — messages that represent something that happened — rather than making direct synchronous calls to each other. The key property is temporal decoupling: the producer publishes an event and moves on immediately. It does not wait for a response. Consumers react to events independently, at their own pace, without the producer knowing they exist.\n\nMartin Fowler identifies four patterns that practitioners call \"event-driven\": Event Notification (lightweight fact announcement), Event-Carried State Transfer (full payload so consumers can self-serve), Event Sourcing (state stored as an event log), and CQRS (separate read and write models). This module focuses on the first two — the communication patterns. Event Sourcing is a separate persistence pattern covered at the end of this module."
+        },
+        "tooltipRefs": [
+          "eda"
+        ]
       },
       {
         "id": "why-eda",
         "type": "text",
-        "title": { "en": "Why EDA Over Request/Response?", "th": "" },
-        "content": {
-          "en": "In synchronous request/response, the caller must know the callee's location, its availability, and its API contract. A downstream failure immediately fails the caller. EDA inverts this: the producer emits a fact and the broker absorbs the load spike. Consumers that are offline when an event is published simply catch up when they come back online — the broker holds messages until delivery.\n\nThe case for EDA is strongest in three dimensions. Coupling: producers do not know their consumers. Adding a new consumer (a new analytics service, a new notification channel) requires zero changes to the producer. Scalability: a broker buffers events so producers and consumers scale independently. A surge in orders does not slow the checkout flow. Resilience: a transient failure in the Notification service should not prevent order placement. In EDA, it does not — the event accumulates until Notification recovers.\n\nThe honest trade-offs: reasoning about message ordering is harder than reading a call stack. Debugging requires correlation IDs and distributed tracing. Eventual consistency becomes the default — the UI must be designed to handle \"your order is being processed\" states rather than immediate confirmation.",
-          "th": ""
+        "title": {
+          "en": "Why EDA Over Request/Response?"
         },
-        "tooltipRefs": ["eda", "eventual-consistency"]
+        "content": {
+          "en": "In synchronous request/response, the caller must know the callee's location, its availability, and its API contract. A downstream failure immediately fails the caller. EDA inverts this: the producer emits a fact and the broker absorbs the load spike. Consumers that are offline when an event is published simply catch up when they come back online — the broker holds messages until delivery.\n\nThe case for EDA is strongest in three dimensions. Coupling: producers do not know their consumers. Adding a new consumer (a new analytics service, a new notification channel) requires zero changes to the producer. Scalability: a broker buffers events so producers and consumers scale independently. A surge in orders does not slow the checkout flow. Resilience: a transient failure in the Notification service should not prevent order placement. In EDA, it does not — the event accumulates until Notification recovers.\n\nThe honest trade-offs: reasoning about message ordering is harder than reading a call stack. Debugging requires correlation IDs and distributed tracing. Eventual consistency becomes the default — the UI must be designed to handle \"your order is being processed\" states rather than immediate confirmation."
+        },
+        "tooltipRefs": [
+          "eda",
+          "eventual-consistency"
+        ]
       },
       {
         "id": "events-commands-queries",
         "type": "comparison",
-        "title": { "en": "Events, Commands, and Queries", "th": "" },
+        "title": {
+          "en": "Events, Commands, and Queries"
+        },
         "content": {
-          "en": "Three message types are commonly confused in event-driven systems. Each has different semantics, direction, and error handling. Keeping them distinct prevents subtle bugs.",
-          "th": ""
+          "en": "Three message types are commonly confused in event-driven systems. Each has different semantics, direction, and error handling. Keeping them distinct prevents subtle bugs."
         },
         "columns": [
           {
-            "heading": { "en": "Event", "th": "" },
+            "heading": {
+              "en": "Event"
+            },
             "items": [
-              { "en": "Records a fact that happened (past tense: OrderPlaced)", "th": "" },
-              { "en": "Cannot be rejected — it already occurred", "th": "" },
-              { "en": "Fire-and-forget: producer does not wait", "th": "" },
-              { "en": "0..N consumers (pub/sub broadcast)", "th": "" },
-              { "en": "E-commerce: OrderPlaced, PaymentCaptured, ItemShipped", "th": "" }
+              {
+                "en": "Records a fact that happened (past tense: OrderPlaced)"
+              },
+              {
+                "en": "Cannot be rejected — it already occurred"
+              },
+              {
+                "en": "Fire-and-forget: producer does not wait"
+              },
+              {
+                "en": "0..N consumers (pub/sub broadcast)"
+              },
+              {
+                "en": "E-commerce: OrderPlaced, PaymentCaptured, ItemShipped"
+              }
             ]
           },
           {
-            "heading": { "en": "Command", "th": "" },
+            "heading": {
+              "en": "Command"
+            },
             "items": [
-              { "en": "Requests a state change (imperative: PlaceOrder)", "th": "" },
-              { "en": "Can be rejected — validation may fail", "th": "" },
-              { "en": "Directed at exactly one handler", "th": "" },
-              { "en": "Zero or two handlers is a bug", "th": "" },
-              { "en": "E-commerce: PlaceOrder, CancelShipment, AuthorizePayment", "th": "" }
+              {
+                "en": "Requests a state change (imperative: PlaceOrder)"
+              },
+              {
+                "en": "Can be rejected — validation may fail"
+              },
+              {
+                "en": "Directed at exactly one handler"
+              },
+              {
+                "en": "Zero or two handlers is a bug"
+              },
+              {
+                "en": "E-commerce: PlaceOrder, CancelShipment, AuthorizePayment"
+              }
             ]
           },
           {
-            "heading": { "en": "Query", "th": "" },
+            "heading": {
+              "en": "Query"
+            },
             "items": [
-              { "en": "Asks for information — returns data", "th": "" },
-              { "en": "Must not change state (read-only)", "th": "" },
-              { "en": "Expects a synchronous response", "th": "" },
-              { "en": "Directed at exactly one read model", "th": "" },
-              { "en": "E-commerce: GetOrderSummary, ListAvailableItems", "th": "" }
+              {
+                "en": "Asks for information — returns data"
+              },
+              {
+                "en": "Must not change state (read-only)"
+              },
+              {
+                "en": "Expects a synchronous response"
+              },
+              {
+                "en": "Directed at exactly one read model"
+              },
+              {
+                "en": "E-commerce: GetOrderSummary, ListAvailableItems"
+              }
             ]
           }
         ],
-        "tooltipRefs": ["domain-event", "command", "query"]
+        "tooltipRefs": [
+          "domain-event",
+          "command",
+          "query"
+        ]
       },
       {
         "id": "domain-vs-integration-events",
         "type": "callout",
-        "title": { "en": "Domain Events vs Integration Events — A Critical Distinction", "th": "" },
-        "content": {
-          "en": "A Domain Event is a business-meaningful fact inside one Bounded Context. It is raised by an Aggregate as a side effect of a state change. It uses the internal ubiquitous language and may carry rich internal data. It is essentially private to the context that produced it. Example: the Order context raises OrderPlaced with full aggregate-internal fields.\n\nAn Integration Event is what crosses a Bounded Context boundary. When a Domain Event needs to notify other contexts, the application layer translates it into an Integration Event — a flattened, versioned, schema-stable message published to the message broker. Only the fields that remote consumers genuinely need are included. It carries a schema version so consumers can migrate at their own pace. Example: sales.order.placed published to Kafka, consumed by Inventory and Payment contexts.\n\nThe rule: not every Domain Event becomes an Integration Event. The Anti-Corruption Layer at the context boundary performs the translation. Skipping this layer — publishing raw Domain Events directly across the broker — turns internal aggregate fields into remote API contracts. Any internal refactoring then breaks all downstream consumers.",
-          "th": ""
+        "title": {
+          "en": "Domain Events vs Integration Events — A Critical Distinction"
         },
-        "tooltipRefs": ["domain-event", "integration-event"]
+        "content": {
+          "en": "A Domain Event is a business-meaningful fact inside one Bounded Context. It is raised by an Aggregate as a side effect of a state change. It uses the internal ubiquitous language and may carry rich internal data. It is essentially private to the context that produced it. Example: the Order context raises OrderPlaced with full aggregate-internal fields.\n\nAn Integration Event is what crosses a Bounded Context boundary. When a Domain Event needs to notify other contexts, the application layer translates it into an Integration Event — a flattened, versioned, schema-stable message published to the message broker. Only the fields that remote consumers genuinely need are included. It carries a schema version so consumers can migrate at their own pace. Example: sales.order.placed published to Kafka, consumed by Inventory and Payment contexts.\n\nThe rule: not every Domain Event becomes an Integration Event. The Anti-Corruption Layer at the context boundary performs the translation. Skipping this layer — publishing raw Domain Events directly across the broker — turns internal aggregate fields into remote API contracts. Any internal refactoring then breaks all downstream consumers."
+        },
+        "tooltipRefs": [
+          "domain-event",
+          "integration-event"
+        ]
       },
       {
         "id": "producers-and-consumers",
         "type": "text",
-        "title": { "en": "Producers, Consumers, and Fan-out", "th": "" },
-        "content": {
-          "en": "A producer is any service that creates events and publishes them to a broker. A consumer is any service that subscribes to a topic and processes those events. Producers and consumers are decoupled in three ways: in time (the producer does not wait), in location (neither knows the other's network address), and in identity (the producer does not know which consumers exist).\n\nFan-out is the pattern where one event triggers multiple independent consumers in parallel. It is the natural consequence of pub/sub topic semantics. In an e-commerce system, a single sales.order.placed event fans out simultaneously to the Inventory service (reserve stock), the Payment service (authorize charge), the Notification service (send confirmation email), and the Analytics service (record conversion). Five independent workflows — triggered by one event — with no coordination code in the Order service.\n\nAdding a new consumer requires zero changes to the producer. This is one of EDA's most powerful properties: new functionality can be wired in without modifying existing services.",
-          "th": ""
+        "title": {
+          "en": "Producers, Consumers, and Fan-out"
         },
-        "tooltipRefs": ["producer", "consumer"]
+        "content": {
+          "en": "A producer is any service that creates events and publishes them to a broker. A consumer is any service that subscribes to a topic and processes those events. Producers and consumers are decoupled in three ways: in time (the producer does not wait), in location (neither knows the other's network address), and in identity (the producer does not know which consumers exist).\n\nFan-out is the pattern where one event triggers multiple independent consumers in parallel. It is the natural consequence of pub/sub topic semantics. In an e-commerce system, a single sales.order.placed event fans out simultaneously to the Inventory service (reserve stock), the Payment service (authorize charge), the Notification service (send confirmation email), and the Analytics service (record conversion). Five independent workflows — triggered by one event — with no coordination code in the Order service.\n\nAdding a new consumer requires zero changes to the producer. This is one of EDA's most powerful properties: new functionality can be wired in without modifying existing services."
+        },
+        "tooltipRefs": [
+          "producer",
+          "consumer"
+        ]
       },
       {
         "id": "producer-consumer-diagram",
         "type": "diagram",
-        "title": { "en": "Fan-out: One Event, Multiple Consumers", "th": "" },
-        "content": { "en": "The Order Service publishes one event to the broker. The broker delivers it independently to each consumer. None of the consumers know about each other, and the Order Service does not know any consumers exist.", "th": "" },
+        "title": {
+          "en": "Fan-out: One Event, Multiple Consumers"
+        },
+        "content": {
+          "en": "The Order Service publishes one event to the broker. The broker delivers it independently to each consumer. None of the consumers know about each other, and the Order Service does not know any consumers exist."
+        },
         "diagram": {
           "type": "mermaid",
           "source": "flowchart LR\n  OS[Order Service] -->|sales.order.placed| B[(Message Broker)]\n  B --> IS[Inventory Service]\n  B --> PS[Payment Service]\n  B --> NS[Notification Service]\n  B --> AS[Analytics Service]\n  style OS fill:#6366f1,stroke:#3730a3,color:#fff\n  style B fill:#f59e0b,stroke:#b45309,color:#1e1b4b\n  style IS fill:#14b8a6,stroke:#0f766e,color:#fff\n  style PS fill:#14b8a6,stroke:#0f766e,color:#fff\n  style NS fill:#14b8a6,stroke:#0f766e,color:#fff\n  style AS fill:#14b8a6,stroke:#0f766e,color:#fff"
         },
-        "tooltipRefs": ["producer", "consumer", "pub-sub"]
+        "tooltipRefs": [
+          "producer",
+          "consumer",
+          "pub-sub"
+        ]
       },
       {
         "id": "message-broker",
         "type": "text",
-        "title": { "en": "Message Broker: Pub/Sub vs Queue", "th": "" },
-        "content": {
-          "en": "A message broker is middleware that receives events from producers and routes them to consumers. It provides three critical services: durability (messages survive producer or consumer restarts), ordering guarantees (within a partition or queue), and replay capability (log-based brokers like Kafka retain messages so a late-joining consumer can read history from the beginning).\n\nTwo fundamental delivery models serve different purposes. In Pub/Sub (topic-based), every independent subscriber receives its own copy of every message. This is appropriate for broadcasting facts that multiple systems care about — the sales.order.placed topic has separate subscriptions for Inventory, Analytics, and Email, each receiving every event. In a Queue (point-to-point), one message is delivered to exactly one consumer within a consumer group. Five worker pods processing the same queue each receive different messages — natural load balancing. This is appropriate for work distribution where each task should be processed once.\n\nThe choice of broker determines your operational complexity. Apache Kafka is log-based with strong ordering per partition and long retention — ideal for high-throughput streaming and replay. RabbitMQ is queue-based with flexible routing and lower operational overhead. AWS SNS+SQS and Google Pub/Sub are managed services that eliminate broker maintenance. Choose based on your team's requirements, not trends.",
-          "th": ""
+        "title": {
+          "en": "Message Broker: Pub/Sub vs Queue"
         },
-        "tooltipRefs": ["message-broker", "pub-sub"]
+        "content": {
+          "en": "A message broker is middleware that receives events from producers and routes them to consumers. It provides three critical services: durability (messages survive producer or consumer restarts), ordering guarantees (within a partition or queue), and replay capability (log-based brokers like Kafka retain messages so a late-joining consumer can read history from the beginning).\n\nTwo fundamental delivery models serve different purposes. In Pub/Sub (topic-based), every independent subscriber receives its own copy of every message. This is appropriate for broadcasting facts that multiple systems care about — the sales.order.placed topic has separate subscriptions for Inventory, Analytics, and Email, each receiving every event. In a Queue (point-to-point), one message is delivered to exactly one consumer within a consumer group. Five worker pods processing the same queue each receive different messages — natural load balancing. This is appropriate for work distribution where each task should be processed once.\n\nThe choice of broker determines your operational complexity. Apache Kafka is log-based with strong ordering per partition and long retention — ideal for high-throughput streaming and replay. RabbitMQ is queue-based with flexible routing and lower operational overhead. AWS SNS+SQS and Google Pub/Sub are managed services that eliminate broker maintenance. Choose based on your team's requirements, not trends."
+        },
+        "tooltipRefs": [
+          "message-broker",
+          "pub-sub"
+        ]
       },
       {
         "id": "eventual-consistency",
         "type": "text",
-        "title": { "en": "Eventual Consistency", "th": "" },
-        "content": {
-          "en": "In EDA, operations span multiple services that each maintain their own state. When an order is placed, the Inventory service may not reflect the stock reservation for 50 milliseconds. During that window, different services hold different views of the same business fact. This is eventual consistency: the system will reach a consistent state, but not immediately. Services converge once all events are processed.\n\nEventual consistency is a deliberate trade-off for the availability and decoupling benefits of EDA, not a bug to be fixed with synchronous calls. Trying to achieve strong consistency in an event-driven system by adding direct HTTP calls between services recreates synchronous coupling and re-introduces the availability dependency EDA was adopted to eliminate.\n\nUI implications are concrete: the interface must be designed for the eventual consistency model. Show \"your order is being processed\" rather than blocking until Inventory confirms stock reservation. Use optimistic updates where appropriate. Make the pending state explicit. A well-designed EDA UI treats the processing window as a feature — the user gets immediate feedback while the system converges in the background.",
-          "th": ""
+        "title": {
+          "en": "Eventual Consistency"
         },
-        "tooltipRefs": ["eventual-consistency"]
+        "content": {
+          "en": "In EDA, operations span multiple services that each maintain their own state. When an order is placed, the Inventory service may not reflect the stock reservation for 50 milliseconds. During that window, different services hold different views of the same business fact. This is eventual consistency: the system will reach a consistent state, but not immediately. Services converge once all events are processed.\n\nEventual consistency is a deliberate trade-off for the availability and decoupling benefits of EDA, not a bug to be fixed with synchronous calls. Trying to achieve strong consistency in an event-driven system by adding direct HTTP calls between services recreates synchronous coupling and re-introduces the availability dependency EDA was adopted to eliminate.\n\nUI implications are concrete: the interface must be designed for the eventual consistency model. Show \"your order is being processed\" rather than blocking until Inventory confirms stock reservation. Use optimistic updates where appropriate. Make the pending state explicit. A well-designed EDA UI treats the processing window as a feature — the user gets immediate feedback while the system converges in the background."
+        },
+        "tooltipRefs": [
+          "eventual-consistency"
+        ]
       },
       {
         "id": "idempotency",
         "type": "text",
-        "title": { "en": "Idempotency: Handling Duplicate Delivery", "th": "" },
-        "content": {
-          "en": "Consumers must produce the same result when the same event is processed multiple times. This is not optional — message brokers use at-least-once delivery semantics. A consumer crash during processing causes the broker to redeliver the message. A network timeout causes a duplicate. The question is not whether your consumer will receive a duplicate; it is whether it handles duplicates correctly.\n\nThe practical implementation uses a deduplication key: the event's eventId field, stored in a processed-events table. Before processing, the consumer checks whether this eventId already exists. If it does, the consumer skips processing and acknowledges the message. Example: when PaymentAuthorized is received twice (due to a broker redeliver), the payment service must charge the card only once. Without idempotency, the customer is double-charged.\n\nIdempotent SQL patterns also help: INSERT ... ON CONFLICT DO NOTHING inserts the row the first time and silently skips on subsequent deliveries. UPDATE ... WHERE version = N applies the update only if the version matches, preventing stale redeliveries from overwriting newer state.",
-          "th": ""
+        "title": {
+          "en": "Idempotency: Handling Duplicate Delivery"
         },
-        "tooltipRefs": ["idempotency"]
+        "content": {
+          "en": "Consumers must produce the same result when the same event is processed multiple times. This is not optional — message brokers use at-least-once delivery semantics. A consumer crash during processing causes the broker to redeliver the message. A network timeout causes a duplicate. The question is not whether your consumer will receive a duplicate; it is whether it handles duplicates correctly.\n\nThe practical implementation uses a deduplication key: the event's eventId field, stored in a processed-events table. Before processing, the consumer checks whether this eventId already exists. If it does, the consumer skips processing and acknowledges the message. Example: when PaymentAuthorized is received twice (due to a broker redeliver), the payment service must charge the card only once. Without idempotency, the customer is double-charged.\n\nIdempotent SQL patterns also help: INSERT ... ON CONFLICT DO NOTHING inserts the row the first time and silently skips on subsequent deliveries. UPDATE ... WHERE version = N applies the update only if the version matches, preventing stale redeliveries from overwriting newer state."
+        },
+        "tooltipRefs": [
+          "idempotency"
+        ]
       },
       {
         "id": "retry-strategy",
         "type": "text",
-        "title": { "en": "Retry Strategy and Dead Letter Queue", "th": "" },
-        "content": {
-          "en": "When a consumer fails to process an event due to a transient error — a downstream service temporarily unavailable, a database connection pool exhausted — it should retry with exponential backoff: wait 1 second, then 2 seconds, then 4 seconds, then 8 seconds, capping at some maximum. Adding random jitter (±20% of each delay) prevents all consumer pods from retrying simultaneously, which would overwhelm the failing service — the thundering herd problem.\n\nAfter a configured number of retry attempts, events that still cannot be processed move to a Dead Letter Queue (DLQ). A DLQ is a holding area for messages that have exhausted their retry budget. Without a DLQ, poison messages — events that cannot be processed due to a bug or schema mismatch — spin in an infinite retry loop, consuming CPU and blocking all subsequent messages in the partition. With a DLQ, operators can inspect the failed message, diagnose the root cause, fix the consumer code, and replay the event when ready.\n\nEvery consumer in a production EDA system must have a DLQ configured. It is not optional. Silent message loss is worse than a visible queue of failures.",
-          "th": ""
+        "title": {
+          "en": "Retry Strategy and Dead Letter Queue"
         },
-        "tooltipRefs": ["retry", "dead-letter-queue"]
+        "content": {
+          "en": "When a consumer fails to process an event due to a transient error — a downstream service temporarily unavailable, a database connection pool exhausted — it should retry with exponential backoff: wait 1 second, then 2 seconds, then 4 seconds, then 8 seconds, capping at some maximum. Adding random jitter (±20% of each delay) prevents all consumer pods from retrying simultaneously, which would overwhelm the failing service — the thundering herd problem.\n\nAfter a configured number of retry attempts, events that still cannot be processed move to a Dead Letter Queue (DLQ). A DLQ is a holding area for messages that have exhausted their retry budget. Without a DLQ, poison messages — events that cannot be processed due to a bug or schema mismatch — spin in an infinite retry loop, consuming CPU and blocking all subsequent messages in the partition. With a DLQ, operators can inspect the failed message, diagnose the root cause, fix the consumer code, and replay the event when ready.\n\nEvery consumer in a production EDA system must have a DLQ configured. It is not optional. Silent message loss is worse than a visible queue of failures."
+        },
+        "tooltipRefs": [
+          "retry",
+          "dead-letter-queue"
+        ]
       },
       {
         "id": "dlq-diagram",
         "type": "diagram",
-        "title": { "en": "Retry and Dead Letter Queue Flow", "th": "" },
-        "content": { "en": "On success, the consumer acknowledges the event immediately. On failure, exponential backoff retries begin. After the retry budget is exhausted, the event moves to the Dead Letter Queue for operator investigation.", "th": "" },
+        "title": {
+          "en": "Retry and Dead Letter Queue Flow"
+        },
+        "content": {
+          "en": "On success, the consumer acknowledges the event immediately. On failure, exponential backoff retries begin. After the retry budget is exhausted, the event moves to the Dead Letter Queue for operator investigation."
+        },
         "diagram": {
           "type": "mermaid",
           "source": "flowchart LR\n  E([Event]) --> C[Consumer]\n  C -->|success| D([Done])\n  C -->|fail| R1[Retry: 1s]\n  R1 -->|fail| R2[Retry: 2s]\n  R2 -->|fail| R3[Retry: 4s]\n  R3 -->|exhausted| DLQ[(Dead Letter Queue)]\n  DLQ --> OPS[Operator Investigation]\n  style D fill:#34d399,stroke:#059669,color:#fff\n  style DLQ fill:#fb7185,stroke:#e11d48,color:#fff\n  style OPS fill:#f59e0b,stroke:#b45309,color:#1e1b4b"
         },
-        "tooltipRefs": ["retry", "dead-letter-queue"]
+        "tooltipRefs": [
+          "retry",
+          "dead-letter-queue"
+        ]
       },
       {
         "id": "event-schema",
         "type": "text",
-        "title": { "en": "Event Schema, CloudEvents, and Versioning", "th": "" },
-        "content": {
-          "en": "Every event should carry a standard envelope regardless of domain content. The required fields are: eventId (a UUID unique per event instance, used for deduplication), eventType (the schema identifier, e.g. sales.order.placed), eventVersion (the schema version), occurredAt (ISO 8601 timestamp in UTC of when the business fact happened, not when the message was published), producer (source service identifier), correlationId (ties all events in one user-initiated action together), causationId (the eventId of the event that caused this one), and payload (the domain-specific data).\n\nThe CNCF CloudEvents specification (v1.0) formalizes this envelope as a vendor-neutral standard, making it easier to integrate across systems and tooling. Using CloudEvents reduces integration friction and provides a common vocabulary for observability tools.\n\nSchema versioning is mandatory as event schemas evolve. Additive changes — adding optional fields — are backward-compatible: old consumers that do not understand new fields simply ignore them. Removing or renaming required fields is a breaking change. The versioned event type strategy publishes sales.order.placed.v2 alongside v1 during a migration period. Consumers migrate at their own pace. The producer deprecates v1 after all consumers have migrated. This enables independent service deployments without coordinated releases.",
-          "th": ""
+        "title": {
+          "en": "Event Schema, CloudEvents, and Versioning"
         },
-        "tooltipRefs": ["event-schema", "event-versioning"]
+        "content": {
+          "en": "Every event should carry a standard envelope regardless of domain content. The required fields are: eventId (a UUID unique per event instance, used for deduplication), eventType (the schema identifier, e.g. sales.order.placed), eventVersion (the schema version), occurredAt (ISO 8601 timestamp in UTC of when the business fact happened, not when the message was published), producer (source service identifier), correlationId (ties all events in one user-initiated action together), causationId (the eventId of the event that caused this one), and payload (the domain-specific data).\n\nThe CNCF CloudEvents specification (v1.0) formalizes this envelope as a vendor-neutral standard, making it easier to integrate across systems and tooling. Using CloudEvents reduces integration friction and provides a common vocabulary for observability tools.\n\nSchema versioning is mandatory as event schemas evolve. Additive changes — adding optional fields — are backward-compatible: old consumers that do not understand new fields simply ignore them. Removing or renaming required fields is a breaking change. The versioned event type strategy publishes sales.order.placed.v2 alongside v1 during a migration period. Consumers migrate at their own pace. The producer deprecates v1 after all consumers have migrated. This enables independent service deployments without coordinated releases."
+        },
+        "tooltipRefs": [
+          "event-schema",
+          "event-versioning"
+        ]
       },
       {
         "id": "event-sourcing-distinction",
         "type": "text",
-        "title": { "en": "Event Sourcing vs EDA — Not the Same Thing", "th": "" },
-        "content": {
-          "en": "Event Sourcing is the single most common conceptual confusion in EDA discussions. They are entirely different patterns applied at different levels. EDA is a communication style — it describes how multiple services talk to each other via a broker. Event Sourcing is a persistence style — it describes how a single service stores its own state internally as an append-only event log, deriving current state by replaying that log.\n\nYou can have either without the other. EDA without Event Sourcing: services use ordinary relational databases. On state change, they write to the database and use the Outbox pattern to publish an Integration Event. This is the most common production EDA pattern. Event Sourcing without EDA: a single service stores aggregates as an event log in EventStoreDB but exposes a synchronous REST API to other services. No broker, no async messaging.\n\nDo not adopt Event Sourcing to get EDA. They solve different problems independently. Adding Event Sourcing to an EDA system compounds complexity — you are now managing both a broker and an event store. Adopt each only when its specific benefits justify its costs.",
-          "th": ""
+        "title": {
+          "en": "Event Sourcing vs EDA — Not the Same Thing"
         },
-        "tooltipRefs": ["eda"]
+        "content": {
+          "en": "Event Sourcing is the single most common conceptual confusion in EDA discussions. They are entirely different patterns applied at different levels. EDA is a communication style — it describes how multiple services talk to each other via a broker. Event Sourcing is a persistence style — it describes how a single service stores its own state internally as an append-only event log, deriving current state by replaying that log.\n\nYou can have either without the other. EDA without Event Sourcing: services use ordinary relational databases. On state change, they write to the database and use the Outbox pattern to publish an Integration Event. This is the most common production EDA pattern. Event Sourcing without EDA: a single service stores aggregates as an event log in EventStoreDB but exposes a synchronous REST API to other services. No broker, no async messaging.\n\nDo not adopt Event Sourcing to get EDA. They solve different problems independently. Adding Event Sourcing to an EDA system compounds complexity — you are now managing both a broker and an event store. Adopt each only when its specific benefits justify its costs."
+        },
+        "tooltipRefs": [
+          "eda"
+        ]
       },
       {
         "id": "common-mistakes",
         "type": "callout",
         "variant": "warning",
-        "title": { "en": "Common Mistakes in EDA", "th": "" },
-        "content": {
-          "en": "Mistake 1 — Publishing Domain Events directly as Integration Events: internal aggregate fields become a remote API contract. Any internal refactoring breaks all downstream consumers. Always translate through an Anti-Corruption Layer.\n\nMistake 2 — Naming events as commands: PlaceOrder and UpdateInventory on a topic look like events but are commands. They violate past-tense semantics and create hidden exactly-one-processing assumptions. Use past tense: OrderPlaced, InventoryReserved.\n\nMistake 3 — Ignoring idempotency: assuming at-most-once delivery when brokers guarantee at-least-once. Duplicate events cause double-charges, double-fulfillment, and double-sends. Every consumer must be idempotent.\n\nMistake 4 — No Dead Letter Queue: poison messages spin in an infinite retry loop, blocking all subsequent messages in the partition. Always configure a DLQ with a retry budget.\n\nMistake 5 — Adding synchronous calls to avoid eventual consistency: when a developer is uncomfortable with a 100ms propagation window, they add a direct HTTP call to confirm. This recreates synchronous coupling. Embrace eventual consistency in the UX design instead.",
-          "th": ""
+        "title": {
+          "en": "Common Mistakes in EDA"
         },
-        "tooltipRefs": ["idempotency", "dead-letter-queue", "eventual-consistency"]
+        "content": {
+          "en": "Mistake 1 — Publishing Domain Events directly as Integration Events: internal aggregate fields become a remote API contract. Any internal refactoring breaks all downstream consumers. Always translate through an Anti-Corruption Layer.\n\nMistake 2 — Naming events as commands: PlaceOrder and UpdateInventory on a topic look like events but are commands. They violate past-tense semantics and create hidden exactly-one-processing assumptions. Use past tense: OrderPlaced, InventoryReserved.\n\nMistake 3 — Ignoring idempotency: assuming at-most-once delivery when brokers guarantee at-least-once. Duplicate events cause double-charges, double-fulfillment, and double-sends. Every consumer must be idempotent.\n\nMistake 4 — No Dead Letter Queue: poison messages spin in an infinite retry loop, blocking all subsequent messages in the partition. Always configure a DLQ with a retry budget.\n\nMistake 5 — Adding synchronous calls to avoid eventual consistency: when a developer is uncomfortable with a 100ms propagation window, they add a direct HTTP call to confirm. This recreates synchronous coupling. Embrace eventual consistency in the UX design instead."
+        },
+        "tooltipRefs": [
+          "idempotency",
+          "dead-letter-queue",
+          "eventual-consistency"
+        ]
       }
     ]
   }
