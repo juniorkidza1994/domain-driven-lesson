@@ -18,6 +18,8 @@ jobs:
         run: node --test tests/unit/validate-schema.js
       - name: Unit — research
         run: node --test tests/unit/validate-research.js
+      - name: Unit — claude-md
+        run: node --test tests/unit/validate-claude-md.js
       - name: Start static server
         run: python3 -m http.server 8080 &
       - name: Wait for server
