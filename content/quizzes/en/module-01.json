@@ -4,13 +4,63 @@
     {
       "id": "q1",
       "type": "mcq",
-      "question": { "en": "What does DDD stand for?", "th": "" },
+      "question": { "en": "What is the primary purpose of an Event Storming workshop?", "th": "" },
       "options": [
-        { "id": "a", "text": { "en": "Domain-Driven Design", "th": "" } },
-        { "id": "b", "text": { "en": "Data-Driven Development", "th": "" } }
+        { "id": "a", "text": { "en": "To produce a UML class diagram for the engineering team", "th": "" } },
+        { "id": "b", "text": { "en": "To build shared understanding of how the business works by mapping domain events on a timeline", "th": "" } },
+        { "id": "c", "text": { "en": "To choose which message broker to use in production", "th": "" } },
+        { "id": "d", "text": { "en": "To document the existing database schema", "th": "" } }
       ],
-      "correctOption": "a",
-      "explanation": { "en": "DDD stands for Domain-Driven Design, a software development approach focused on the core domain.", "th": "" }
+      "correctOption": "b",
+      "explanation": { "en": "Event Storming is a discovery technique. Its main output is shared understanding — a roomful of developers, domain experts, and stakeholders aligning on how the business actually works, expressed as a timeline of domain events. Diagrams, broker choices, and schemas come later, if at all.", "th": "" }
+    },
+    {
+      "id": "q2",
+      "type": "true-false",
+      "question": { "en": "Domain-Driven Design requires you to use Event-Driven Architecture.", "th": "" },
+      "options": [
+        { "id": "true", "text": { "en": "True", "th": "" } },
+        { "id": "false", "text": { "en": "False", "th": "" } }
+      ],
+      "correctOption": "false",
+      "explanation": { "en": "False. DDD and EDA are complementary but independent. You can apply DDD inside a single monolith with synchronous calls and benefit fully from bounded contexts and ubiquitous language. EDA is one possible way to wire DDD bounded contexts together, but it is not required.", "th": "" }
+    },
+    {
+      "id": "q3",
+      "type": "mcq",
+      "question": { "en": "If you are new to all three (DDD, Event Storming, EDA), which is the recommended one to learn and apply first?", "th": "" },
+      "options": [
+        { "id": "a", "text": { "en": "Event-Driven Architecture — pick a broker and start publishing events", "th": "" } },
+        { "id": "b", "text": { "en": "Tactical DDD — start refactoring code into aggregates and repositories", "th": "" } },
+        { "id": "c", "text": { "en": "Event Storming — get people in a room and map the business as events", "th": "" } },
+        { "id": "d", "text": { "en": "All three simultaneously on a new green-field project", "th": "" } }
+      ],
+      "correctOption": "c",
+      "explanation": { "en": "Event Storming is the cheapest, fastest, and most visual of the three. A single afternoon session produces events and ubiquitous language that become the raw material for DDD (drawing bounded contexts) and for EDA (the actual events on the broker). Starting with EDA or tactical DDD without this groundwork is the classic mistake.", "th": "" }
+    },
+    {
+      "id": "q4",
+      "type": "true-false",
+      "question": { "en": "Event-Driven Architecture means services communicate primarily through direct synchronous API calls.", "th": "" },
+      "options": [
+        { "id": "true", "text": { "en": "True", "th": "" } },
+        { "id": "false", "text": { "en": "False", "th": "" } }
+      ],
+      "correctOption": "false",
+      "explanation": { "en": "False. EDA is precisely the opposite. In EDA, services communicate by publishing events to a message broker and subscribing to events they care about. The publisher does not know — and does not care — who is listening. Direct synchronous API calls are the request/response style EDA is designed to avoid.", "th": "" }
+    },
+    {
+      "id": "q5",
+      "type": "mcq",
+      "question": { "en": "Which of the following is the LEAST suitable scenario for adopting Domain-Driven Design?", "th": "" },
+      "options": [
+        { "id": "a", "text": { "en": "A large e-commerce platform with separate teams for catalog, checkout, fulfillment, and billing", "th": "" } },
+        { "id": "b", "text": { "en": "A regulated banking system where multiple departments disagree on what 'account' means", "th": "" } },
+        { "id": "c", "text": { "en": "A simple internal CRUD app that lets staff edit a list of office locations", "th": "" } },
+        { "id": "d", "text": { "en": "A logistics platform where business rules change frequently and the code cannot keep up", "th": "" } }
+      ],
+      "correctOption": "c",
+      "explanation": { "en": "DDD pays off when the domain is complex, the language is contested, or multiple teams are stepping on each other. A simple CRUD app — forms saving rows to tables, no business rules of note, one developer — gains nothing from bounded contexts and aggregates and only pays the ceremony cost. The other three scenarios all have the complexity, ambiguity, or pace of change that DDD is designed for.", "th": "" }
     }
   ]
 }
