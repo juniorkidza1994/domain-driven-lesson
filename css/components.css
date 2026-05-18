@@ -100,3 +100,24 @@
   .step-flow { flex-direction: row; flex-wrap: wrap; }
   .step-flow > .step { flex: 1 1 220px; }
 }
+
+/* Step flow item (DRE-14) — .step-flow-item mirrors .step for AC5 selector */
+.step-flow > .step-flow-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+@media (min-width: 640px) {
+  .step-flow > .step-flow-item { flex: 1 1 220px; }
+}
+.step-flow-item__num {
+  flex: 0 0 28px; height: 28px; border-radius: 50%;
+  background: var(--color-primary); color: #fff;
+  font-weight: 700; display: grid; place-items: center;
+}
+.step-flow-item__body { flex: 1; }
+.step-flow-item__label { font-weight: 600; margin-bottom: 2px; }
