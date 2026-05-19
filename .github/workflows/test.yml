@@ -13,16 +13,21 @@ jobs:
         run: |
           npm init -y
           npm install --save-dev @playwright/test
-          npx playwright install --with-deps chromium
+          npx playwright install --with-deps chromium firefox webkit
       - name: Unit — schema
         run: node --test tests/unit/validate-schema.js
       - name: Unit — research
         run: node --test tests/unit/validate-research.js
       - name: Unit — claude-md
         run: node --test tests/unit/validate-claude-md.js
-      - name: Start static server
-        run: python3 -m http.server 8080 &
-      - name: Wait for server
-        run: npx wait-on http://localhost:8080/index.html
-      - name: E2E smoke
-        run: npx playwright test tests/e2e/smoke.spec.js
+      - name: E2E — full suite (chromium + firefox + webkit)
+        run: npx playwright test
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7

@@ -103,3 +103,41 @@ test.describe('DRE-14 · content-loader', () => {
 
   test.skip('AC8 (covered in AC1) no console errors on normal load', () => {});
 });
+
+// ── DRE-26: Real-content smoke — all 7 module URLs ──────────────────────────
+// No mocking: hits the actual JSON files served by the static server.
+// Asserts: #sections-container has ≥1 child within 10s, zero console.error.
+
+const MODULES = [
+  { n: '01', slug: 'intro' },
+  { n: '02', slug: 'ddd' },
+  { n: '03', slug: 'event-storming' },
+  { n: '04', slug: 'es-to-ddd' },
+  { n: '05', slug: 'eda' },
+  { n: '06', slug: 'es-to-eda' },
+  { n: '07', slug: 'case-study' },
+];
+
+test.describe('DRE-26 · real-content smoke (all 7 modules)', () => {
+  for (const m of MODULES) {
+    const url = BASE + `/modules/${m.n}-${m.slug}.html`;
+
+    test(`module-${m.n} loads real content without errors`, async ({ page }) => {
+      const errors = [];
+      page.on('pageerror', e => errors.push(e.message));
+      page.on('console', msg => {
+        if (msg.type() === 'error') errors.push(msg.text());
+      });
+
+      await page.goto(url);
+      await page.waitForFunction(() => window.Alpine !== undefined);
+
+      // Wait for at least one section to appear (real fetch from JSON)
+      const container = page.locator('#sections-container');
+      await expect(container).toBeVisible({ timeout: 10000 });
+      await expect(container.locator('> *')).not.toHaveCount(0, { timeout: 10000 });
+
+      expect(errors).toEqual([]);
+    });
+  }
+});

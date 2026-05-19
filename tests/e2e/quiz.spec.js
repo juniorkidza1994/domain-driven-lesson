@@ -17,8 +17,12 @@ const QUIZ_FIXTURE = {
       explanation: { en: 'It defines where a model applies.', th: 'อธิบาย' }
     },
     {
-      id: 'q2', type: 'truefalse',
+      id: 'q2', type: 'true-false',
       question: { en: 'DDD requires microservices.', th: 'DDD ต้องไมโคร?' },
+      options: [
+        { id: 'true',  text: { en: 'True',  th: 'จริง' } },
+        { id: 'false', text: { en: 'False', th: 'เท็จ' } }
+      ],
       correctOption: 'false',
       explanation: { en: 'DDD is architecture-agnostic.', th: 'ไม่ขึ้นกับสถาปัตยกรรม' }
     }
@@ -39,7 +43,7 @@ async function gotoQuiz(page) {
   await mockAll(page);
   await page.goto(MODULE_URL);
   await page.waitForFunction(() => window.Alpine !== undefined);
-  await page.waitForSelector('.quiz-section', { timeout: 5000 });
+  await page.waitForSelector('.quiz-question[data-question-id="q1"]', { timeout: 15000 });
 }
 
 test.describe('DRE-16 · quiz system', () => {
@@ -138,7 +142,7 @@ test.describe('DRE-16 · quiz system', () => {
     await mockAll(page);
     await page.goto(MODULE_URL);
     await page.waitForFunction(() => window.Alpine !== undefined);
-    await page.waitForSelector('.quiz-section', { timeout: 5000 });
+    await page.waitForSelector('.quiz-question[data-question-id="q1"]', { timeout: 15000 });
     await page.locator('.quiz-question[data-question-id="q1"] .quiz-option[data-option-id="a"]').click();
     await page.locator('.quiz-question[data-question-id="q2"] .quiz-option[data-option-id="false"]').click();
     await page.locator('.quiz-submit').click();
