@@ -75,7 +75,7 @@ test.describe('DRE-15 · tooltip system', () => {
     await page.goto(MODULE_URL);
     await page.locator('.tooltip-trigger').first().click();
     await expect(page.locator('.tooltip-sheet')).toBeVisible();
-    await page.locator('.tooltip-overlay').click();
+    await page.locator('.tooltip-overlay').click({ position: { x: 10, y: 10 } });
     await expect(page.locator('.tooltip-sheet')).toBeHidden();
     await ctx.close();
   });
