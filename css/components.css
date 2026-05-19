@@ -325,3 +325,152 @@
   cursor: not-allowed;
 }
 .quiz-retake[hidden] { display: none; }
+
+/* ── Profile chip + modal — DRE-29 ───────────────────────────── */
+
+/* Hide x-cloak elements until Alpine initialises */
+[x-cloak] { display: none !important; }
+
+/* Profile chip in nav */
+.profile-chip-wrap {
+  position: relative;
+  display: inline-block;
+}
+.profile-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 6px 14px;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  cursor: pointer;
+}
+.profile-chip:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.profile-chip__name { max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.profile-chip__caret { font-size: 0.8rem; }
+
+.profile-chip__menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  min-width: 180px;
+  z-index: 200;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+}
+.profile-chip__menu button {
+  min-height: 44px;
+  padding: 8px 12px;
+  background: transparent;
+  border: 0;
+  text-align: left;
+  font: inherit;
+  color: var(--color-text);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+.profile-chip__menu button:hover {
+  background: var(--color-primary-50);
+  color: var(--color-primary);
+}
+
+/* Profile modal */
+.profile-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(30, 27, 75, 0.55);
+  z-index: 1000;
+}
+.profile-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(92vw, 420px);
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 24px;
+  z-index: 1001;
+}
+.profile-modal__title {
+  margin: 0 0 16px;
+  font-size: 1.2rem;
+  color: var(--color-primary);
+}
+.profile-list {
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+.profile-list__item {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  background: var(--color-surface-2);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  text-align: left;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.profile-list__item:hover {
+  background: var(--color-primary-50);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+.profile-modal__new {
+  width: 100%;
+}
+.profile-modal__input {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font: inherit;
+  color: var(--color-text);
+  background: var(--color-surface);
+  box-sizing: border-box;
+}
+.profile-modal__input:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 0;
+  border-color: var(--color-primary);
+}
+.profile-modal__error {
+  margin: 0 0 12px;
+  color: var(--color-danger);
+  font-size: 0.88rem;
+}
+.profile-modal__actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+.profile-modal__actions .btn-primary,
+.profile-modal__actions .btn-secondary {
+  flex: 1 1 auto;
+}

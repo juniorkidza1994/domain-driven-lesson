@@ -1,6 +1,12 @@
 const { test, expect } = require('@playwright/test');
 
 test('index.html returns 200 and core globals load', async ({ page }) => {
+  // DRE-29: seed active profile so profile modal doesn't block
+  await page.addInitScript(() => {
+    sessionStorage.setItem('ddd-active-profile', 'TestUser');
+    localStorage.setItem('ddd-profiles', JSON.stringify(['TestUser']));
+  });
+
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
   page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });

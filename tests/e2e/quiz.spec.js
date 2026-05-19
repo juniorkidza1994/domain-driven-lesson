@@ -40,6 +40,11 @@ async function mockAll(page) {
 }
 
 async function gotoQuiz(page) {
+  // DRE-29: seed active profile so profile modal doesn't block
+  await page.addInitScript(() => {
+    sessionStorage.setItem('ddd-active-profile', 'TestUser');
+    localStorage.setItem('ddd-profiles', JSON.stringify(['TestUser']));
+  });
   await mockAll(page);
   await page.goto(MODULE_URL);
   await page.waitForFunction(() => window.Alpine !== undefined);
@@ -119,7 +124,8 @@ test.describe('DRE-16 · quiz system', () => {
     await page.locator('.quiz-question[data-question-id="q1"] .quiz-option[data-option-id="a"]').click();
     await page.locator('.quiz-question[data-question-id="q2"] .quiz-option[data-option-id="false"]').click();
     await page.locator('.quiz-submit').click();
-    const progress = await page.evaluate(() => JSON.parse(localStorage.getItem('ddd-progress')));
+    // DRE-29: progress is stored under profile-scoped key
+    const progress = await page.evaluate(() => JSON.parse(localStorage.getItem('ddd-progress-TestUser')));
     expect(progress['module-02'].quizCompleted).toBe(true);
     expect(typeof progress['module-02'].score).toBe('number');
     expect(progress['module-02'].score).toBeGreaterThanOrEqual(0);
@@ -130,8 +136,15 @@ test.describe('DRE-16 · quiz system', () => {
     await page.locator('.quiz-question[data-question-id="q1"] .quiz-option[data-option-id="a"]').click();
     await page.locator('.quiz-question[data-question-id="q2"] .quiz-option[data-option-id="false"]').click();
     await page.locator('.quiz-submit').click();
+    // DRE-29: addInitScript re-runs on reload so session storage is re-seeded
     await page.reload();
     await page.waitForFunction(() => window.Alpine !== undefined);
+    // Wait for Alpine store to be fully initialized with profile-scoped progress
+    await page.waitForFunction(() => {
+      if (!window.Alpine) return false;
+      const app = Alpine.store('app');
+      return !!(app && app.activeProfile);
+    }, { timeout: 10000 });
     const completed = await page.evaluate(() => Alpine.store('app').progress['module-02']?.quizCompleted);
     expect(completed).toBe(true);
   });
@@ -139,6 +152,11 @@ test.describe('DRE-16 · quiz system', () => {
   test('AC11 nav checkmark visible after submit', async ({ browser }) => {
     const ctx = await browser.newContext({ viewport: { width: 375, height: 800 } });
     const page = await ctx.newPage();
+    // DRE-29: seed active profile so profile modal doesn't block
+    await page.addInitScript(() => {
+      sessionStorage.setItem('ddd-active-profile', 'TestUser');
+      localStorage.setItem('ddd-profiles', JSON.stringify(['TestUser']));
+    });
     await mockAll(page);
     await page.goto(MODULE_URL);
     await page.waitForFunction(() => window.Alpine !== undefined);

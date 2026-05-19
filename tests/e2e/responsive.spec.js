@@ -16,10 +16,24 @@ const ALL_PAGES = [
 ];
 
 test.describe('DRE-26 · responsive 375px — no overflow, no console.error', () => {
+  test.beforeEach(async ({ page }) => {
+    // DRE-29: seed active profile so profile modal doesn't interfere
+    await page.addInitScript(() => {
+      sessionStorage.setItem('ddd-active-profile', 'TestUser');
+      localStorage.setItem('ddd-profiles', JSON.stringify(['TestUser']));
+    });
+  });
+
   for (const pg of ALL_PAGES) {
     test(`${pg.name}: no horizontal overflow and zero console.error at 375×800`, async ({ browser }) => {
       const ctx = await browser.newContext({ viewport: { width: 375, height: 800 } });
       const page = await ctx.newPage();
+
+      // DRE-29: seed active profile in browser context pages
+      await page.addInitScript(() => {
+        sessionStorage.setItem('ddd-active-profile', 'TestUser');
+        localStorage.setItem('ddd-profiles', JSON.stringify(['TestUser']));
+      });
 
       const errors = [];
       page.on('pageerror', e => errors.push(e.message));

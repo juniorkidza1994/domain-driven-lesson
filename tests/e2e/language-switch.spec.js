@@ -26,6 +26,11 @@ async function mockLesson(page) {
 }
 
 async function setup(page) {
+  // DRE-29: seed active profile so profile modal doesn't block
+  await page.addInitScript(() => {
+    sessionStorage.setItem('ddd-active-profile', 'TestUser');
+    localStorage.setItem('ddd-profiles', JSON.stringify(['TestUser']));
+  });
   await mockLesson(page);
   await page.goto(PAGE_URL);
   await page.waitForFunction(() => window.Alpine !== undefined);
@@ -64,6 +69,11 @@ test.describe('DRE-25/26 · language toggle', () => {
     // Use a fresh context so localStorage is isolated
     const ctx = await browser.newContext();
     const page = await ctx.newPage();
+    // DRE-29: seed active profile so profile modal doesn't block
+    await page.addInitScript(() => {
+      sessionStorage.setItem('ddd-active-profile', 'TestUser');
+      localStorage.setItem('ddd-profiles', JSON.stringify(['TestUser']));
+    });
     await page.route('**/content/lessons/**/module-01.json', r =>
       r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(LESSON_FIXTURE) }));
 

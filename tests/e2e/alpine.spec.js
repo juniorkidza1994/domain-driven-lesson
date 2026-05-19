@@ -3,12 +3,21 @@ const { test, expect } = require('@playwright/test');
 
 const BASE = 'http://localhost:8080';
 
+// DRE-29: seed active profile so profile modal doesn't block tests
+async function seedProfile(page) {
+  await page.addInitScript(() => {
+    sessionStorage.setItem('ddd-active-profile', 'TestUser');
+    localStorage.setItem('ddd-profiles', JSON.stringify(['TestUser']));
+  });
+}
+
 test.describe('DRE-9 · Alpine + Mermaid integration', () => {
   test.beforeEach(async ({ context }) => {
     await context.clearCookies();
   });
 
   test('window.Alpine is defined after load', async ({ page }) => {
+    await seedProfile(page);
     const errors = [];
     page.on('pageerror', e => errors.push(e.message));
     page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
@@ -19,7 +28,12 @@ test.describe('DRE-9 · Alpine + Mermaid integration', () => {
   });
 
   test('Alpine.store(app).lang defaults to "en" on fresh load', async ({ page }) => {
-    await page.addInitScript(() => localStorage.clear());
+    // Clear then re-seed profile so modal doesn't show
+    await page.addInitScript(() => {
+      localStorage.clear();
+      sessionStorage.setItem('ddd-active-profile', 'TestUser');
+      localStorage.setItem('ddd-profiles', JSON.stringify(['TestUser']));
+    });
     await page.goto(BASE + '/index.html');
     await page.waitForFunction(() => !!window.Alpine?.store('app'));
     const lang = await page.evaluate(() => Alpine.store('app').lang);
@@ -27,7 +41,12 @@ test.describe('DRE-9 · Alpine + Mermaid integration', () => {
   });
 
   test('clicking TH toggle sets store.lang to "th"', async ({ page }) => {
-    await page.addInitScript(() => localStorage.clear());
+    // Clear then re-seed profile so modal doesn't block clicks
+    await page.addInitScript(() => {
+      localStorage.clear();
+      sessionStorage.setItem('ddd-active-profile', 'TestUser');
+      localStorage.setItem('ddd-profiles', JSON.stringify(['TestUser']));
+    });
     await page.goto(BASE + '/index.html');
     await page.waitForFunction(() => document.querySelector('.lang-toggle button'));
     await page.locator('.lang-toggle button', { hasText: 'TH' }).first().click();
@@ -36,9 +55,14 @@ test.describe('DRE-9 · Alpine + Mermaid integration', () => {
   });
 
   test('lang persists across reload via localStorage', async ({ page }) => {
+    // DRE-29: seed profile on every navigation including reload
+    await seedProfile(page);
     // Clear localStorage before initial load only (addInitScript would clear on reload too)
     await page.goto(BASE + '/index.html');
-    await page.evaluate(() => localStorage.clear());
+    await page.evaluate(() => {
+      // Remove just the lang key, preserve profile keys
+      localStorage.removeItem('lang');
+    });
     await page.goto(BASE + '/index.html');
     await page.waitForFunction(() => document.querySelector('.lang-toggle button'));
     await page.locator('.lang-toggle button', { hasText: 'TH' }).first().click();
@@ -51,6 +75,7 @@ test.describe('DRE-9 · Alpine + Mermaid integration', () => {
   });
 
   test('renderDiagrams() turns .mermaid-block[data-source] into an SVG', async ({ page }) => {
+    await seedProfile(page);
     await page.goto(BASE + '/index.html');
     await page.waitForFunction(() => {
       const el = document.querySelector('.mermaid-block');
@@ -61,6 +86,7 @@ test.describe('DRE-9 · Alpine + Mermaid integration', () => {
   });
 
   test('Mermaid SVG has viewBox attribute', async ({ page }) => {
+    await seedProfile(page);
     await page.goto(BASE + '/index.html');
     await page.waitForSelector('.mermaid-block svg');
     const viewBox = await page.locator('.mermaid-block svg').first().getAttribute('viewBox');
@@ -68,6 +94,7 @@ test.describe('DRE-9 · Alpine + Mermaid integration', () => {
   });
 
   test('no console errors during Alpine init and Mermaid render', async ({ page }) => {
+    await seedProfile(page);
     const errors = [];
     page.on('pageerror', e => errors.push(e.message));
     page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });

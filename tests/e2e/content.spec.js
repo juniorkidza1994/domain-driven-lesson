@@ -4,6 +4,14 @@ const { test, expect } = require('@playwright/test');
 const BASE = 'http://localhost:8080';
 const MODULE_URL = BASE + '/modules/01-intro.html';
 
+// DRE-29: seed active profile so profile modal doesn't block tests
+async function seedProfile(page) {
+  await page.addInitScript(() => {
+    sessionStorage.setItem('ddd-active-profile', 'TestUser');
+    localStorage.setItem('ddd-profiles', JSON.stringify(['TestUser']));
+  });
+}
+
 // Fixture covers all 7 section types so one page load proves every renderer.
 const FIXTURE = {
   module: {
@@ -44,6 +52,10 @@ async function mockJson(page, body, status) {
 }
 
 test.describe('DRE-14 · content-loader', () => {
+
+  test.beforeEach(async ({ page }) => {
+    await seedProfile(page);
+  });
 
   test('AC1 #sections-container has ≥1 child after load', async ({ page }) => {
     await mockJson(page, FIXTURE);
@@ -119,6 +131,10 @@ const MODULES = [
 ];
 
 test.describe('DRE-26 · real-content smoke (all 7 modules)', () => {
+  test.beforeEach(async ({ page }) => {
+    await seedProfile(page);
+  });
+
   for (const m of MODULES) {
     const url = BASE + `/modules/${m.n}-${m.slug}.html`;
 

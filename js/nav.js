@@ -1,17 +1,14 @@
-// js/nav.js — DRE-7: Shared Nav & Alpine store
-// Runs deferred, BEFORE Alpine CDN (script order in <head> guarantees this).
+// js/nav.js — DRE-7 + DRE-29: Shared Nav, Alpine store, named profiles
+// Runs deferred, BEFORE Alpine CDN.
 
-// ── Location detection ──────────────────────────────────────────────────────
 const _inModules = location.pathname.includes('/modules/');
 const pathPrefix = _inModules ? '../' : '';
 
-// Derive current module id from filename, e.g. /modules/03-event-storming.html → module-03
 function deriveCurrentModuleId() {
   const m = location.pathname.match(/\/modules\/(\d{2})-[^/]+\.html$/);
   return m ? 'module-' + m[1] : null;
 }
 
-// ── Module data (single source of truth) ───────────────────────────────────
 const MODULE_LIST = [
   { id: 'module-01', num: '01', en: 'Introduction',     th: 'บทนำ',                           href: '01-intro.html' },
   { id: 'module-02', num: '02', en: 'DDD Fundamentals', th: 'พื้นฐาน DDD',                     href: '02-ddd.html' },
@@ -22,43 +19,139 @@ const MODULE_LIST = [
   { id: 'module-07', num: '07', en: 'Case Study',       th: 'กรณีศึกษา',                       href: '07-case-study.html' },
 ];
 
-// ── Alpine store registration (fires before Alpine scans DOM) ───────────────
+// ── Profile helpers ────────────────────────────────────────────────────────
+const PROFILE_KEY     = 'ddd-active-profile';   // sessionStorage
+const PROFILES_KEY    = 'ddd-profiles';         // localStorage
+const PROGRESS_PREFIX = 'ddd-progress-';        // localStorage prefix
+const LEGACY_PROGRESS = 'ddd-progress';         // localStorage legacy
+
+function readProfilesList() {
+  try { return JSON.parse(localStorage.getItem(PROFILES_KEY) || '[]'); }
+  catch (e) { return []; }
+}
+function readProgressFor(name) {
+  if (!name) {
+    // legacy fallback (read-only)
+    try { return JSON.parse(localStorage.getItem(LEGACY_PROGRESS) || '{}'); }
+    catch (e) { return {}; }
+  }
+  try { return JSON.parse(localStorage.getItem(PROGRESS_PREFIX + name) || '{}'); }
+  catch (e) { return {}; }
+}
+
 document.addEventListener('alpine:init', function () {
+  const initialActive = sessionStorage.getItem(PROFILE_KEY) || '';
+  const initialProfiles = readProfilesList();
+
   Alpine.store('app', {
+    // ── Existing ──────────────────────────────────────────────
     lang: localStorage.getItem('lang') || 'en',
-    progress: JSON.parse(localStorage.getItem('ddd-progress') || '{}'),
     pathPrefix: pathPrefix,
     currentModuleId: deriveCurrentModuleId(),
-    setLang: function (next) {
+    tooltipOpen: null,
+    openTooltip(id) { this.tooltipOpen = id; },
+    closeTooltip()  { this.tooltipOpen = null; },
+    setLang(next) {
       this.lang = next;
       localStorage.setItem('lang', next);
       document.body.setAttribute('data-lang', next);
       document.dispatchEvent(new CustomEvent('lang-change', { detail: next }));
     },
-    toggleLang: function () {
-      this.setLang(this.lang === 'en' ? 'th' : 'en');
+    toggleLang() { this.setLang(this.lang === 'en' ? 'th' : 'en'); },
+
+    // ── Profile state (DRE-29) ────────────────────────────────
+    activeProfile: initialActive,
+    profiles: initialProfiles,
+    profileModalOpen: false,
+    profileModalView: 'list',   // 'list' | 'create'
+    profileChipOpen: false,
+    nameInput: '',
+    nameError: '',
+
+    // Progress is profile-scoped
+    progress: readProgressFor(initialActive),
+
+    // ── Profile methods ───────────────────────────────────────
+    _progressKey() {
+      return this.activeProfile ? (PROGRESS_PREFIX + this.activeProfile) : LEGACY_PROGRESS;
     },
-    isModuleComplete: function (id) {
+    _persistProfilesOrder() {
+      localStorage.setItem(PROFILES_KEY, JSON.stringify(this.profiles));
+    },
+    _loadProgressForActive() {
+      this.progress = readProgressFor(this.activeProfile);
+    },
+    setActiveProfile(name) {
+      this.activeProfile = name;
+      sessionStorage.setItem(PROFILE_KEY, name);
+      // move to head of MRU list
+      this.profiles = [name].concat(this.profiles.filter(p => p !== name));
+      this._persistProfilesOrder();
+      this._loadProgressForActive();
+    },
+    createProfile(rawName) {
+      const name = (rawName || '').trim();
+      if (!name) { this.nameError = 'Please enter a name.'; return false; }
+      if (name.length > 40) { this.nameError = 'Name too long (max 40).'; return false; }
+      this.nameError = '';
+      if (!this.profiles.includes(name)) {
+        this.profiles = [name].concat(this.profiles);
+        this._persistProfilesOrder();
+      }
+      this.setActiveProfile(name);
+      this.profileModalOpen = false;
+      this.nameInput = '';
+      return true;
+    },
+    switchProfile(name) {
+      this.setActiveProfile(name);
+      this.profileModalOpen = false;
+      this.profileChipOpen = false;
+    },
+    openSwitchModal() {
+      // Clear active for this tab so user must re-pick
+      sessionStorage.removeItem(PROFILE_KEY);
+      this.activeProfile = '';
+      this.profiles = readProfilesList();
+      this.profileModalView = this.profiles.length ? 'list' : 'create';
+      this.profileModalOpen = true;
+      this.profileChipOpen = false;
+    },
+    openNewProfileModal() {
+      this.profileModalView = 'create';
+      this.profileModalOpen = true;
+      this.profileChipOpen = false;
+      this.nameInput = '';
+      this.nameError = '';
+    },
+    // Called once at startup after Alpine ready
+    initProfileFlow() {
+      if (this.activeProfile) { return; } // Case C
+      this.profileModalView = this.profiles.length ? 'list' : 'create';
+      this.profileModalOpen = true;
+    },
+
+    // ── Progress (now profile-scoped) ─────────────────────────
+    isModuleComplete(id) {
       return !!(this.progress[id] && this.progress[id].quizCompleted === true);
     },
-    tooltipOpen: null,
-    openTooltip: function (id) { this.tooltipOpen = id; },
-    closeTooltip: function () { this.tooltipOpen = null; },
-    saveProgress: function (moduleId, score) {
+    saveProgress(moduleId, score) {
       this.progress[moduleId] = { quizCompleted: true, score: score };
-      localStorage.setItem('ddd-progress', JSON.stringify(this.progress));
+      localStorage.setItem(this._progressKey(), JSON.stringify(this.progress));
     },
   });
 
-  // Sync body[data-lang] on init so Sarabun CSS rule fires immediately on reload
+  // Sync body[data-lang]
   document.body.setAttribute('data-lang', Alpine.store('app').lang);
 
-  Alpine.store('modules', {
-    list: MODULE_LIST,
-  });
+  // Trigger profile flow once Alpine has finished initial rendering
+  // (use queueMicrotask so MutationObserver picks up nav DOM first)
+  queueMicrotask(() => Alpine.store('app').initProfileFlow());
+
+  Alpine.store('modules', { list: MODULE_LIST });
 });
 
-// ── Nav injection (async fetch → Alpine MutationObserver picks up new DOM) ──
+// ── Nav injection (unchanged) ───────────────────────────────────────────────
 (async function injectNav() {
   const root = document.getElementById('nav-root');
   if (!root) return;
