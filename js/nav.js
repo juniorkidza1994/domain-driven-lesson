@@ -7,7 +7,7 @@ const pathPrefix = _inModules ? '../' : '';
 
 // Derive current module id from filename, e.g. /modules/03-event-storming.html → module-03
 function deriveCurrentModuleId() {
-  const m = location.pathname.match(/\/modules\/(\d{2})-[^/]+\.html$/);
+  const m = location.pathname.match(/\/modules\/(\d{2})-[^/]+(?:\.html)?$/);
   return m ? 'module-' + m[1] : null;
 }
 
