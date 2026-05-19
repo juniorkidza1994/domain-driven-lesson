@@ -5,7 +5,7 @@ const _inModules = location.pathname.includes('/modules/');
 const pathPrefix = _inModules ? '../' : '';
 
 function deriveCurrentModuleId() {
-  const m = location.pathname.match(/\/modules\/(\d{2})-[^/]+\.html$/);
+  const m = location.pathname.match(/\/modules\/(\d{2})-[^/]+(?:\.html)?$/);
   return m ? 'module-' + m[1] : null;
 }
 
