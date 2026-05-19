@@ -5,7 +5,8 @@ test('index.html returns 200 and core globals load', async ({ page }) => {
   page.on('pageerror', e => errors.push(e.message));
   page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
 
-  const resp = await page.goto('http://localhost:8080/index.html');
+  const BASE = process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:8080';
+  const resp = await page.goto(`${BASE}/index.html`);
   expect(resp.status()).toBe(200);                      // AC1
 
   await page.waitForLoadState('domcontentloaded');
