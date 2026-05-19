@@ -95,8 +95,9 @@ test('hamburger opens drawer, scrim closes it', async ({ browser }) => {
   await page.locator('.nav-hamburger').click();
   await expect(page.locator('.drawer')).toHaveClass(/open/);
 
-  // Click scrim to close
-  await page.locator('.drawer-scrim').click();
+  // Click the visible part of the scrim (right edge, not covered by drawer panel)
+  // Drawer occupies 85% of 375px ≈ 319px; scrim visible beyond that
+  await page.locator('.drawer-scrim').click({ position: { x: 350, y: 400 } });
   await expect(page.locator('.drawer')).not.toHaveClass(/open/);
   await ctx.close();
 });
