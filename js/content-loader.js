@@ -27,11 +27,19 @@
     );
   }
 
+  function renderMd(text) {
+    if (!text) return '';
+    const html = (window.marked && typeof window.marked.parse === 'function')
+      ? window.marked.parse(text)
+      : esc(text).replace(/\n/g, '<br>');
+    return renderTipMarkup(html);
+  }
+
   // ── section renderers ────────────────────────────────────────────────────
   function renderText(s, lang) {
     return `<section class="content-section" data-section-id="${esc(s.id)}">
       ${s.title ? `<h2>${esc(pick(s.title, lang))}</h2>` : ''}
-      <p>${renderTipMarkup(esc(pick(s.content, lang)))}</p>
+      <div class="prose">${renderMd(pick(s.content, lang))}</div>
     </section>`;
   }
 
@@ -39,8 +47,8 @@
     const variant = s.variant === 'warning' ? ' callout-warning' : '';
     return `<section class="content-section" data-section-id="${esc(s.id)}">
       <div class="callout${variant}">
-        ${s.title ? `<strong>${esc(pick(s.title, lang))}</strong><br/>` : ''}
-        ${renderTipMarkup(esc(pick(s.content, lang)))}
+        ${s.title ? `<strong>${esc(pick(s.title, lang))}</strong>` : ''}
+        <div class="prose">${renderMd(pick(s.content, lang))}</div>
       </div>
     </section>`;
   }
