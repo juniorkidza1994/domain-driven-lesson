@@ -20,6 +20,8 @@ jobs:
         run: node --test tests/unit/validate-research.js
       - name: Unit — claude-md
         run: node --test tests/unit/validate-claude-md.js
+      - name: Unit — paths
+        run: node --test tests/unit/validate-paths.js
       - name: E2E — full suite (chromium + firefox + webkit)
         run: npx playwright test
       - name: Upload Playwright report on failure
