@@ -84,16 +84,18 @@
     submit() {
       this.score = this.calculateScore();
       this.submitted = true;
-      const progress = JSON.parse(localStorage.getItem('ddd-progress') || '{}');
-      progress[this.moduleId] = {
-        quizCompleted: true,
-        score: this.score,
-        completedAt: new Date().toISOString()
-      };
-      localStorage.setItem('ddd-progress', JSON.stringify(progress));
-      // Reassign for Alpine reactivity (nav x-show observes store.progress)
+      // DRE-29: delegate to Alpine store so progress is scoped to active profile
       if (window.Alpine && Alpine.store('app')) {
-        Alpine.store('app').progress = progress;
+        Alpine.store('app').saveProgress(this.moduleId, this.score);
+      } else {
+        // Fallback (no Alpine) — write to legacy key
+        const progress = JSON.parse(localStorage.getItem('ddd-progress') || '{}');
+        progress[this.moduleId] = {
+          quizCompleted: true,
+          score: this.score,
+          completedAt: new Date().toISOString()
+        };
+        localStorage.setItem('ddd-progress', JSON.stringify(progress));
       }
       return this.score;
     }

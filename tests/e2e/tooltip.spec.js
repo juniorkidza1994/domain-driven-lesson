@@ -27,9 +27,18 @@ async function mockLesson(page) {
                     body: JSON.stringify(FIXTURE) }));
 }
 
+// DRE-29: seed active profile so profile modal doesn't block tests
+async function seedProfile(page) {
+  await page.addInitScript(() => {
+    sessionStorage.setItem('ddd-active-profile', 'TestUser');
+    localStorage.setItem('ddd-profiles', JSON.stringify(['TestUser']));
+  });
+}
+
 test.describe('DRE-15 · tooltip system', () => {
 
   test('AC1 .tooltip-trigger visible in rendered lesson', async ({ page }) => {
+    await seedProfile(page);
     await mockLesson(page);
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto(MODULE_URL);
@@ -37,6 +46,7 @@ test.describe('DRE-15 · tooltip system', () => {
   });
 
   test('AC2 desktop hover → bubble visible with text', async ({ page }) => {
+    await seedProfile(page);
     await mockLesson(page);
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto(MODULE_URL);
@@ -47,6 +57,7 @@ test.describe('DRE-15 · tooltip system', () => {
   });
 
   test('AC3 click outside → bubble hidden', async ({ page }) => {
+    await seedProfile(page);
     await mockLesson(page);
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto(MODULE_URL);
@@ -59,6 +70,7 @@ test.describe('DRE-15 · tooltip system', () => {
   test('AC4 mobile tap → .tooltip-sheet visible with full def', async ({ browser }) => {
     const ctx = await browser.newContext({ viewport: { width: 375, height: 800 } });
     const page = await ctx.newPage();
+    await seedProfile(page);
     await mockLesson(page);
     await page.goto(MODULE_URL);
     await page.locator('.tooltip-trigger').first().click();
@@ -71,6 +83,7 @@ test.describe('DRE-15 · tooltip system', () => {
   test('AC5 tap overlay → sheet hidden', async ({ browser }) => {
     const ctx = await browser.newContext({ viewport: { width: 375, height: 800 } });
     const page = await ctx.newPage();
+    await seedProfile(page);
     await mockLesson(page);
     await page.goto(MODULE_URL);
     await page.locator('.tooltip-trigger').first().click();
@@ -83,6 +96,7 @@ test.describe('DRE-15 · tooltip system', () => {
   test('AC6 close button → sheet hidden', async ({ browser }) => {
     const ctx = await browser.newContext({ viewport: { width: 375, height: 800 } });
     const page = await ctx.newPage();
+    await seedProfile(page);
     await mockLesson(page);
     await page.goto(MODULE_URL);
     await page.locator('.tooltip-trigger').first().click();
@@ -92,16 +106,19 @@ test.describe('DRE-15 · tooltip system', () => {
   });
 
   test('AC7 glossary.html has ≥1 <h2> category heading', async ({ page }) => {
+    await seedProfile(page);
     await page.goto(GLOSSARY_URL);
     await expect(page.locator('main h2').first()).toBeVisible();
   });
 
   test('AC8 glossary.html has ≥1 term definition', async ({ page }) => {
+    await seedProfile(page);
     await page.goto(GLOSSARY_URL);
     await expect(page.locator('.glossary-term .glossary-term__def').first()).toBeVisible();
   });
 
   test('AC9 language toggle changes tooltip text', async ({ page }) => {
+    await seedProfile(page);
     await mockLesson(page);
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto(MODULE_URL);
@@ -115,6 +132,7 @@ test.describe('DRE-15 · tooltip system', () => {
   });
 
   test('AC10 keyboard: Tab + Enter opens tooltip', async ({ page }) => {
+    await seedProfile(page);
     await mockLesson(page);
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto(MODULE_URL);

@@ -5,7 +5,6 @@
       <span>ArchPath</span>
     </a>
 
-    <!-- desktop inline nav, hidden <768px -->
     <nav class="nav-desktop" aria-label="Modules">
       <template x-for="m in $store.modules.list" :key="m.id">
         <a class="nav-item"
@@ -20,6 +19,33 @@
     </nav>
 
     <div class="topnav-right">
+      <!-- Profile chip (DRE-29) -->
+      <div class="profile-chip-wrap"
+           x-show="$store.app.activeProfile"
+           @click.outside="$store.app.profileChipOpen = false">
+        <button class="profile-chip"
+                type="button"
+                data-testid="profile-chip"
+                :aria-expanded="$store.app.profileChipOpen.toString()"
+                @click="$store.app.profileChipOpen = !$store.app.profileChipOpen">
+          <span class="profile-chip__name" x-text="$store.app.activeProfile"></span>
+          <span class="profile-chip__caret" aria-hidden="true">&#x25BE;</span>
+        </button>
+        <div class="profile-chip__menu"
+             x-show="$store.app.profileChipOpen"
+             x-cloak
+             role="menu">
+          <button type="button" role="menuitem"
+                  data-testid="chip-switch"
+                  @click="$store.app.openSwitchModal()"
+                  x-text="$store.app.lang === 'en' ? 'Switch Profile' : 'สลับโปรไฟล์'"></button>
+          <button type="button" role="menuitem"
+                  data-testid="chip-new"
+                  @click="$store.app.openNewProfileModal()"
+                  x-text="$store.app.lang === 'en' ? 'New Profile' : 'โปรไฟล์ใหม่'"></button>
+        </div>
+      </div>
+
       <div class="lang-toggle" role="group" aria-label="Language">
         <button :class="{ active: $store.app.lang === 'en' }" @click="$store.app.setLang('en')">EN</button>
         <button :class="{ active: $store.app.lang === 'th' }" @click="$store.app.setLang('th')">TH</button>
@@ -28,7 +54,7 @@
     </div>
   </header>
 
-  <!-- mobile drawer -->
+  <!-- mobile drawer (unchanged) -->
   <div class="drawer-scrim" :class="{ open }" @click="open = false"></div>
   <aside class="drawer" :class="{ open }" aria-label="Modules">
     <header>
@@ -59,4 +85,72 @@
       </div>
     </footer>
   </aside>
+
+  <!-- Profile modal (DRE-29) -->
+  <div class="profile-modal-overlay"
+       x-show="$store.app.profileModalOpen"
+       x-cloak
+       data-testid="profile-modal-overlay"
+       aria-hidden="true"></div>
+  <div class="profile-modal"
+       x-show="$store.app.profileModalOpen"
+       x-cloak
+       role="dialog"
+       aria-modal="true"
+       aria-labelledby="profile-modal-title"
+       data-testid="profile-modal">
+    <!-- LIST VIEW -->
+    <div x-show="$store.app.profileModalView === 'list'">
+      <h2 id="profile-modal-title" class="profile-modal__title"
+          x-text="$store.app.lang === 'en' ? 'Who is studying?' : 'ใครกำลังเรียน?'"></h2>
+      <ul class="profile-list" data-testid="profile-list">
+        <template x-for="p in $store.app.profiles" :key="p">
+          <li>
+            <button class="profile-list__item"
+                    type="button"
+                    data-testid="profile-list-item"
+                    @click="$store.app.switchProfile(p)"
+                    x-text="p"></button>
+          </li>
+        </template>
+      </ul>
+      <button class="btn-secondary profile-modal__new"
+              type="button"
+              data-testid="profile-create-new"
+              @click="$store.app.profileModalView = 'create'; $store.app.nameInput = ''; $store.app.nameError = ''"
+              x-text="$store.app.lang === 'en' ? '+ New Profile' : '+ โปรไฟล์ใหม่'"></button>
+    </div>
+
+    <!-- CREATE VIEW -->
+    <form x-show="$store.app.profileModalView === 'create'"
+          @submit.prevent="$store.app.createProfile($store.app.nameInput)">
+      <h2 id="profile-modal-title" class="profile-modal__title"
+          x-text="$store.app.lang === 'en' ? 'Enter your name' : 'ใส่ชื่อของคุณ'"></h2>
+      <input class="profile-modal__input"
+             type="text"
+             maxlength="40"
+             data-testid="profile-name-input"
+             :placeholder="$store.app.lang === 'en' ? 'Your name' : 'ชื่อของคุณ'"
+             x-model="$store.app.nameInput"
+             @input="$store.app.nameError = ''"
+             autofocus/>
+      <p class="profile-modal__error"
+         x-show="$store.app.nameError"
+         data-testid="profile-name-error"
+         x-text="$store.app.nameError"></p>
+      <div class="profile-modal__actions">
+        <button type="button"
+                class="btn-secondary"
+                x-show="$store.app.profiles.length"
+                data-testid="profile-create-back"
+                @click="$store.app.profileModalView = 'list'; $store.app.nameError = ''"
+                x-text="$store.app.lang === 'en' ? 'Back' : 'ย้อนกลับ'"></button>
+        <button type="submit"
+                class="btn-primary"
+                data-testid="profile-create-submit"
+                :disabled="!$store.app.nameInput.trim()"
+                x-text="$store.app.lang === 'en' ? 'Start learning' : 'เริ่มเรียน'"></button>
+      </div>
+    </form>
+  </div>
 </div>

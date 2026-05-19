@@ -3,6 +3,15 @@ const { test, expect } = require('@playwright/test');
 
 const FIXTURE_URL = 'http://localhost:8080/tests/e2e/fixtures/es-board-fixture.html';
 
+// DRE-29: seed active profile so profile modal doesn't block tests on pages
+// that include nav.js (the fixture page may not need this, but module pages do)
+async function seedProfile(page) {
+  await page.addInitScript(() => {
+    sessionStorage.setItem('ddd-active-profile', 'TestUser');
+    localStorage.setItem('ddd-profiles', JSON.stringify(['TestUser']));
+  });
+}
+
 test.describe('DRE-17 · ES Board component', () => {
 
   test('AC1 .es-board-container is visible', async ({ page }) => {
@@ -68,6 +77,7 @@ test.describe('DRE-17 · ES Board component', () => {
   test('AC10 content-loader renderEsBoard handles lanes format', async ({ page }) => {
     // Drive the live renderer with a module page + mocked JSON
     const MOD_URL = 'http://localhost:8080/modules/01-intro.html';
+    await seedProfile(page);
     await page.route('**/content/lessons/**/module-01.json', route => route.fulfill({
       status: 200, contentType: 'application/json',
       body: JSON.stringify({

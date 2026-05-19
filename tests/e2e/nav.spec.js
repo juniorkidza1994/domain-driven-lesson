@@ -3,6 +3,14 @@ const { test, expect } = require('@playwright/test');
 
 const BASE = 'http://localhost:8080';
 
+// DRE-29: seed active profile so profile modal doesn't block tests
+async function seedProfile(page) {
+  await page.addInitScript(() => {
+    sessionStorage.setItem('ddd-active-profile', 'TestUser');
+    localStorage.setItem('ddd-profiles', JSON.stringify(['TestUser']));
+  });
+}
+
 const ALL_PAGES = [
   '/',
   '/glossary.html',
@@ -27,6 +35,9 @@ const MODULE_LINKS = [
 
 // AC: nav.html injected into all 9 pages, lang-toggle visible on every page
 test.describe('injection', () => {
+  test.beforeEach(async ({ page }) => {
+    await seedProfile(page);
+  });
   for (const route of ALL_PAGES) {
     test(`topnav and lang-toggle visible on ${route}`, async ({ page }) => {
       await page.goto(BASE + route);
@@ -41,6 +52,7 @@ test.describe('injection', () => {
 
 // AC: All 7 module links present with correct hrefs
 test('7 module links with correct hrefs', async ({ page }) => {
+  await seedProfile(page);
   await page.goto(BASE + '/');
   await page.waitForSelector('#nav-root .topnav', { timeout: 5000 });
   await page.waitForFunction(() => window.Alpine !== undefined);
@@ -58,6 +70,7 @@ test('7 module links with correct hrefs', async ({ page }) => {
 test('default lang is en', async ({ browser }) => {
   const ctx = await browser.newContext();
   const page = await ctx.newPage();
+  await seedProfile(page);
   await page.goto(BASE + '/');
   await page.waitForFunction(() => window.Alpine !== undefined);
   const lang = await page.evaluate(() => localStorage.getItem('lang'));
@@ -71,6 +84,7 @@ test('default lang is en', async ({ browser }) => {
 test('mobile: hamburger visible, desktop nav hidden', async ({ browser }) => {
   const ctx = await browser.newContext({ viewport: { width: 375, height: 800 } });
   const page = await ctx.newPage();
+  await seedProfile(page);
   await page.goto(BASE + '/');
   await page.waitForSelector('#nav-root .topnav', { timeout: 5000 });
   await page.waitForFunction(() => window.Alpine !== undefined);
@@ -84,6 +98,7 @@ test('mobile: hamburger visible, desktop nav hidden', async ({ browser }) => {
 test('hamburger opens drawer, scrim closes it', async ({ browser }) => {
   const ctx = await browser.newContext({ viewport: { width: 375, height: 800 } });
   const page = await ctx.newPage();
+  await seedProfile(page);
   await page.goto(BASE + '/');
   await page.waitForSelector('#nav-root .topnav', { timeout: 5000 });
   await page.waitForFunction(() => window.Alpine !== undefined);
@@ -109,7 +124,10 @@ test('checkmark visible after localStorage progress seed', async ({ browser }) =
   const page = await ctx.newPage();
 
   await page.addInitScript(() => {
-    localStorage.setItem('ddd-progress', JSON.stringify({
+    // DRE-29: seed profile + progress under profile key
+    sessionStorage.setItem('ddd-active-profile', 'TestUser');
+    localStorage.setItem('ddd-profiles', JSON.stringify(['TestUser']));
+    localStorage.setItem('ddd-progress-TestUser', JSON.stringify({
       'module-01': { quizCompleted: true, score: 80 }
     }));
   });
@@ -124,6 +142,7 @@ test('checkmark visible after localStorage progress seed', async ({ browser }) =
     if (!window.Alpine) return false;
     const app = Alpine.store('app');
     if (!app) return false;
+    // DRE-29: progress is scoped to the active profile key
     return !!(app.progress && app.progress['module-01'] && app.progress['module-01'].quizCompleted);
   }, { timeout: 5000 });
   // Give Alpine one microtask to apply x-show directives on the injected nav items
@@ -138,6 +157,7 @@ test('checkmark visible after localStorage progress seed', async ({ browser }) =
 
 // AC: active link has aria-current="page" on the matching module page
 test('active module link has aria-current=page', async ({ page }) => {
+  await seedProfile(page);
   await page.goto(BASE + '/modules/03-event-storming.html');
   await page.waitForSelector('#nav-root .topnav', { timeout: 5000 });
   await page.waitForFunction(() => window.Alpine !== undefined);
@@ -150,6 +170,7 @@ test('active module link has aria-current=page', async ({ page }) => {
 
 // AC: lang toggle re-renders labels without reload, persists to localStorage
 test('lang toggle switches labels and persists to localStorage', async ({ page }) => {
+  await seedProfile(page);
   await page.goto(BASE + '/');
   await page.waitForSelector('#nav-root .topnav', { timeout: 5000 });
   await page.waitForFunction(() => window.Alpine !== undefined);
