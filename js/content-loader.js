@@ -35,6 +35,14 @@
     return renderTipMarkup(html);
   }
 
+  function renderMdInline(text) {
+    if (!text) return '';
+    const html = (window.marked && typeof window.marked.parseInline === 'function')
+      ? window.marked.parseInline(text)
+      : esc(text);
+    return renderTipMarkup(html);
+  }
+
   // ── section renderers ────────────────────────────────────────────────────
   function renderText(s, lang) {
     return `<section class="content-section" data-section-id="${esc(s.id)}">
@@ -82,7 +90,7 @@
     const col = (c) => `
       <div class="comparison-col">
         <h3>${esc(pick(c.heading, lang))}</h3>
-        <ul>${(c.items || []).map(it => `<li>${renderTipMarkup(esc(pick(it, lang)))}</li>`).join('')}</ul>
+        <ul>${(c.items || []).map(it => `<li>${renderMdInline(pick(it, lang))}</li>`).join('')}</ul>
       </div>`;
     const cols = Array.isArray(s.columns) && s.columns.length
       ? s.columns.map(col).join('')
@@ -98,7 +106,7 @@
       <div class="infographic-item">
         <div class="infographic-icon">${esc(it.icon || '•')}</div>
         <div class="infographic-label">${esc(pick(it.label, lang))}</div>
-        <div class="infographic-body">${renderTipMarkup(esc(pick(it.body, lang)))}</div>
+        <div class="infographic-body">${renderMdInline(pick(it.body, lang))}</div>
       </div>`).join('');
     return `<section class="content-section" data-section-id="${esc(s.id)}">
       ${s.title ? `<h2>${esc(pick(s.title, lang))}</h2>` : ''}
