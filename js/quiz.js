@@ -18,6 +18,36 @@
     { id: 'false', text: { en: 'False', th: 'เท็จ' } }
   ];
 
+  // DRE-31: next-module map (bare sibling filenames — all pages live in /modules/)
+  const NEXT_MODULE = {
+    'module-01': '02-ddd.html',
+    'module-02': '03-event-storming.html',
+    'module-03': '04-es-to-ddd.html',
+    'module-04': '05-eda.html',
+    'module-05': '06-es-to-eda.html',
+    'module-06': '07-case-study.html'
+  };
+
+  // DRE-31: post-submit HTML (next button or congrats block)
+  function renderPostSubmit(moduleId, lang) {
+    if (moduleId === 'module-07') {
+      const title = lang === 'th' ? 'ยินดีด้วย! 🎉' : 'Congratulations! 🎉';
+      const body  = lang === 'th' ? 'คุณเรียนจบครบทั้ง 7 บทแล้ว' : 'You have completed all 7 modules.';
+      const btn   = lang === 'th' ? 'เริ่มคอร์สใหม่' : 'Restart Course';
+      return `<div class="quiz-congrats">
+        <h3>${title}</h3>
+        <p>${body}</p>
+        <button type="button" class="btn-secondary quiz-restart">${btn}</button>
+      </div>`;
+    }
+    const next = NEXT_MODULE[moduleId];
+    if (next) {
+      const label = lang === 'th' ? 'บทถัดไป →' : 'Next Module →';
+      return `<a class="btn-primary quiz-next-module" href="${esc(next)}">${label}</a>`;
+    }
+    return '';
+  }
+
   class QuizEngine {
     constructor(moduleId) {
       this.moduleId = moduleId;
@@ -160,7 +190,7 @@
     }).join('');
 
     const scoreHtml = engine.submitted
-      ? `<div class="quiz-score" role="status">Score: ${engine.score}% (${engine.correctCount()} / ${engine.questions.length})</div>`
+      ? `<div class="quiz-score" role="status">Score: ${engine.score}% (${engine.correctCount()} / ${engine.questions.length})${renderPostSubmit(engine.moduleId, lang)}</div>`
       : `<div class="quiz-score" hidden></div>`;
 
     root.innerHTML = `
@@ -206,12 +236,22 @@
         if (!ENGINE.allAnswered() || ENGINE.submitted) return;
         ENGINE.submit();
         render(ENGINE, currentLang());
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
       }
 
       if (e.target.closest('.quiz-retake')) {
         ENGINE.retake();
         render(ENGINE, currentLang());
+        return;
+      }
+
+      if (e.target.closest('.quiz-restart')) {
+        if (window.Alpine && Alpine.store('app')?.clearProgress) {
+          Alpine.store('app').clearProgress();
+        }
+        const prefix = (window.Alpine && Alpine.store('app')?.pathPrefix) || '';
+        window.location.href = prefix + 'index.html';
         return;
       }
     });
