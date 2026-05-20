@@ -190,7 +190,7 @@
     }).join('');
 
     const scoreHtml = engine.submitted
-      ? `<div class="quiz-score" role="status">Score: ${engine.score}% (${engine.correctCount()} / ${engine.questions.length})${renderPostSubmit(engine.moduleId, lang)}</div>`
+      ? `<div class="quiz-score" role="status">Score: ${engine.score}% (${engine.correctCount()} / ${engine.questions.length})</div>`
       : `<div class="quiz-score" hidden></div>`;
 
     root.innerHTML = `
@@ -205,6 +205,7 @@
           <button type="button" class="btn-secondary quiz-retake" ${engine.submitted ? '' : 'hidden'}>
             ${lang === 'th' ? 'ทำใหม่' : 'Retake'}
           </button>
+          ${engine.submitted ? renderPostSubmit(engine.moduleId, lang) : ''}
         </div>
       </form>
     `;
