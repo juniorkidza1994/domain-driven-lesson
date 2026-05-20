@@ -449,6 +449,27 @@
         ]
       },
       {
+        "id": "ddd-aggregates-cross-domain",
+        "type": "diagram",
+        "title": {
+          "en": "Aggregates Across Domains — Library & Thai Bank",
+          "th": "Aggregate ในหลาย Domain — ห้องสมุดและธนาคารไทย"
+        },
+        "content": {
+          "en": "The aggregate pattern is not unique to e-commerce. Any domain with consistency rules benefits from a single root that owns its invariants. A library borrowing system and a Thai bank transfer system both apply the same rule: one root guards the boundary, external code never reaches past the root to mutate children directly (Vernon 2013, Effective Aggregate Design). This generalises what you saw in the ShopSphere Order aggregate above.",
+          "th": "Aggregate pattern ไม่ได้ถูกจำกัดแค่ e-commerce ทุก domain ที่มีกฎ consistency สามารถใช้ root เดียวเป็นเจ้าของ invariant ได้ ระบบยืมหนังสือและระบบโอนเงินธนาคารใช้กฎเดียวกัน: root เดียวดูแลขอบเขต code ภายนอกต้องเรียกผ่าน root เท่านั้น ห้ามแก้ไข child โดยตรง (Vernon 2013, Effective Aggregate Design) หลักการเดียวกับ ShopSphere Order ที่เห็นด้านบน"
+        },
+        "diagram": {
+          "type": "mermaid",
+          "source": "classDiagram\n  direction TD\n\n  class BorrowingRecord {\n    +recordId\n    +status\n    +borrow()\n    +returnBook()\n    +extend()\n  }\n  class BookCopy {\n    +copyId\n    +barcode\n    +condition\n  }\n  class DueDate {\n    +date\n    +isOverdue()\n  }\n  <<AggregateRoot>> BorrowingRecord\n  <<Entity>> BookCopy\n  <<ValueObject>> DueDate\n  BorrowingRecord \"1\" *-- \"1\" BookCopy\n  BorrowingRecord \"1\" *-- \"1\" DueDate\n  note for BorrowingRecord \"Invariant: cannot extend if already overdue\"\n\n  class TransferRequest {\n    +transferId\n    +status\n    +submit()\n    +approve()\n    +reject()\n  }\n  class Money {\n    +amount\n    +currency\n  }\n  class AccountRef {\n    +accountId\n    +bankCode\n  }\n  <<AggregateRoot>> TransferRequest\n  <<ValueObject>> Money\n  <<Entity>> AccountRef\n  TransferRequest \"1\" *-- \"1\" Money\n  TransferRequest \"1\" *-- \"1\" AccountRef\n  note for TransferRequest \"Invariant: balance >= transfer amount\""
+        },
+        "tooltipRefs": [
+          "aggregate",
+          "entity",
+          "value-object"
+        ]
+      },
+      {
         "id": "ubiquitous-language",
         "type": "infographic",
         "title": {
