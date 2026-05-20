@@ -162,9 +162,10 @@
   text-underline-offset: 3px;
   cursor: pointer;
   color: var(--color-primary);
-  background: none;
+  background: rgba(99, 102, 241, 0.08);
+  border-radius: 3px;
   border: 0;
-  padding: 0;
+  padding: 0 3px;
   font: inherit;
 }
 .tooltip-trigger:focus-visible {
