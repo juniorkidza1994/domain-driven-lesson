@@ -465,6 +465,22 @@
         ]
       },
       {
+        "id": "clustering-criteria",
+        "type": "text",
+        "title": {
+          "en": "How to Cluster Events into Capability Groups",
+          "th": ""
+        },
+        "content": {
+          "en": "After the Big Picture wall fills up, step 9 asks participants to group neighbouring events into candidate Bounded Contexts. This is the step that confuses most teams — how do you decide which events belong together?\n\nBrandolini's primary signal is **vocabulary shift**: if the same word means different things in two parts of the wall, that shift marks a boundary (Brandolini, *Introducing EventStorming*). In practice, four concrete criteria help make the decision explicit.\n\n---\n\n**Criterion 1: Vocabulary — does the language shift?**\n\nWalk along the event timeline and listen. If the same noun starts carrying different meanings, you have crossed a boundary. In an e-commerce wall, the word *order* appears in Cart events (*Item Added To Cart*, *Cart Reviewed*) and in fulfilment events (*Order Dispatched*, *Delivery Confirmed*). But the Payment events use entirely different vocabulary — *amount*, *authorization*, *charge*, *refund*, *idempotency key* — that no one in the checkout team needs to understand. Vocabulary shift = context boundary.\n\n**Criterion 2: Domain expert ownership — who answers questions about these events?**\n\nA practical shortcut: which expert in the room understands these events? The sales or checkout team can explain every Cart and Order event. The finance or payments team owns Payment events — they know about authorization holds, PCI compliance, refund windows, and payment provider APIs. When two adjacent clusters require *different* experts to explain them, they belong in *different* contexts.\n\n**Criterion 3: Shared business goal — do these events describe the same capability?**\n\nCart events and Order events both describe one goal: *a customer deciding what to buy and committing to the purchase*. A Cart is the accumulation phase; an Order is the commitment phase. They are the same business capability at different lifecycle stages — the Cart becomes an Order. Payment describes a completely different capability: *has money moved?* Payment can fail and be retried independently. An order can exist only after payment succeeds, but the payment process itself is a separate accountability with its own success/failure states.\n\n**Criterion 4: Change together — do the rules evolve for the same reason?**\n\nCart and Order rules change when pricing changes, promotions change, or checkout UX changes. Payment rules change when Stripe updates its API, when a new payment method launches, or when a regulatory requirement changes. Different change triggers with different owners means different contexts.\n\n---\n\n**Applying the criteria: why Cart + Order are one context and Payment is another**\n\n| Criterion | Cart + Order (Sales context) | Payment (Payments context) |\n|---|---|---|\n| Vocabulary | *item, quantity, price, customer intent* | *amount, authorization, charge, refund* |\n| Domain expert | Checkout / sales team | Finance / payments team |\n| Business goal | What is the customer buying, and have they committed? | Has money moved? |\n| Change trigger | Pricing, promotions, checkout UX | Payment provider API, compliance, new payment methods |\n\nThe **pivotal event** connecting these two contexts is *Payment Authorized*. It crosses from the Payments context back into the Sales context. The purple Policy sticky — *Whenever Payment Authorized → Place Order* — is the bridge between them: a reactive rule that connects two separate capabilities. Brandolini calls this a *pivotal event* because it sits exactly on the seam.\n\n---\n\n**The proximity trap — a common mistake**\n\nTeams often group Payment with Cart and Order because they appear close in time: the customer pays during checkout. This is *sequence proximity*, not business capability. The test is: if you extracted the Payment context entirely and swapped Stripe for a different provider, would Cart and Order logic change? No — they are independently deployable. Sequence proximity is not a boundary criterion; shared vocabulary, shared expert ownership, and shared business goal are."
+        },
+        "tooltipRefs": [
+          "bounded-context",
+          "domain-event",
+          "pivotal-event"
+        ]
+      },
+      {
         "id": "es-to-bounded-contexts",
         "type": "flow",
         "title": {
