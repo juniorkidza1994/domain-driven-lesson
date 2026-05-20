@@ -139,6 +139,11 @@ document.addEventListener('alpine:init', function () {
       this.progress[moduleId] = { quizCompleted: true, score: score };
       localStorage.setItem(this._progressKey(), JSON.stringify(this.progress));
     },
+    clearProgress() {
+      // Clears progress only for the active profile. Does NOT remove the profile from PROFILES_KEY.
+      this.progress = {};
+      localStorage.setItem(this._progressKey(), JSON.stringify(this.progress));
+    },
   });
 
   // Sync body[data-lang]
