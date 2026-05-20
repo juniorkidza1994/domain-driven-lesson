@@ -243,12 +243,15 @@ test.describe('DRE-16 · quiz system', () => {
 
 test.describe('DRE-31 · scroll, next module, congratulations', () => {
 
-  test('AC1 submitting quiz scrolls to top', async ({ page }) => {
+  test('AC1 submitting quiz does not scroll to top', async ({ page }) => {
     await gotoQuiz(page);
-    // Scroll down first so we can detect the scroll-up
+    // Scroll down first so we can verify position is preserved after submit
     await page.evaluate(() => window.scrollTo(0, 500));
     await answerAndSubmit(page);
-    await expect.poll(() => page.evaluate(() => window.scrollY), { timeout: 3000 }).toBeLessThan(50);
+    // Score should be visible without scroll reset (DRE-37: removed scroll-to-top)
+    await expect(page.locator('.quiz-score')).toBeVisible();
+    const scrollY = await page.evaluate(() => window.scrollY);
+    expect(scrollY).toBeGreaterThan(50);
   });
 
   test('AC2 module-02 shows next-module button with correct href after submit', async ({ page }) => {
