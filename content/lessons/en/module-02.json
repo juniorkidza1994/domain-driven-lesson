@@ -125,6 +125,22 @@
         ]
       },
       {
+        "id": "entity-examples-diagram",
+        "type": "diagram",
+        "title": {
+          "en": "Entity — Three Domain Examples",
+          "th": "Entity — ตัวอย่าง 3 Domain"
+        },
+        "content": {
+          "en": "An Entity is identified by a unique ID that persists across its entire lifetime. Attributes may change — a Customer updates their email, an Order transitions through states, a BankAccount balance changes with each transaction — but the identity never changes. Source: Evans, Domain-Driven Design §5.",
+          "th": ""
+        },
+        "diagram": {
+          "type": "mermaid",
+          "source": "classDiagram\n  direction TD\n  namespace ECommerce {\n    class Order {\n      <<Entity>>\n      +UUID orderId\n      +Enum status\n      +Money totalAmount\n      +DateTime placedAt\n    }\n  }\n  namespace Library {\n    class Patron {\n      <<Entity>>\n      +UUID patronId\n      +String name\n      +Enum patronType\n    }\n  }\n  namespace ThaiBank {\n    class BankAccount {\n      <<Entity>>\n      +UUID accountId\n      +String accountNumber\n      +Money balance\n      +Enum status\n    }\n  }"
+        }
+      },
+      {
         "id": "value-object",
         "type": "text",
         "title": {
@@ -136,6 +152,22 @@
         "tooltipRefs": [
           "value-object"
         ]
+      },
+      {
+        "id": "value-object-examples-diagram",
+        "type": "diagram",
+        "title": {
+          "en": "Value Object — Three Domain Examples",
+          "th": "Value Object — ตัวอย่าง 3 Domain"
+        },
+        "content": {
+          "en": "A Value Object has no identity — it is defined entirely by its attributes. Two Money(100, \"USD\") values are equal and interchangeable. Value Objects are always immutable: to change a balance you replace Money with a new instance, never mutate the existing one. Source: Evans, Domain-Driven Design §5.",
+          "th": ""
+        },
+        "diagram": {
+          "type": "mermaid",
+          "source": "classDiagram\n  direction TD\n  namespace ECommerce {\n    class Money {\n      <<ValueObject>>\n      +Decimal amount\n      +String currency\n    }\n    class Address {\n      <<ValueObject>>\n      +String street\n      +String city\n      +String postalCode\n    }\n  }\n  namespace Library {\n    class ISBN {\n      <<ValueObject>>\n      +String value\n    }\n  }\n  namespace ThaiBank {\n    class ThaiIDNumber {\n      <<ValueObject>>\n      +String value\n    }\n  }"
+        }
       },
       {
         "id": "aggregate",
@@ -151,6 +183,22 @@
           "entity",
           "value-object"
         ]
+      },
+      {
+        "id": "aggregate-examples-diagram",
+        "type": "diagram",
+        "title": {
+          "en": "Aggregate — Three Domain Examples",
+          "th": "Aggregate — ตัวอย่าง 3 Domain"
+        },
+        "content": {
+          "en": "The Aggregate Root is the only entry point for all changes within its boundary. External code never mutates child entities directly. Invariants — order total equals sum of lines, Patron cannot hold more than 5 books, BankAccount balance cannot go below zero — are enforced at the root. Source: Vernon, Implementing Domain-Driven Design §10.",
+          "th": ""
+        },
+        "diagram": {
+          "type": "mermaid",
+          "source": "classDiagram\n  direction TD\n  namespace ECommerce {\n    class Order {\n      <<AggregateRoot>>\n      +UUID orderId\n      +Enum status\n    }\n    class OrderLine {\n      <<Entity>>\n      +UUID productId\n      +Money price\n      +Int quantity\n    }\n  }\n  namespace Library {\n    class Patron {\n      <<AggregateRoot>>\n      +UUID patronId\n      +Enum patronType\n    }\n    class Hold {\n      <<Entity>>\n      +UUID bookId\n      +DateTime placedAt\n    }\n  }\n  namespace ThaiBank {\n    class BankAccount {\n      <<AggregateRoot>>\n      +UUID accountId\n      +Money balance\n    }\n    class Transaction {\n      <<Entity>>\n      +UUID txId\n      +Money amount\n      +Enum type\n    }\n  }\n  Order \"1\" *-- \"many\" OrderLine\n  Patron \"1\" *-- \"many\" Hold\n  BankAccount \"1\" *-- \"many\" Transaction"
+        }
       },
       {
         "id": "aggregate-diagram",
