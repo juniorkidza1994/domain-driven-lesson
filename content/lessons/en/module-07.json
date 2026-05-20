@@ -456,8 +456,8 @@
           "th": "Aggregate ในหลาย Domain — ห้องสมุดและธนาคารไทย"
         },
         "content": {
-          "en": "The aggregate pattern is not unique to e-commerce. Any domain with consistency rules benefits from a single root that owns its invariants. A library borrowing system and a Thai bank transfer system both apply the same rule: one root guards the boundary, external code never reaches past the root to mutate children directly (Vernon 2013, Effective Aggregate Design). This generalises what you saw in the ShopSphere Order aggregate above.",
-          "th": "Aggregate pattern ไม่ได้ถูกจำกัดแค่ e-commerce ทุก domain ที่มีกฎ consistency สามารถใช้ root เดียวเป็นเจ้าของ invariant ได้ ระบบยืมหนังสือและระบบโอนเงินธนาคารใช้กฎเดียวกัน: root เดียวดูแลขอบเขต code ภายนอกต้องเรียกผ่าน root เท่านั้น ห้ามแก้ไข child โดยตรง (Vernon 2013, Effective Aggregate Design) หลักการเดียวกับ ShopSphere Order ที่เห็นด้านบน"
+          "en": "The aggregate pattern is not unique to e-commerce. Any domain with consistency rules benefits from a single root that owns its invariants. A library borrowing system and a Thai bank transfer system both apply the same rule: one root guards the boundary, external code never reaches past the root to mutate children directly (Vernon 2013, Implementing Domain-Driven Design, ch. 10). This generalises what you saw in the ShopSphere Order aggregate above.",
+          "th": "Aggregate pattern ไม่ได้ถูกจำกัดแค่ e-commerce ทุก domain ที่มีกฎ consistency สามารถใช้ root เดียวเป็นเจ้าของ invariant ได้ ระบบยืมหนังสือและระบบโอนเงินธนาคารใช้กฎเดียวกัน: root เดียวดูแลขอบเขต code ภายนอกต้องเรียกผ่าน root เท่านั้น ห้ามแก้ไข child โดยตรง (Vernon 2013, Implementing Domain-Driven Design, ch. 10) หลักการเดียวกับ ShopSphere Order ที่เห็นด้านบน"
         },
         "diagram": {
           "type": "mermaid",
