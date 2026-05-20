@@ -237,7 +237,6 @@
         if (!ENGINE.allAnswered() || ENGINE.submitted) return;
         ENGINE.submit();
         render(ENGINE, currentLang());
-        window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
       }
 
