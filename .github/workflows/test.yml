@@ -10,7 +10,7 @@ jobs:
       - uses: actions/setup-node@v4.4.0
         with: { node-version: '20' }
       - name: Audit dependencies
-        run: npm audit --audit-level=high
+        run: npm i --package-lock-only && npm audit --audit-level=high
       - name: Unit — schema
         run: node --test tests/unit/validate-schema.js
       - name: Unit — research
