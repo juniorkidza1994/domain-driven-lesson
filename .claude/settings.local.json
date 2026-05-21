@@ -15,7 +15,13 @@
       "Bash(rtk npx *)",
       "mcp__linear-server__get_issue",
       "WebFetch(domain:api.anthropic.com)",
-      "Skill(caveman:caveman-commit)"
+      "Skill(caveman:caveman-commit)",
+      "Bash(rtk gh *)",
+      "Bash(pkill -f \"python3 -m http.server 8080\")",
+      "Bash(python3 -m http.server 8080)",
+      "Bash(rtk playwright *)",
+      "Bash(python3 *)",
+      "Bash(gh api *)"
     ]
   }
 }
