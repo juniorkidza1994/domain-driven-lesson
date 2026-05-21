@@ -45,13 +45,14 @@ document.addEventListener('alpine:init', function () {
 
   Alpine.store('app', {
     // ── Existing ──────────────────────────────────────────────
-    lang: localStorage.getItem('lang') || 'en',
+    lang: (localStorage.getItem('lang') === 'th') ? 'th' : 'en',
     pathPrefix: pathPrefix,
     currentModuleId: deriveCurrentModuleId(),
     tooltipOpen: null,
     openTooltip(id) { this.tooltipOpen = id; },
     closeTooltip()  { this.tooltipOpen = null; },
     setLang(next) {
+      if (next !== 'en' && next !== 'th') return;
       this.lang = next;
       localStorage.setItem('lang', next);
       document.body.setAttribute('data-lang', next);
