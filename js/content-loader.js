@@ -29,17 +29,19 @@
 
   function renderMd(text) {
     if (!text) return '';
-    const html = (window.marked && typeof window.marked.parse === 'function')
+    let html = (window.marked && typeof window.marked.parse === 'function')
       ? window.marked.parse(text)
       : esc(text).replace(/\n/g, '<br>');
+    if (window.DOMPurify) html = window.DOMPurify.sanitize(html);
     return renderTipMarkup(html);
   }
 
   function renderMdInline(text) {
     if (!text) return '';
-    const html = (window.marked && typeof window.marked.parseInline === 'function')
+    let html = (window.marked && typeof window.marked.parseInline === 'function')
       ? window.marked.parseInline(text)
       : esc(text);
+    if (window.DOMPurify) html = window.DOMPurify.sanitize(html);
     return renderTipMarkup(html);
   }
 
@@ -203,6 +205,8 @@
   let activeRequestId = 0;
 
   async function loadModule(moduleId, lang, pathPrefix) {
+    if (!moduleId || !/^module-0[1-7]$/.test(moduleId)) return;
+    lang = (lang === 'th') ? 'th' : 'en';
     const container = document.getElementById('sections-container');
     if (!container) return;
     const myReq = ++activeRequestId;
