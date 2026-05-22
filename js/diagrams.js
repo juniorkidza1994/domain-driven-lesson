@@ -8,6 +8,8 @@
     startOnLoad: false,
     theme: 'base',
     themeVariables: {
+      background:         '#faf9f7', // --color-bg; explicit SVG bg rect fill (Safari default is black)
+      mainBkg:            '#e0e7ff',
       primaryColor:       '#e0e7ff', // --color-primary-100
       primaryTextColor:   '#1e1b4b', // --color-text
       primaryBorderColor: '#6366f1', // --color-primary
