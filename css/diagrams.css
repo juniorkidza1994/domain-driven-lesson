@@ -107,7 +107,7 @@
 
 /* ── Mermaid hooks (placeholder so renderDiagrams output looks clean) */
 .mermaid-block { display: block; margin: 1rem 0; position: relative; }
-.mermaid-block svg { max-width: 100%; height: auto; }
+.mermaid-block svg { max-width: 100%; height: auto; background: var(--color-bg); }
 
 /* Expand button (absolute, top-right of diagram) */
 .diagram-expand-btn {
