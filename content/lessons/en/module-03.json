@@ -288,10 +288,10 @@
         "id": "es-board-example",
         "type": "es-board",
         "title": {
-          "en": "E-Commerce ES Board Example"
+          "en": "ShopSphere Full Journey — Login to Delivery"
         },
         "content": {
-          "en": "A Design-Level slice of an e-commerce checkout flow. Read left-to-right: the **Customer** lane begins the flow by viewing a cart and starting checkout; **Checkout** validates the address and creates the order; **Inventory** reserves stock; **Payment** authorises the card via Stripe. Pivotal event *Order Placed* (between Checkout and Inventory) marks the seam between the Sales and Fulfilment bounded contexts. The pink hotspot in the Inventory lane captures an unresolved business question."
+          "en": "The complete ShopSphere journey across eight Bounded Contexts. Read left-to-right — that is temporal order. Each lane is one context with its own ubiquitous language: the Identity team does not understand *InventoryReserved*; the Inventory team has never heard of *UserLoggedIn*. The orange event **OrderPlaced** (Order Context) is the **pivotal event**: everything to its left is the Sales domain; everything to its right is the Fulfilment domain. Purple policies are the invisible automation connecting contexts — they fire commands across boundaries with no human actor. Pink hotspots are unresolved design questions captured during the session."
         },
         "diagram": {
           "type": "es-board",
@@ -299,9 +299,9 @@
         },
         "lanes": [
           {
-            "id": "customer",
+            "id": "identity",
             "label": {
-              "en": "Customer"
+              "en": "Identity Context"
             },
             "items": [
               {
@@ -311,21 +311,103 @@
                 }
               },
               {
-                "type": "readmodel",
-                "text": {
-                  "en": "Cart Summary"
-                }
-              },
-              {
                 "type": "command",
                 "text": {
-                  "en": "Review Cart"
+                  "en": "Login"
                 }
               },
               {
                 "type": "event",
                 "text": {
-                  "en": "Cart Reviewed"
+                  "en": "UserLoggedIn"
+                }
+              },
+              {
+                "type": "command",
+                "text": {
+                  "en": "Register"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "CustomerRegistered"
+                }
+              }
+            ]
+          },
+          {
+            "id": "catalog",
+            "label": {
+              "en": "Catalog Context"
+            },
+            "items": [
+              {
+                "type": "readmodel",
+                "text": {
+                  "en": "Product Catalog"
+                }
+              },
+              {
+                "type": "command",
+                "text": {
+                  "en": "Browse Products"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "ProductListViewed"
+                }
+              },
+              {
+                "type": "command",
+                "text": {
+                  "en": "View Product"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "ProductViewed"
+                }
+              }
+            ]
+          },
+          {
+            "id": "cart",
+            "label": {
+              "en": "Cart Context"
+            },
+            "items": [
+              {
+                "type": "aggregate",
+                "text": {
+                  "en": "Cart"
+                }
+              },
+              {
+                "type": "command",
+                "text": {
+                  "en": "Add Item to Cart"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "ItemAddedToCart"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "CartAbandoned"
+                }
+              },
+              {
+                "type": "policy",
+                "text": {
+                  "en": "On CartAbandoned → Send Reminder Email"
                 }
               },
               {
@@ -337,15 +419,15 @@
               {
                 "type": "event",
                 "text": {
-                  "en": "Checkout Started"
+                  "en": "CheckoutStarted"
                 }
               }
             ]
           },
           {
-            "id": "checkout",
+            "id": "order",
             "label": {
-              "en": "Checkout"
+              "en": "Order Context"
             },
             "items": [
               {
@@ -355,21 +437,9 @@
                 }
               },
               {
-                "type": "command",
-                "text": {
-                  "en": "Validate Address"
-                }
-              },
-              {
-                "type": "event",
-                "text": {
-                  "en": "Address Validated"
-                }
-              },
-              {
                 "type": "policy",
                 "text": {
-                  "en": "When Payment Authorized → Place Order"
+                  "en": "On CheckoutStarted → Place Order"
                 }
               },
               {
@@ -381,7 +451,31 @@
               {
                 "type": "event",
                 "text": {
-                  "en": "Order Placed"
+                  "en": "OrderPlaced"
+                }
+              },
+              {
+                "type": "policy",
+                "text": {
+                  "en": "On PaymentCaptured → Confirm Order"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "OrderConfirmed"
+                }
+              },
+              {
+                "type": "policy",
+                "text": {
+                  "en": "On PaymentFailed → Cancel Order"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "OrderCancelled"
                 }
               }
             ]
@@ -389,7 +483,7 @@
           {
             "id": "inventory",
             "label": {
-              "en": "Inventory"
+              "en": "Inventory Context"
             },
             "items": [
               {
@@ -401,7 +495,7 @@
               {
                 "type": "policy",
                 "text": {
-                  "en": "When Order Placed → Reserve Inventory"
+                  "en": "On OrderPlaced → Reserve Inventory"
                 }
               },
               {
@@ -413,13 +507,19 @@
               {
                 "type": "event",
                 "text": {
-                  "en": "Inventory Reserved"
+                  "en": "InventoryReserved"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "InventoryReservationFailed"
                 }
               },
               {
                 "type": "hotspot",
                 "text": {
-                  "en": "Partial stock? Split shipment or cancel?"
+                  "en": "Stock depleted between AddToCart and OrderPlaced — cancel or backorder?"
                 }
               }
             ]
@@ -427,13 +527,19 @@
           {
             "id": "payment",
             "label": {
-              "en": "Payment"
+              "en": "Payment Context"
             },
             "items": [
               {
-                "type": "aggregate",
+                "type": "external",
                 "text": {
-                  "en": "Payment"
+                  "en": "Stripe"
+                }
+              },
+              {
+                "type": "policy",
+                "text": {
+                  "en": "On InventoryReserved → Authorize Payment"
                 }
               },
               {
@@ -443,21 +549,145 @@
                 }
               },
               {
-                "type": "external",
+                "type": "event",
                 "text": {
-                  "en": "Stripe"
+                  "en": "PaymentAuthorized"
+                }
+              },
+              {
+                "type": "command",
+                "text": {
+                  "en": "Capture Payment"
                 }
               },
               {
                 "type": "event",
                 "text": {
-                  "en": "Payment Authorized"
+                  "en": "PaymentCaptured"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "PaymentFailed"
+                }
+              },
+              {
+                "type": "hotspot",
+                "text": {
+                  "en": "COD: capture at delivery not checkout — two saga variants?"
+                }
+              }
+            ]
+          },
+          {
+            "id": "shipping",
+            "label": {
+              "en": "Shipping Context"
+            },
+            "items": [
+              {
+                "type": "aggregate",
+                "text": {
+                  "en": "Shipment"
+                }
+              },
+              {
+                "type": "policy",
+                "text": {
+                  "en": "On OrderConfirmed → Create Shipment"
+                }
+              },
+              {
+                "type": "actor",
+                "text": {
+                  "en": "Warehouse Staff"
+                }
+              },
+              {
+                "type": "command",
+                "text": {
+                  "en": "Create Shipment"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "ShipmentCreated"
                 }
               },
               {
                 "type": "readmodel",
                 "text": {
-                  "en": "Order Confirmation"
+                  "en": "Pick List"
+                }
+              },
+              {
+                "type": "command",
+                "text": {
+                  "en": "Dispatch Shipment"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "ShipmentDispatched"
+                }
+              },
+              {
+                "type": "external",
+                "text": {
+                  "en": "Carrier API"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "ShipmentDelivered"
+                }
+              }
+            ]
+          },
+          {
+            "id": "notification",
+            "label": {
+              "en": "Notification Context"
+            },
+            "items": [
+              {
+                "type": "external",
+                "text": {
+                  "en": "SendGrid / SMS Gateway"
+                }
+              },
+              {
+                "type": "policy",
+                "text": {
+                  "en": "On OrderPlaced → Send Confirmation Email"
+                }
+              },
+              {
+                "type": "policy",
+                "text": {
+                  "en": "On CartAbandoned → Send Reminder Email"
+                }
+              },
+              {
+                "type": "policy",
+                "text": {
+                  "en": "On PaymentFailed → Send Payment Failed Email"
+                }
+              },
+              {
+                "type": "policy",
+                "text": {
+                  "en": "On ShipmentDispatched → Send Tracking Email"
+                }
+              },
+              {
+                "type": "policy",
+                "text": {
+                  "en": "On ShipmentDelivered → Send Delivery Confirmation"
                 }
               }
             ]

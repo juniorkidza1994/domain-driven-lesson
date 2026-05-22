@@ -124,6 +124,42 @@
               {
                 "type": "command",
                 "text": {
+                  "en": "Login"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "UserLoggedIn"
+                }
+              },
+              {
+                "type": "command",
+                "text": {
+                  "en": "Browse Products"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "ProductListViewed"
+                }
+              },
+              {
+                "type": "command",
+                "text": {
+                  "en": "View Product"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "ProductViewed"
+                }
+              },
+              {
+                "type": "command",
+                "text": {
                   "en": "Register"
                 }
               },
