@@ -132,10 +132,10 @@
         "id": "step-2-mini-board",
         "type": "es-board",
         "title": {
-          "en": "Mini ES Board — Checkout Slice"
+          "en": "Mini ES Board — Login to Checkout"
         },
         "content": {
-          "en": "A small two-lane slice of an e-commerce checkout, after step 2. Each row reads actor → command → event. Notice the *Payment Authorized* event has no actor on the Customer lane — it is produced by the Payment lane in response to a command issued from Checkout. That cross-lane causation is exactly what step 3 will formalise as a policy."
+          "en": "Four lanes of the ShopSphere journey after step 2. Read left-to-right — that is temporal order. Notice events cluster naturally by lane: Identity owns login facts, Catalog owns browsing facts, Cart owns selection facts, Payment owns money facts. A domain expert from the Catalog team would not be able to explain *Payment Authorized*; a finance team member would not understand *ProductViewed*. That separation of expertise is what step 4 will formalise as Bounded Context boundaries."
         },
         "diagram": {
           "type": "es-board",
@@ -143,9 +143,9 @@
         },
         "lanes": [
           {
-            "id": "customer",
+            "id": "identity",
             "label": {
-              "en": "Customer"
+              "en": "Identity Context"
             },
             "items": [
               {
@@ -157,13 +157,71 @@
               {
                 "type": "command",
                 "text": {
+                  "en": "Login"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "UserLoggedIn"
+                }
+              }
+            ]
+          },
+          {
+            "id": "catalog",
+            "label": {
+              "en": "Catalog Context"
+            },
+            "items": [
+              {
+                "type": "readmodel",
+                "text": {
+                  "en": "Product Catalog"
+                }
+              },
+              {
+                "type": "command",
+                "text": {
+                  "en": "Browse Products"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "ProductListViewed"
+                }
+              },
+              {
+                "type": "command",
+                "text": {
+                  "en": "View Product"
+                }
+              },
+              {
+                "type": "event",
+                "text": {
+                  "en": "ProductViewed"
+                }
+              }
+            ]
+          },
+          {
+            "id": "customer",
+            "label": {
+              "en": "Cart Context"
+            },
+            "items": [
+              {
+                "type": "command",
+                "text": {
                   "en": "Add Item to Cart"
                 }
               },
               {
                 "type": "event",
                 "text": {
-                  "en": "Item Added"
+                  "en": "ItemAddedToCart"
                 }
               },
               {
@@ -175,7 +233,7 @@
               {
                 "type": "event",
                 "text": {
-                  "en": "Checkout Started"
+                  "en": "CheckoutStarted"
                 }
               },
               {
@@ -189,7 +247,7 @@
           {
             "id": "payment",
             "label": {
-              "en": "Payment"
+              "en": "Payment Context"
             },
             "items": [
               {
@@ -199,9 +257,15 @@
                 }
               },
               {
+                "type": "external",
+                "text": {
+                  "en": "Stripe"
+                }
+              },
+              {
                 "type": "event",
                 "text": {
-                  "en": "Payment Authorized"
+                  "en": "PaymentAuthorized"
                 }
               }
             ]

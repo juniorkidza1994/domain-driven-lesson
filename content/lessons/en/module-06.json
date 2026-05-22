@@ -90,7 +90,7 @@
         },
         "diagram": {
           "type": "mermaid",
-          "source": "sequenceDiagram\n  participant C as Customer\n  participant O as Order Service\n  participant B as Broker\n  participant P as Payment Service\n  participant I as Inventory Service\n  participant N as Notification Service\n  C->>O: PlaceOrder\n  O->>B: publish sales.order.placed\n  B-->>P: sales.order.placed\n  B-->>I: sales.order.placed\n  B-->>N: sales.order.placed\n  P->>B: publish payments.payment.captured\n  I->>B: publish inventory.stock.reserved\n  B-->>O: payments.payment.captured\n  B-->>O: inventory.stock.reserved\n  O->>B: publish sales.order.confirmed\n  B-->>N: sales.order.confirmed\n  N->>C: confirmation email"
+          "source": "sequenceDiagram\n  actor C as Customer\n  participant ID as Identity\n  participant CAT as Catalog\n  participant CART as Cart\n  participant O as Order Service\n  participant B as Broker\n  participant P as Payment Service\n  participant I as Inventory Service\n  participant N as Notification Service\n  C->>ID: Login\n  ID-->>C: UserLoggedIn\n  C->>CAT: Browse\n  CAT-->>C: ProductViewed\n  C->>CART: Add Item\n  CART-->>C: ItemAddedToCart\n  C->>CART: Checkout\n  CART->>O: CheckoutStarted\n  O->>B: publish sales.order.placed\n  B-->>P: sales.order.placed\n  B-->>I: sales.order.placed\n  B-->>N: sales.order.placed\n  P->>B: publish payments.payment.captured\n  I->>B: publish inventory.stock.reserved\n  B-->>O: payments.payment.captured\n  B-->>O: inventory.stock.reserved\n  O->>B: publish sales.order.confirmed\n  B-->>N: sales.order.confirmed\n  N->>C: confirmation email"
         },
         "tooltipRefs": [
           "producer",

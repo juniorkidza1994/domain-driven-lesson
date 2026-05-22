@@ -36,6 +36,22 @@
         ]
       },
       {
+        "id": "bounded-context-journey",
+        "type": "diagram",
+        "title": {
+          "en": "How Events Reveal Bounded Contexts",
+          "th": ""
+        },
+        "content": {
+          "en": "Walk a real user journey and write down every business fact that happens. You get: **UserLoggedIn** — only the Identity team cares about authentication tokens and sessions. **ProductViewed** — only the Catalog team owns search indexes and product descriptions. **InventoryReserved** — the warehouse team lights up; the marketing team has no idea what it means. **PaymentAuthorized** — the finance team owns this; it has PCI compliance rules no other context needs to know about.\n\nThat clustering of concern — each event naturally understood by one group of experts and opaque to everyone else — is how you find your bounded context boundaries. You do not design the boundaries first; you discover them by following the events.\n\nThe diagram maps the ShopSphere journey from first login to delivery across eight contexts. Orange **OrderPlaced** is the pivotal event: it is the seam between the Sales domain (everything to the left) and the Fulfilment domain (everything to the right). Dashed arrows show Notification receiving events it reacts to without owning any business entity.",
+          "th": ""
+        },
+        "diagram": {
+          "type": "mermaid",
+          "source": "flowchart LR\n  subgraph ID[Identity Context]\n    E1[UserLoggedIn]\n  end\n  subgraph CAT[Catalog Context]\n    E2[ProductListViewed]\n    E3[ProductViewed]\n  end\n  subgraph CART[Cart Context]\n    E4[ItemAddedToCart]\n    E5[CheckoutStarted]\n  end\n  subgraph ORD[Order Context]\n    E6[OrderPlaced]\n    E7[OrderConfirmed]\n  end\n  subgraph INV[Inventory Context]\n    E8[InventoryReserved]\n  end\n  subgraph PAY[Payment Context]\n    E9[PaymentAuthorized]\n    E10[PaymentCaptured]\n  end\n  subgraph SHIP[Shipping Context]\n    E11[ShipmentDispatched]\n    E12[ShipmentDelivered]\n  end\n  subgraph NOTIF[Notification Context]\n    E13[order + ship emails]\n  end\n  E1-->E2-->E3-->E4-->E5-->E6-->E8-->E9-->E10-->E7-->E11-->E12\n  E6-.->E13\n  E11-.->E13\n  style E6 fill:#f97316,stroke:#c2410c,color:#fff\n  style ID fill:#eef2ff,stroke:#6366f1\n  style CAT fill:#f0fdfa,stroke:#14b8a6\n  style CART fill:#fef3c7,stroke:#f59e0b\n  style ORD fill:#fff7ed,stroke:#f97316\n  style INV fill:#f0fdf4,stroke:#22c55e\n  style PAY fill:#fdf4ff,stroke:#a855f7\n  style SHIP fill:#eff6ff,stroke:#3b82f6\n  style NOTIF fill:#fafafa,stroke:#94a3b8"
+        }
+      },
+      {
         "id": "bounded-context-diagram",
         "type": "diagram",
         "title": {

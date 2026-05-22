@@ -152,11 +152,11 @@
           "en": "Fan-out: One Event, Multiple Consumers"
         },
         "content": {
-          "en": "The Order Service publishes one event to the broker. The broker delivers it independently to each consumer. None of the consumers know about each other, and the Order Service does not know any consumers exist."
+          "en": "The full ShopSphere journey: customer logs in, browses, adds to cart, checks out. When the Order Context publishes `sales.order.placed`, the broker fans it out to every subscribed consumer simultaneously. Inventory, Payment, Notification, and Analytics each get their own independent copy. The Order Service does not know how many consumers exist — adding a new consumer requires no change to the Order Service at all."
         },
         "diagram": {
           "type": "mermaid",
-          "source": "flowchart LR\n  OS[Order Service] -->|sales.order.placed| B[(Message Broker)]\n  B --> IS[Inventory Service]\n  B --> PS[Payment Service]\n  B --> NS[Notification Service]\n  B --> AS[Analytics Service]\n  style OS fill:#6366f1,stroke:#3730a3,color:#fff\n  style B fill:#f59e0b,stroke:#b45309,color:#1e1b4b\n  style IS fill:#14b8a6,stroke:#0f766e,color:#fff\n  style PS fill:#14b8a6,stroke:#0f766e,color:#fff\n  style NS fill:#14b8a6,stroke:#0f766e,color:#fff\n  style AS fill:#14b8a6,stroke:#0f766e,color:#fff"
+          "source": "sequenceDiagram\n  actor C as Customer\n  participant ID as Identity\n  participant CAT as Catalog\n  participant CART as Cart\n  participant OS as Order Service\n  participant B as Broker\n  participant IS as Inventory\n  participant PS as Payment\n  participant NS as Notification\n  participant AS as Analytics\n  C->>ID: Login\n  ID-->>C: UserLoggedIn\n  C->>CAT: Browse\n  CAT-->>C: ProductViewed\n  C->>CART: Add Item\n  CART-->>C: ItemAddedToCart\n  C->>CART: Checkout\n  CART->>OS: CheckoutStarted\n  OS->>B: sales.order.placed\n  B-->>IS: sales.order.placed\n  B-->>PS: sales.order.placed\n  B-->>NS: sales.order.placed\n  B-->>AS: sales.order.placed"
         },
         "tooltipRefs": [
           "producer",
