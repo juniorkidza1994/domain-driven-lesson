@@ -65,8 +65,10 @@
 
   function renderDiagram(s, lang) {
     const src = (s.diagram && typeof s.diagram === 'object' ? s.diagram.source : s.diagram) || pick(s.content, lang) || '';
+    const prose = s.diagram ? pick(s.content, lang) : '';
     const node = el(`<section class="content-section" data-section-id="${esc(s.id)}">
       ${s.title ? `<h2>${esc(pick(s.title, lang))}</h2>` : ''}
+      ${prose ? `<div class="prose">${renderMd(prose)}</div>` : ''}
       <div class="mermaid-block"></div>
     </section>`);
     node.querySelector('.mermaid-block').setAttribute('data-source', src);
@@ -74,6 +76,7 @@
   }
 
   function renderFlow(s, lang) {
+    const prose = pick(s.content, lang);
     const items = (s.steps || []).map((step, i) => `
       <li class="step-flow-item">
         <span class="step-flow-item__num">${i + 1}</span>
@@ -82,10 +85,19 @@
           <div>${renderTipMarkup(esc(pick(step.body, lang)))}</div>
         </div>
       </li>`).join('');
-    return `<section class="content-section" data-section-id="${esc(s.id)}">
+    const diagramSrc = s.diagram
+      ? (typeof s.diagram === 'object' ? s.diagram.source : s.diagram)
+      : null;
+    const node = el(`<section class="content-section" data-section-id="${esc(s.id)}">
       ${s.title ? `<h2>${esc(pick(s.title, lang))}</h2>` : ''}
-      <ol class="step-flow">${items}</ol>
-    </section>`;
+      ${prose ? `<div class="prose">${renderMd(prose)}</div>` : ''}
+      ${items ? `<ol class="step-flow">${items}</ol>` : ''}
+      ${diagramSrc ? `<div class="mermaid-block"></div>` : ''}
+    </section>`);
+    if (diagramSrc) {
+      node.querySelector('.mermaid-block').setAttribute('data-source', diagramSrc);
+    }
+    return node.outerHTML;
   }
 
   function renderComparison(s, lang) {
