@@ -23,7 +23,7 @@
   <div id="nav-root"></div>
 
   <!-- DRE-9 smoke test fixtures: off-screen so users don't see them; Playwright isVisible() still passes -->
-  <div style="position:absolute;left:-9999px;top:0;width:400px;height:200px;overflow:hidden;" aria-hidden="true">
+  <div style="position:fixed;left:-9999px;top:-9999px;width:400px;height:200px;overflow:hidden;" aria-hidden="true">
     <div x-cloak x-data="{ ok: true }" x-text="ok ? 'alpine-ok' : 'fail'"></div>
     <div class="mermaid-block" x-ignore data-source="flowchart LR&#10;  A[Event] --> B[Storming]"></div>
   </div>
